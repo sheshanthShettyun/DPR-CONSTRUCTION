@@ -10,7 +10,7 @@ const hanken = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "DPR. — Operations Dashboard",
+  title: "DPR — Operations Dashboard",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

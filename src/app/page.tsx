@@ -9,6 +9,7 @@ const orders = [
   { id: "#EP0111454", site: "Berlin, DE → Paris, FR", flag: "🇩🇪🇫🇷", sub: "Gravitas LLC", load: "1,240 kg", status: "Delivered", color: "emerald" },
   { id: "#US045860", site: "Seattle, WA → Denver, CO", flag: "🇺🇸", sub: "BVI GROUP", load: "125 kg", status: "Picked Up", color: "orange" },
   { id: "#EP045840", site: "Warsaw, PL → Prague, CZ", flag: "🇵🇱🇨🇿", sub: "MEGAONE", load: "2,584 kg", status: "In Transit", color: "amber" },
+  { id: "#US046584", site: "Miami, FL → Atlanta, GA", flag: "🇺🇸", sub: "DPR Logistics", load: "890 kg", status: "Maintenance", color: "orange" },
 ];
 
 export default function Home() {
@@ -39,8 +40,9 @@ export default function Home() {
             {orders.slice(0, 3).map((order) => (
               <OrderCard key={order.id} {...order} />
             ))}
-            <TimerSection />
             <OrderCard {...orders[3]} />
+            <OrderCard {...orders[4]} />
+            <TimerSection />
           </div>
         </section>
 
