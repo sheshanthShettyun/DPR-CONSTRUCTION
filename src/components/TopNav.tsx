@@ -5,7 +5,12 @@ import { Search, Bell, ChevronDown } from "lucide-react";
 
 const navItems = ["Overview", "Site Ops", "Personnel", "Documents", "Budget", "Safety"];
 
-export default function TopNav() {
+interface Props {
+  activeNav: string;
+  onNavChange: (item: string) => void;
+}
+
+export default function TopNav({ activeNav, onNavChange }: Props) {
   return (
     <motion.header
       initial={{ opacity: 0, y: -12 }}
@@ -22,19 +27,19 @@ export default function TopNav() {
         </div>
         <nav className="hidden items-center gap-8 text-sm font-medium text-[#8c8c8c] md:flex">
           {navItems.map((item, i) => (
-            <motion.a
+            <motion.button
               key={item}
+              onClick={() => onNavChange(item)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 + i * 0.04 }}
               whileHover={{ y: -1 }}
-              className={`transition-colors hover:text-white ${
-                item === "Site Ops" ? "border-b-2 border-white pb-1 text-white" : ""
+              className={`cursor-pointer transition-colors hover:text-white ${
+                activeNav === item ? "border-b-2 border-white pb-1 text-white" : ""
               }`}
-              href="#"
             >
               {item}
-            </motion.a>
+            </motion.button>
           ))}
         </nav>
       </div>
