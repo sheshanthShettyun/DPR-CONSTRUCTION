@@ -3,14 +3,9 @@
 import { motion } from "framer-motion";
 import { Search, Bell, ChevronDown } from "lucide-react";
 
-const navItems = ["Overview", "Site Ops", "Personnel", "Documents", "Budget", "Safety"];
+const navItems = ["Overview", "Personnel", "Documents", "Budget", "Safety"];
 
-interface Props {
-  activeNav: string;
-  onNavChange: (item: string) => void;
-}
-
-export default function TopNav({ activeNav, onNavChange }: Props) {
+export default function TopNav() {
   return (
     <motion.header
       initial={{ opacity: 0, y: -12 }}
@@ -27,19 +22,19 @@ export default function TopNav({ activeNav, onNavChange }: Props) {
         </div>
         <nav className="hidden items-center gap-8 text-sm font-medium text-[#8c8c8c] md:flex">
           {navItems.map((item, i) => (
-            <motion.button
+            <motion.a
               key={item}
-              onClick={() => onNavChange(item)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 + i * 0.04 }}
               whileHover={{ y: -1 }}
               className={`cursor-pointer transition-colors hover:text-white ${
-                activeNav === item ? "border-b-2 border-white pb-1 text-white" : ""
+                item === "Overview" ? "border-b-2 border-white pb-1 text-white" : ""
               }`}
+              href="#"
             >
               {item}
-            </motion.button>
+            </motion.a>
           ))}
         </nav>
       </div>
