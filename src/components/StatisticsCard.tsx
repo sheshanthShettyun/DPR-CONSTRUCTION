@@ -1,11 +1,18 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { TrendingUp, ChevronDown } from "lucide-react";
 import BarChart from "./BarChart";
 
 export default function StatisticsCard() {
   return (
-    <div className="card-bg flex flex-1 flex-col rounded-3xl border border-gray-100 p-6 shadow-sm">
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
+      whileHover={{ y: -3, boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}
+      className="card-bg flex flex-1 flex-col rounded-3xl border border-gray-100 p-6 shadow-sm"
+    >
       <div className="mb-6 flex items-center justify-between border-b border-gray-200 pb-2">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2 text-xl font-bold text-gray-900">
@@ -29,6 +36,6 @@ export default function StatisticsCard() {
         </div>
       </div>
       <BarChart />
-    </div>
+    </motion.div>
   );
 }
