@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PanelLeftOpen, X } from "lucide-react";
+import { PanelLeftOpen, X, Calendar } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import FilterSidebar from "@/components/FilterSidebar";
 import OrderCard from "@/components/OrderCard";
 import TimerSection from "@/components/TimerSection";
 import AssetPanel from "@/components/AssetPanel";
+import CalendarPicker from "@/components/CalendarPicker";
 
 const orders = [
   { id: "#US045861", site: "Dallas, TX → Houston, TX", flag: "🇺🇸", sub: "TNA Groups", load: "650 kg", status: "In Transit", color: "amber" },
@@ -19,6 +20,8 @@ const orders = [
 
 export default function Home() {
   const [panelOpen, setPanelOpen] = useState(false);
+  const [calOpen, setCalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   return (
     <div className="p-8">
@@ -34,9 +37,27 @@ export default function Home() {
               <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">1,556</span>
             </div>
             <div className="flex items-center gap-2">
-              <button className="rounded-xl border border-white/5 bg-[#1a1a1a] p-2 text-[#8c8c8c]">
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/></svg>
-              </button>
+              <div className="relative">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setCalOpen(!calOpen)}
+                  className={`rounded-xl border border-white/5 p-2 transition-colors ${
+                    calOpen || selectedDate ? "bg-[#1a1a1a] text-[#e2f1a6]" : "bg-[#1a1a1a] text-[#8c8c8c]"
+                  }`}
+                >
+                  <Calendar size={20} />
+                </motion.button>
+                <AnimatePresence>
+                  {calOpen && (
+                    <CalendarPicker
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      onClose={() => setCalOpen(false)}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
               <button className="rounded-xl border border-white/5 bg-[#1a1a1a] p-2 text-[#8c8c8c]">
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/></svg>
               </button>
