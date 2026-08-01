@@ -84,14 +84,12 @@ export default function TransitPanel({ order }: Props) {
           <div className="h-[9px] w-[9px] rounded-full bg-[#e2f1a6]" />
         </div>
 
-        <motion.div
+        <div
           className="absolute"
           style={{ left: 479, top: 3 }}
-          animate={{ x: [0, 2, -1, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
           <Truck size={36} color="#e2f1a6" strokeWidth={2} />
-        </motion.div>
+        </div>
 
         {[
           { x: 448, w: 16, o: 0.55 },
