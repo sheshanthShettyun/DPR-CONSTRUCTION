@@ -9,19 +9,20 @@ import OrderCard from "@/components/OrderCard";
 import TimerSection from "@/components/TimerSection";
 import AssetPanel from "@/components/AssetPanel";
 import CalendarPicker from "@/components/CalendarPicker";
-
-const orders = [
-  { id: "#US045861", site: "Dallas, TX → Houston, TX", flag: "🇺🇸", sub: "TNA Groups", load: "650 kg", status: "In Transit", color: "amber" },
-  { id: "#EP0111454", site: "Berlin, DE → Paris, FR", flag: "🇩🇪🇫🇷", sub: "Gravitas LLC", load: "1,240 kg", status: "Delivered", color: "emerald" },
-  { id: "#US045860", site: "Seattle, WA → Denver, CO", flag: "🇺🇸", sub: "BVI GROUP", load: "125 kg", status: "Picked Up", color: "orange" },
-  { id: "#EP045840", site: "Warsaw, PL → Prague, CZ", flag: "🇵🇱🇨🇿", sub: "MEGAONE", load: "2,584 kg", status: "In Transit", color: "amber" },
-  { id: "#US046584", site: "Miami, FL → Atlanta, GA", flag: "🇺🇸", sub: "DPR Logistics", load: "890 kg", status: "Maintenance", color: "orange" },
-];
+import TransitPanel from "@/components/TransitPanel";
+import { orders, type OrderData } from "@/lib/orders";
 
 export default function Home() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [calOpen, setCalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderData>(orders[0]);
+  const [transitOpen, setTransitOpen] = useState(false);
+
+  const openTransit = (order: OrderData) => {
+    setSelectedOrder(order);
+    setTransitOpen(true);
+  };
 
   return (
     <div className="p-8">
@@ -76,10 +77,20 @@ export default function Home() {
 
           <div className="grid grid-cols-3 gap-6">
             {orders.slice(0, 3).map((order) => (
-              <OrderCard key={order.id} {...order} />
+              <OrderCard
+                key={order.id}
+                {...order}
+                onClick={() => openTransit(order)}
+              />
             ))}
-            <OrderCard {...orders[3]} />
-            <OrderCard {...orders[4]} />
+            <OrderCard
+              {...orders[3]}
+              onClick={() => openTransit(orders[3])}
+            />
+            <OrderCard
+              {...orders[4]}
+              onClick={() => openTransit(orders[4])}
+            />
             <TimerSection />
           </div>
         </section>
@@ -110,6 +121,33 @@ export default function Home() {
           )}
         </AnimatePresence>
       </main>
+
+      <AnimatePresence>
+        {transitOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black/60"
+              onClick={() => setTransitOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-8"
+              onClick={() => setTransitOpen(false)}
+            >
+              <div onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-[1180px]">
+                <TransitPanel order={selectedOrder} />
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
