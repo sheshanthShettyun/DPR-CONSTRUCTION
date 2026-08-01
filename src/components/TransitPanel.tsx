@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Truck } from "lucide-react";
+import { Truck, MessageCircle } from "lucide-react";
 import type { OrderData } from "@/lib/orders";
 
 interface Props {
@@ -40,6 +40,14 @@ export default function TransitPanel({ order }: Props) {
               {status}
               <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
             </span>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-1.5 rounded-lg border border-white/5 px-2.5 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:border-white/10 hover:text-white"
+            >
+              <MessageCircle size={13} />
+              Report Issue
+            </motion.button>
           </div>
         </div>
 
@@ -114,33 +122,6 @@ export default function TransitPanel({ order }: Props) {
 
         <span className="absolute left-[11px] top-[162px] text-xs text-[#8c8c8c]">{from}</span>
         <span className="absolute left-[1104px] top-[162px] text-xs text-[#8c8c8c]">{to}</span>
-      </div>
-
-      <div className="mt-[18px] h-px w-full bg-white/5" />
-
-      <div className="flex items-start pt-[22px]">
-        <div className="flex flex-col gap-3.5 pr-10">
-          <span className="text-xs text-[#8c8c8c]">Overall Progress</span>
-          <div className="flex items-center gap-[18px]">
-            <span className="text-[28px] font-semibold text-white">{progress}%</span>
-            <div className="h-2 w-[290px] overflow-hidden rounded-full bg-zinc-800">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="h-full rounded-full bg-[#e2f1a6]"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="h-[58px] w-px bg-white/5" />
-        <div className="flex flex-1 flex-col gap-3.5 pl-10">
-          <span className="text-xs text-[#8c8c8c]">Current Stage</span>
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-white">{stages.find((s) => s.active)?.label || "—"}</span>
-            <span className="text-xs text-[#8c8c8c]">{sub} handling transport.</span>
-          </div>
-        </div>
       </div>
     </motion.div>
   );
