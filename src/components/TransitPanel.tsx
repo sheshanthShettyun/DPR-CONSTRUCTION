@@ -22,6 +22,8 @@ export default function TransitPanel({ order }: Props) {
   const doneCount = stages.filter((s) => s.done).length;
   const progress = Math.round((doneCount / stages.length) * 100);
 
+  const stagePositions = [94, 250, 437, 587, 751, 916];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -65,14 +67,14 @@ export default function TransitPanel({ order }: Props) {
         </div>
       </div>
 
-      <div className="relative mt-[22px] h-[196px] overflow-hidden">
-        <div className="absolute left-[15px] top-[62px] h-[54px] w-[139px] rounded-tl-[54px] border-l-2 border-t-2 border-zinc-800" />
+      <div className="relative mt-[22px] h-[196px]">
+        <div className="absolute left-[11px] top-[62px] h-[54px] w-[139px] rounded-tl-[54px] border-l-2 border-t-2 border-zinc-800" />
         <div className="absolute left-[152px] top-[62px] h-[2px] w-[347px] bg-[#e2f1a6]" />
         <div className="absolute left-[497px] top-[62px] h-[2px] w-[479px] bg-zinc-800" />
-        <div className="absolute left-[976px] top-[62px] h-[54px] w-[89px] rounded-tr-[54px] border-r-2 border-t-2 border-zinc-800" />
+        <div className="absolute left-[976px] top-[62px] h-[54px] w-[139px] rounded-tr-[54px] border-r-2 border-t-2 border-zinc-800" />
 
         <div className="absolute left-[11px] top-[112px] h-2 w-2 rounded-full bg-[#e2f1a6]" />
-        <div className="absolute left-[1061px] top-[112px] h-[7px] w-[7px] rounded-full bg-[#6b7280]" />
+        <div className="absolute left-[1111px] top-[112px] h-[7px] w-[7px] rounded-full bg-[#6b7280]" />
 
         {[147, 303, 640, 804, 969].map((x) => (
           <div key={x} className="absolute top-[55px] h-3.5 w-3.5 rounded-full bg-[#1a1a1a]" style={{ left: x }} />
@@ -83,8 +85,8 @@ export default function TransitPanel({ order }: Props) {
         </div>
 
         <motion.div
-          className="absolute top-2"
-          style={{ left: 479 }}
+          className="absolute"
+          style={{ left: 479, top: 3 }}
           animate={{ x: [0, 2, -1, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -104,7 +106,7 @@ export default function TransitPanel({ order }: Props) {
             <div
               key={s.label}
               className="flex w-[120px] flex-col items-center gap-2.5"
-              style={{ position: "absolute", left: [94, 250, 437, 587, 751, 916][i] }}
+              style={{ position: "absolute", left: stagePositions[i] }}
             >
               <span className={`text-xs ${s.active ? "font-semibold text-white" : "font-medium text-[#8c8c8c]"}`}>{s.label}</span>
               <span className="text-xs text-[#6b7280]">{s.time}</span>
@@ -112,10 +114,8 @@ export default function TransitPanel({ order }: Props) {
           ))}
         </div>
 
-        <div className="absolute left-0 top-[162px] flex w-full items-center justify-between">
-          <span className="text-xs text-[#8c8c8c]">{from}</span>
-          <span className="text-xs text-[#8c8c8c]">{to}</span>
-        </div>
+        <span className="absolute left-[11px] top-[162px] text-xs text-[#8c8c8c]">{from}</span>
+        <span className="absolute left-[1104px] top-[162px] text-xs text-[#8c8c8c]">{to}</span>
       </div>
 
       <div className="mt-[18px] h-px w-full bg-white/5" />
@@ -139,8 +139,8 @@ export default function TransitPanel({ order }: Props) {
         <div className="flex flex-1 flex-col gap-3.5 pl-10">
           <span className="text-xs text-[#8c8c8c]">Current Stage</span>
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-white">Structural Phase 4</span>
-            <span className="text-xs text-[#8c8c8c]">Transporting structural components to next checkpoint.</span>
+            <span className="text-sm font-medium text-white">{stages.find((s) => s.active)?.label || "—"}</span>
+            <span className="text-xs text-[#8c8c8c]">{sub} handling transport.</span>
           </div>
         </div>
       </div>
