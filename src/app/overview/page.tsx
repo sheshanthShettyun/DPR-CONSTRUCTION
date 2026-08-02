@@ -60,6 +60,7 @@ export default function Home() {
                   </motion.button>
                   <h1 className="text-3xl font-semibold">{buildingName}</h1>
                   <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">{activeFilter}</span>
+                  <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">{activeFilter}</span>
                 </>
               ) : (
                 <>
