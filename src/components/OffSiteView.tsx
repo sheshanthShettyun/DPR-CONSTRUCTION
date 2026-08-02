@@ -1,34 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Truck, Package, Wrench } from "lucide-react";
+import { Truck, Package, Wrench, Hammer, Ship, Box } from "lucide-react";
 
 const equipment = [
   {
     title: "Leased Out Equipment",
     icon: Truck,
     items: [
-      { name: "Excavator CAT 320", spec: "Leased to TNA Groups · Until Aug 15", status: "Active Lease", chipColor: "emerald" },
-      { name: "Dump Truck CAT 745", spec: "Leased to MEGAONE · Until Sep 02", status: "Active Lease", chipColor: "emerald" },
-      { name: "Bulldozer D6T", spec: "Leased to BVI GROUP · Until Aug 28", status: "Pending Return", chipColor: "amber" },
+      { name: "Excavator CAT 320", spec: "Leased to TNA Groups · Until Aug 15", status: "Active Lease", chipColor: "emerald", icon: Hammer },
+      { name: "Dump Truck CAT 745", spec: "Leased to MEGAONE · Until Sep 02", status: "Active Lease", chipColor: "emerald", icon: Truck },
+      { name: "Bulldozer D6T", spec: "Leased to BVI GROUP · Until Aug 28", status: "Pending Return", chipColor: "amber", icon: Hammer },
     ],
   },
   {
     title: "In Transit — External",
     icon: Package,
     items: [
-      { name: "Steel Beams A992", spec: "Shipped from US Steel Corp · ETA Aug 10", status: "In Transit", chipColor: "yellow" },
-      { name: "Concrete Blocks", spec: "200 units · Supplier: CEMEX", status: "Delayed", chipColor: "orange" },
-      { name: "Scaffolding System", spec: "40m x 12m · Shipped from Germany", status: "Customs", chipColor: "amber" },
+      { name: "Steel Beams A992", spec: "Shipped from US Steel Corp · ETA Aug 10", status: "In Transit", chipColor: "yellow", icon: Box },
+      { name: "Concrete Blocks", spec: "200 units · Supplier: CEMEX", status: "Delayed", chipColor: "orange", icon: Box },
+      { name: "Scaffolding System", spec: "40m x 12m · Shipped from Germany", status: "Customs", chipColor: "amber", icon: Ship },
     ],
   },
   {
     title: "Returned / Depot",
     icon: Wrench,
     items: [
-      { name: "Generator Honda 5.5kW", spec: "Returned Jul 28 · Awaiting inspection", status: "In Queue", chipColor: "zinc" },
-      { name: "Welding Rig Lincoln", spec: "Returned Jul 25 · Under repair", status: "Servicing", chipColor: "amber" },
-      { name: "Air Compressor", spec: "Returned Jul 30 · Ready for reassign", status: "Available", chipColor: "emerald" },
+      { name: "Generator Honda 5.5kW", spec: "Returned Jul 28 · Awaiting inspection", status: "In Queue", chipColor: "zinc", icon: Wrench },
+      { name: "Welding Rig Lincoln", spec: "Returned Jul 25 · Under repair", status: "Servicing", chipColor: "amber", icon: Wrench },
+      { name: "Air Compressor", spec: "Returned Jul 30 · Ready for reassign", status: "Available", chipColor: "emerald", icon: Wrench },
     ],
   },
 ];
@@ -64,9 +64,12 @@ export default function OffSiteView() {
           <div className="flex flex-col gap-3">
             {cat.items.map((item) => (
               <div key={item.name} className="flex items-center justify-between border-b border-white/5 pb-3 last:border-0 last:pb-0">
-                <div>
-                  <p className="text-sm text-white">{item.name}</p>
-                  <p className="text-xs text-[#8c8c8c]">{item.spec}</p>
+                <div className="flex items-center gap-2.5">
+                  <item.icon size={14} strokeWidth={1.8} className="text-[#52525b]" />
+                  <div>
+                    <p className="text-sm text-white">{item.name}</p>
+                    <p className="text-xs text-[#8c8c8c]">{item.spec}</p>
+                  </div>
                 </div>
                 <div className={`status-chip ${chipColors[item.chipColor].bg} ${chipColors[item.chipColor].text}`}>
                   <div className={`status-dot ${chipColors[item.chipColor].dot}`} />

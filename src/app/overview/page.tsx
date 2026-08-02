@@ -6,7 +6,6 @@ import { PanelLeftOpen, X, Calendar, ArrowLeft } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import FilterSidebar from "@/components/FilterSidebar";
 import OrderCard from "@/components/OrderCard";
-import TimerSection from "@/components/TimerSection";
 import AssetPanel from "@/components/AssetPanel";
 import CalendarPicker from "@/components/CalendarPicker";
 import TransitPanel from "@/components/TransitPanel";
@@ -21,7 +20,7 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<OrderData>(orders[0]);
   const [transitOpen, setTransitOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("Transit");
+  const [activeFilter, setActiveFilter] = useState("All Transit");
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
 
   const handleBuildingSelect = (id: string) => {
@@ -113,6 +112,16 @@ export default function Home() {
             <OnSiteView />
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
+          ) : activeFilter === "All Transit" ? (
+            <div className="grid grid-cols-3 gap-6">
+              {orders.map((order) => (
+                <OrderCard
+                  key={order.id}
+                  {...order}
+                  onClick={() => openTransit(order)}
+                />
+              ))}
+            </div>
           ) : (
             <div className="grid grid-cols-3 gap-6">
               {orders

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Truck, Wrench, Archive, Plus } from "lucide-react";
+import { LayoutDashboard, MapPin, Truck, Wrench, Archive, Plus } from "lucide-react";
 
 interface Props {
   active: string;
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const filters = [
+  { id: "All Transit", icon: LayoutDashboard, count: 1556 },
   { id: "Transit", icon: Truck, count: 338 },
   { id: "Utilities", icon: MapPin, count: 412 },
   { id: "Maintenance", icon: Wrench, count: 147 },
