@@ -54,10 +54,8 @@ export default function ProjectsView({ onSelect }: Props) {
           className="dashboard-card flex cursor-pointer flex-col gap-5"
         >
           <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#e2f1a6]/10">
-                <Building2 size={18} className="text-[#e2f1a6]" strokeWidth={1.8} />
-              </div>
+            <div className="flex items-center gap-2.5">
+              <Building2 size={15} className="text-[#e2f1a6]" strokeWidth={1.8} />
               <div>
                 <h3 className="text-[15px] font-bold text-white">{p.name}</h3>
                 <p className="text-[11px] text-[#8c8c8c]">{p.location} · {p.eta}</p>
