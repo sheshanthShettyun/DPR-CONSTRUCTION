@@ -17,12 +17,12 @@ const stages = [
   { label: "Delivered", time: "16:30", done: false },
 ];
 
+const stagePositions = [94, 250, 437, 587, 751, 916];
+
 export default function TransitPanel({ order }: Props) {
   const { from, to, eta, distance, load, status, sub } = order;
   const doneCount = stages.filter((s) => s.done).length;
   const progress = Math.round((doneCount / stages.length) * 100);
-
-  const stagePositions = [94, 250, 437, 587, 751, 916];
 
   return (
     <motion.div
@@ -43,7 +43,7 @@ export default function TransitPanel({ order }: Props) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1.5 rounded-lg border border-white/5 px-2.5 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:border-white/10 hover:text-white"
+              className="flex items-center gap-1.5 rounded-lg bg-white/5 px-[11px] py-1.5 text-xs font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
             >
               <MessageCircle size={13} />
               Report Issue
@@ -75,53 +75,51 @@ export default function TransitPanel({ order }: Props) {
         </div>
       </div>
 
-      <div className="relative mt-[22px] h-[196px]">
-        <div className="absolute left-[11px] top-[62px] h-[54px] w-[139px] rounded-tl-[54px] border-l-2 border-t-2 border-zinc-800" />
-        <div className="absolute left-[152px] top-[62px] h-[2px] w-[347px] bg-[#e2f1a6]" />
-        <div className="absolute left-[497px] top-[62px] h-[2px] w-[479px] bg-zinc-800" />
-        <div className="absolute left-[976px] top-[62px] h-[54px] w-[139px] rounded-tr-[54px] border-r-2 border-t-2 border-zinc-800" />
+      <div className="relative mt-[22px]" style={{ height: 164 }}>
+        <div style={{ transform: "scale(0.82)", transformOrigin: "top left", width: 1080, height: 196 }}>
+          <div className="relative h-[196px]">
+            <div className="absolute left-[152px] top-[62px] h-[2px] w-[347px] bg-[#e2f1a6]" />
+            <div className="absolute left-[497px] top-[62px] h-[2px] w-[479px] bg-zinc-800" />
 
-        <div className="absolute left-[11px] top-[112px] h-2 w-2 rounded-full bg-[#e2f1a6]" />
-        <div className="absolute left-[1111px] top-[112px] h-[7px] w-[7px] rounded-full bg-[#6b7280]" />
+            <div className="absolute left-[148px] top-[62px] h-2 w-2 rounded-full bg-[#e2f1a6]" />
+            <div className="absolute left-[976px] top-[62px] h-[7px] w-[7px] rounded-full bg-[#6b7280]" />
 
-        {[147, 303, 640, 804, 969].map((x) => (
-          <div key={x} className="absolute top-[55px] h-3.5 w-3.5 rounded-full bg-[#1a1a1a]" style={{ left: x }} />
-        ))}
+            {[147, 303, 640, 804, 969].map((x) => (
+              <div key={x} className="absolute top-[55px] h-3.5 w-3.5 rounded-full bg-[#1a1a1a]" style={{ left: x }} />
+            ))}
 
-        <div className="absolute left-[485px] top-[51px] z-[2] flex h-6 w-6 items-center justify-center rounded-full bg-[#1a1a1a]">
-          <div className="h-[9px] w-[9px] rounded-full bg-[#e2f1a6]" />
-        </div>
-
-        <div
-          className="absolute"
-          style={{ left: 479, top: 3 }}
-        >
-          <Truck size={36} color="#e2f1a6" strokeWidth={2} />
-        </div>
-
-        {[
-          { x: 448, w: 16, o: 0.55 },
-          { x: 438, w: 24, o: 0.4 },
-          { x: 450, w: 13, o: 0.3 },
-        ].map((s, i) => (
-          <div key={i} className="absolute h-[2px] rounded-full bg-[#e2f1a6]" style={{ left: s.x, top: `${17 + i * 9}px`, width: s.w, opacity: s.o }} />
-        ))}
-
-        <div className="absolute left-0 top-[90px] flex h-[60px] w-full">
-          {stages.map((s, i) => (
-            <div
-              key={s.label}
-              className="flex w-[120px] flex-col items-center gap-2.5"
-              style={{ position: "absolute", left: stagePositions[i] }}
-            >
-              <span className={`text-xs ${s.active ? "font-semibold text-white" : "font-medium text-[#8c8c8c]"}`}>{s.label}</span>
-              <span className="text-xs text-[#6b7280]">{s.time}</span>
+            <div className="absolute left-[485px] top-[51px] z-[2] flex h-6 w-6 items-center justify-center rounded-full bg-[#1a1a1a]">
+              <div className="h-[9px] w-[9px] rounded-full bg-[#e2f1a6]" />
             </div>
-          ))}
-        </div>
 
-        <span className="absolute left-[11px] top-[162px] text-xs text-[#8c8c8c]">{from}</span>
-        <span className="absolute left-[1104px] top-[162px] text-xs text-[#8c8c8c]">{to}</span>
+            <div className="absolute" style={{ left: 479, top: 3 }}>
+              <Truck size={36} color="#e2f1a6" strokeWidth={2} />
+            </div>
+
+            {[
+              { x: 448, w: 16, o: 0.55 },
+              { x: 438, w: 24, o: 0.4 },
+              { x: 450, w: 13, o: 0.3 },
+            ].map((s, i) => (
+              <div key={i} className="absolute h-[2px] rounded-full bg-[#e2f1a6]" style={{ left: s.x, top: `${17 + i * 9}px`, width: s.w, opacity: s.o }} />
+            ))}
+
+            <div className="absolute left-0 top-[90px] flex h-[60px] w-full">
+              {stages.map((s, i) => (
+                <div
+                  key={s.label}
+                  className="flex w-[120px] flex-col items-center gap-2.5"
+                  style={{ position: "absolute", left: stagePositions[i] }}
+                >
+                  <span className={`text-xs ${s.active ? "font-semibold text-white" : "font-medium text-[#8c8c8c]"}`}>{s.label}</span>
+                  <span className="text-xs text-[#6b7280]">{s.time}</span>
+                  {i === 0 && <span className="text-[10px] text-[#52525b]">{from}</span>}
+                  {i === 5 && <span className="text-[10px] text-[#52525b]">{to}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

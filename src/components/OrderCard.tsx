@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
 const colorMap: Record<string, { bg: string; text: string; dot: string }> = {
   amber: { bg: "bg-amber-900/20", text: "text-amber-500", dot: "bg-amber-500" },
@@ -30,8 +31,7 @@ export default function OrderCard({ id, from, to, flag, sub, load, status, color
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}
-      onClick={onClick}
-      className="dashboard-card cursor-pointer transition-colors"
+      className="dashboard-card"
     >
       <div className="mb-6 flex items-center justify-between">
         <span className="font-bold">{id}</span>
@@ -53,9 +53,20 @@ export default function OrderCard({ id, from, to, flag, sub, load, status, color
       </div>
       <div className="flex items-center justify-between border-t border-white/5 pt-4">
         <span className="text-[10px] uppercase tracking-wider text-[#8c8c8c]">Job Site</span>
-        <div className={`status-chip ${c.bg} ${c.text}`}>
-          <div className={`status-dot ${c.dot}`} />
-          {status}
+        <div className="flex items-center gap-3">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={(e) => { e.stopPropagation(); onClick(); }}
+            className="flex items-center gap-1 rounded-lg bg-white/5 px-2 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
+          >
+            Track
+            <ArrowUpRight size={11} />
+          </motion.button>
+          <div className={`status-chip ${c.bg} ${c.text}`}>
+            <div className={`status-dot ${c.dot}`} />
+            {status}
+          </div>
         </div>
       </div>
     </motion.div>

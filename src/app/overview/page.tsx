@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PanelLeftOpen, X, Calendar } from "lucide-react";
+import { PanelLeftOpen, X, Calendar, ArrowLeft } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import FilterSidebar from "@/components/FilterSidebar";
 import OrderCard from "@/components/OrderCard";
@@ -10,6 +10,9 @@ import TimerSection from "@/components/TimerSection";
 import AssetPanel from "@/components/AssetPanel";
 import CalendarPicker from "@/components/CalendarPicker";
 import TransitPanel from "@/components/TransitPanel";
+import OnSiteView from "@/components/OnSiteView";
+import OffSiteView from "@/components/OffSiteView";
+import ProjectsView from "@/components/ProjectsView";
 import { orders, type OrderData } from "@/lib/orders";
 
 export default function Home() {
@@ -18,6 +21,17 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<OrderData>(orders[0]);
   const [transitOpen, setTransitOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("Transit");
+  const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+
+  const handleBuildingSelect = (id: string) => {
+    setSelectedBuilding(id);
+    setActiveFilter("Transit");
+  };
+
+  const buildingName = selectedBuilding === "building-a" ? "Meridian Heights — Tower B" :
+    selectedBuilding === "building-b" ? "Harbour Vista — Phase 2" :
+    selectedBuilding === "building-c" ? "Riverside Industrial Park" : "";
 
   const openTransit = (order: OrderData) => {
     setSelectedOrder(order);
@@ -29,13 +43,30 @@ export default function Home() {
       <TopNav />
 
       <main className="relative flex gap-6">
-        <FilterSidebar />
+        {selectedBuilding && <FilterSidebar active={activeFilter} onChange={setActiveFilter} />}
 
         <section className="flex-1">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-semibold">Equipment &amp; Assets</h1>
-              <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">1,556</span>
+              {selectedBuilding ? (
+                <>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSelectedBuilding(null)}
+                    className="rounded-lg border border-white/5 bg-[#1a1a1a] p-1.5 text-[#8c8c8c] hover:text-white"
+                  >
+                    <ArrowLeft size={16} />
+                  </motion.button>
+                  <h1 className="text-3xl font-semibold">{buildingName}</h1>
+                  <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">{activeFilter}</span>
+                </>
+              ) : (
+                <>
+                  <h1 className="text-3xl font-semibold">All Projects</h1>
+                  <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">3 active</span>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <div className="relative">
@@ -75,24 +106,25 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
-            {orders.slice(0, 3).map((order) => (
-              <OrderCard
-                key={order.id}
-                {...order}
-                onClick={() => openTransit(order)}
-              />
-            ))}
-            <OrderCard
-              {...orders[3]}
-              onClick={() => openTransit(orders[3])}
-            />
-            <OrderCard
-              {...orders[4]}
-              onClick={() => openTransit(orders[4])}
-            />
-            <TimerSection />
-          </div>
+          {!selectedBuilding ? (
+            <ProjectsView onSelect={handleBuildingSelect} />
+          ) : activeFilter === "Utilities" ? (
+            <OnSiteView />
+          ) : activeFilter === "Off-Site" ? (
+            <OffSiteView />
+          ) : (
+            <div className="grid grid-cols-3 gap-6">
+              {orders
+                .filter((o) => activeFilter === "Transit" ? o.status === "In Transit" : o.status === activeFilter)
+                .map((order) => (
+                  <OrderCard
+                    key={order.id}
+                    {...order}
+                    onClick={() => openTransit(order)}
+                  />
+                ))}
+            </div>
+          )}
         </section>
 
         <AnimatePresence>
@@ -141,7 +173,7 @@ export default function Home() {
               className="fixed inset-0 z-50 flex items-center justify-center p-8"
               onClick={() => setTransitOpen(false)}
             >
-              <div onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-[1180px]">
+              <div onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-[960px]">
                 <TransitPanel order={selectedOrder} />
               </div>
             </motion.div>

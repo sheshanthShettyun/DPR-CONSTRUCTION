@@ -4,15 +4,19 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { LayoutGrid, MapPin, Truck, Wrench, Archive } from "lucide-react";
 
+interface Props {
+  active: string;
+  onChange: (id: string) => void;
+}
+
 const filters = [
-  { id: "All", icon: LayoutGrid, count: 1556 },
-  { id: "On-Site", icon: MapPin, count: 412 },
-  { id: "In Transit", icon: Truck, count: 338 },
-  { id: "Maintenance", icon: Wrench, count: 147, active: true },
+  { id: "Transit", icon: Truck, count: 338 },
+  { id: "Utilities", icon: MapPin, count: 412 },
+  { id: "Maintenance", icon: Wrench, count: 147 },
   { id: "Off-Site", icon: Archive, count: 659 },
 ];
 
-export default function FilterSidebar() {
+export default function FilterSidebar({ active, onChange }: Props) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -24,9 +28,10 @@ export default function FilterSidebar() {
       onMouseLeave={() => setHovered(false)}
       className="flex flex-shrink-0 flex-col items-center gap-0.5 overflow-hidden rounded-2xl bg-[#1a1a1a] py-3"
     >
-      {filters.map(({ id, icon: Icon, count, active }) => (
+      {filters.map(({ id, icon: Icon, count }) => (
         <motion.button
           key={id}
+          onClick={() => onChange(id)}
           whileHover={{ x: hovered ? 3 : 0, scale: hovered ? 1.02 : 1.1 }}
           whileTap={{ scale: 0.92 }}
           className={`flex items-center transition-all ${
@@ -34,10 +39,8 @@ export default function FilterSidebar() {
               ? "w-full gap-3 rounded-xl px-3 py-2.5"
               : "h-10 w-10 justify-center rounded-full"
           } ${
-            active
-              ? hovered
-                ? "bg-[#e2f1a6] text-black"
-                : "bg-[#e2f1a6] text-black"
+            active === id
+              ? "bg-[#e2f1a6] text-black"
               : hovered
                 ? "text-[#8c8c8c] hover:bg-zinc-800 hover:text-white"
                 : "text-[#6b7280] hover:bg-zinc-800 hover:text-white"

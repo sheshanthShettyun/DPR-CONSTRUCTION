@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Search, Bell, ChevronDown } from "lucide-react";
 
-const navItems = ["Overview", "Personnel", "Documents", "Budget", "Safety"];
+const navItems = ["ALL", "Personnel", "Documents", "Budget", "Safety"];
 
 export default function TopNav() {
   return (
@@ -21,18 +21,16 @@ export default function TopNav() {
           </svg>
           <span className="text-2xl font-bold tracking-tight">DPR</span>
         </Link>
-        <nav className="hidden items-center gap-8 text-sm font-medium text-[#8c8c8c] md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item, i) => (
             <motion.a
               key={item}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 + i * 0.04 }}
-              whileHover={{ y: -1 }}
-              className={`cursor-pointer transition-colors hover:text-white ${
-                item === "Overview" ? "border-b-2 border-white pb-1 text-white" : ""
-              }`}
-              href={item === "Overview" ? "/overview" : "#"}
+              className="flex items-center rounded-[10px] px-3 text-[13px] font-medium text-[#8c8c8c] transition-all duration-200 hover:bg-white/[0.04] hover:text-white"
+              style={{ height: 30 }}
+              href={item === "ALL" ? "/overview" : "#"}
             >
               {item}
             </motion.a>

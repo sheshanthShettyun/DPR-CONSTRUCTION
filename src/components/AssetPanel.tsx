@@ -69,9 +69,9 @@ export default function AssetPanel({ onClose }: Props) {
   }, []);
 
   return (
-    <div className="dashboard-card flex w-72 flex-col gap-4 p-5">
+    <div className="dashboard-card flex w-80 flex-col gap-2.5 p-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold">Asset Details</h2>
+        <h2 className="text-base font-bold">Asset Details</h2>
         <div className="flex items-center gap-1">
           <motion.button whileHover={{ rotate: 90 }} className="text-[#8c8c8c] hover:text-white">
             <Ellipsis size={18} />
@@ -83,11 +83,11 @@ export default function AssetPanel({ onClose }: Props) {
       </div>
 
       <div ref={catRef} className="relative">
-        <label className="mb-1.5 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Category</label>
+        <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Category</label>
         <motion.button
           whileTap={{ scale: 0.99 }}
           onClick={() => setCatOpen(!catOpen)}
-          className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:border-white/20 transition-colors"
+          className="flex w-full items-center justify-between rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:border-white/20 transition-colors"
         >
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
@@ -124,14 +124,14 @@ export default function AssetPanel({ onClose }: Props) {
       </div>
 
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Asset ID</label>
-        <button className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-zinc-900 px-4 py-2.5">
+        <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Asset ID</label>
+        <button className="flex w-full items-center justify-between rounded-lg border border-white/10 bg-zinc-900 px-3 py-2">
           <span className="text-sm font-bold">#US046584</span>
           <ChevronDown size={16} className="text-[#8c8c8c]" />
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 gap-y-2 rounded-xl border border-white/5 bg-zinc-900/50 p-3">
+      <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 rounded-lg border border-white/5 bg-zinc-900/50 p-2.5">
         {cat.fields.map(([label, value]) => (
           <div key={label}>
             <p className="text-[10px] uppercase text-[#8c8c8c]">{label}</p>
@@ -148,7 +148,7 @@ export default function AssetPanel({ onClose }: Props) {
 
       {cat.tools.length > 0 && (
         <div>
-          <p className="mb-2 text-[10px] uppercase tracking-wider text-[#8c8c8c]">
+          <p className="mb-1.5 text-[10px] uppercase tracking-wider text-[#8c8c8c]">
             {category === "Heavy Machinery" ? "Attachments" : "On-Board Tools"}
           </p>
           <div className="flex flex-wrap gap-2">
@@ -163,31 +163,31 @@ export default function AssetPanel({ onClose }: Props) {
         </div>
       )}
 
-      <div className="space-y-3 border-t border-white/5 pt-4">
-        <div className="grid grid-cols-3 gap-3">
+      <div className="space-y-2.5 border-t border-white/5 pt-3">
+        <div className="grid grid-cols-3 gap-2">
           <div>
             <p className="text-[10px] uppercase text-[#8c8c8c]">Type</p>
-            <p className="text-sm font-bold">{category === "Heavy Machinery" ? "Heavy" : "Standard"}</p>
+            <p className="text-xs font-bold">{category === "Heavy Machinery" ? "Heavy" : "Standard"}</p>
           </div>
           <div>
             <p className="text-[10px] uppercase text-[#8c8c8c]">Weight</p>
-            <p className="text-sm font-bold">{category === "Heavy Machinery" ? "22,450kg" : "275kg"}</p>
+            <p className="text-xs font-bold">{category === "Heavy Machinery" ? "22,450kg" : "275kg"}</p>
           </div>
           <div>
             <p className="text-[10px] uppercase text-[#8c8c8c]">Est. Cost</p>
-            <p className="text-sm font-bold text-[#e2f1a6]">{category === "Heavy Machinery" ? "$180.5k" : "$8.2k"}</p>
+            <p className="text-xs font-bold text-[#e2f1a6]">{category === "Heavy Machinery" ? "$180.5k" : "$8.2k"}</p>
           </div>
         </div>
-        <div className="flex gap-3">
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1 rounded-xl border border-white/5 bg-zinc-900 py-3 text-sm font-bold hover:bg-zinc-800">Share</motion.button>
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1 rounded-xl border border-white/5 bg-zinc-900 py-3 text-sm font-bold hover:bg-zinc-800">Checkout</motion.button>
+        <div className="flex gap-2">
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1 rounded-lg border border-white/5 bg-zinc-900 py-2 text-xs font-bold hover:bg-zinc-800">Share</motion.button>
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1 rounded-lg border border-white/5 bg-zinc-900 py-2 text-xs font-bold hover:bg-zinc-800">Checkout</motion.button>
         </div>
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#e2f1a6] py-3.5 text-sm font-bold text-black transition-opacity hover:opacity-90"
+          className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#e2f1a6] py-2.5 text-xs font-bold text-black transition-opacity hover:opacity-90"
         >
-          <Plus size={18} />
+          <Plus size={15} />
           Log Activity
         </motion.button>
       </div>
