@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 const CYCLE_MS = 9000;
 
-export default function HourglassIcon({ progress: fixedProgress }: { progress?: number }) {
+export default function HourglassIcon({ progress: fixedProgress, size = 200 }: { progress?: number; size?: number }) {
   const [progress, setProgress] = useState(fixedProgress ?? 0);
   const rafRef = useRef<number>(0);
   const startRef = useRef<number>(0);
@@ -37,20 +37,21 @@ export default function HourglassIcon({ progress: fixedProgress }: { progress?: 
   const waistY = 200;
   const topHW = 116;
   const botHW = 104;
-  const waistHW = 9;
+  const waistHW = 10;
   const r = 22;
 
+  // Single continuous clockwise path — smooth cubic curves through the waist
   const d = [
     `M ${cx - topHW + r},${topY}`,
     `L ${cx + topHW - r},${topY}`,
     `Q ${cx + topHW},${topY} ${cx + topHW},${topY + r}`,
-    `L ${cx + waistHW},${waistY}`,
-    `L ${cx + botHW},${bottomY - r}`,
+    `C ${cx + topHW},${topY + 34} ${cx + waistHW},${waistY - 30} ${cx + waistHW},${waistY}`,
+    `C ${cx + waistHW},${waistY + 28} ${cx + botHW},${bottomY - 36} ${cx + botHW},${bottomY - r}`,
     `Q ${cx + botHW},${bottomY} ${cx + botHW - r},${bottomY}`,
     `L ${cx - botHW + r},${bottomY}`,
     `Q ${cx - botHW},${bottomY} ${cx - botHW},${bottomY - r}`,
-    `L ${cx - waistHW},${waistY}`,
-    `L ${cx - topHW},${topY + r}`,
+    `C ${cx - botHW},${bottomY - 36} ${cx - waistHW},${waistY + 28} ${cx - waistHW},${waistY}`,
+    `C ${cx - waistHW},${waistY - 30} ${cx - topHW},${topY + 34} ${cx - topHW},${topY + r}`,
     `Q ${cx - topHW},${topY} ${cx - topHW + r},${topY}`,
     "Z",
   ].join(" ");
@@ -62,8 +63,8 @@ export default function HourglassIcon({ progress: fixedProgress }: { progress?: 
   return (
     <div className="flex items-center justify-center">
       <svg
-        width={200}
-        height={250}
+        width={size}
+        height={size * 1.25}
         viewBox={`0 0 ${W} ${H}`}
         style={{ display: "block" }}
         aria-label="Hourglass timer"
@@ -106,7 +107,7 @@ export default function HourglassIcon({ progress: fixedProgress }: { progress?: 
           x={cx}
           y={408}
           textAnchor="middle"
-          fontFamily="'Hanken Grotesk', system-ui, sans-serif"
+          fontFamily="'Inter', system-ui, sans-serif"
           fontSize="17"
           fontWeight="500"
           letterSpacing="0.14em"

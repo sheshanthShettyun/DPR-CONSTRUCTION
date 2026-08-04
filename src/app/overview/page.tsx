@@ -117,8 +117,8 @@ export default function Home() {
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
-            <div className="flex gap-6">
-              <div className="flex-1 space-y-6">
+            <div className="grid grid-cols-[380px_1fr_380px] gap-8">
+              <div className="space-y-6">
                 <div className="max-w-[380px]">
                   <ObjectivesCard />
                 </div>
@@ -149,7 +149,21 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="w-[380px] flex-shrink-0 space-y-6">
+
+              <div className="flex items-start justify-center pt-[280px]">
+                <div className="dashboard-card flex w-[320px] flex-col items-center gap-4 py-6">
+                  <div className="flex items-center gap-1.5 rounded-full bg-[#e2f1a6]/10 px-2.5 py-0.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
+                    <span className="text-[10px] font-medium text-[#e2f1a6]">Progress</span>
+                  </div>
+                  <HourglassIcon progress={selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91} size={170} />
+                  <p className="text-center text-sm font-medium text-white">{buildingName || "Project Progress"}</p>
+                  <div className="h-px w-10 bg-white/5" />
+                  <p className="text-center text-[11px] text-[#8c8c8c]">Tracked in real time</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
                 <UtilityStockCard />
                 <ExpensesCard />
               </div>
