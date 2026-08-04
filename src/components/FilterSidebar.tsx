@@ -10,7 +10,7 @@ interface Props {
 }
 
 const filters = [
-  { id: "All Transit", icon: LayoutDashboard, count: 1556 },
+  { id: "Dashboard", icon: LayoutDashboard, count: 1556 },
   { id: "Transit", icon: Truck, count: 338 },
   { id: "Utilities", icon: MapPin, count: 412 },
   { id: "Maintenance", icon: Wrench, count: 147 },

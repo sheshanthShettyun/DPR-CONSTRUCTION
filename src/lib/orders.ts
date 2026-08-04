@@ -82,4 +82,16 @@ export const orders: OrderData[] = [
       { label: "Delivered", time: "—", done: false },
     ],
   },
+  {
+    id: "#EP022309", from: "London, UK", to: "Amsterdam, NL", flag: "🇬🇧🇳🇱", sub: "Atlas Logistics", load: "1,870 kg", status: "Delivered", color: "emerald",
+    eta: "—", distance: "576 km",
+    stages: [
+      { label: "Loaded", time: "07:00", done: true },
+      { label: "Dispatched", time: "08:10", done: true },
+      { label: "In Transit", time: "09:40", done: true },
+      { label: "Checkpoint", time: "12:00", done: true },
+      { label: "Arriving", time: "14:20", done: true },
+      { label: "Delivered", time: "15:30", done: true, active: true },
+    ],
+  },
 ];

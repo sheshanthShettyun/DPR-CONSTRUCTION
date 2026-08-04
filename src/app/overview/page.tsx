@@ -12,6 +12,8 @@ import TransitPanel from "@/components/TransitPanel";
 import OnSiteView from "@/components/OnSiteView";
 import OffSiteView from "@/components/OffSiteView";
 import ProjectsView from "@/components/ProjectsView";
+import ExpensesCard from "@/components/ExpensesCard";
+import ObjectivesCard from "@/components/ObjectivesCard";
 import { orders, type OrderData } from "@/lib/orders";
 
 export default function Home() {
@@ -20,7 +22,7 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<OrderData>(orders[0]);
   const [transitOpen, setTransitOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("All Transit");
+  const [activeFilter, setActiveFilter] = useState("Dashboard");
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
 
   const handleBuildingSelect = (id: string) => {
@@ -112,20 +114,47 @@ export default function Home() {
             <OnSiteView />
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
-          ) : activeFilter === "All Transit" ? (
-            <div className="grid grid-cols-3 gap-6">
-              {orders.map((order) => (
-                <OrderCard
-                  key={order.id}
-                  {...order}
-                  onClick={() => openTransit(order)}
-                />
-              ))}
+          ) : activeFilter === "Dashboard" ? (
+            <div className="flex gap-6">
+              <div className="flex-1 space-y-6">
+                <div className="max-w-[380px]">
+                  <ObjectivesCard />
+                </div>
+                <div className="max-w-[380px]">
+                  <div className="mb-4">
+                    <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
+                  </div>
+                  <div className="flex flex-col gap-6">
+                    {orders
+                      .filter((o) => o.status === "Delivered")
+                      .map((order) => (
+                        <OrderCard
+                          key={order.id}
+                          {...order}
+                          onClick={() => openTransit(order)}
+                        />
+                      ))}
+                  </div>
+                  <div className="mt-4">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setActiveFilter("Transit")}
+                      className="flex items-center gap-1 rounded-lg bg-white/5 px-2 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                      See All →
+                    </motion.button>
+                  </div>
+                </div>
+              </div>
+              <div className="w-[380px] flex-shrink-0">
+                <ExpensesCard />
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-6">
               {orders
-                .filter((o) => activeFilter === "Transit" ? o.status === "In Transit" : o.status === activeFilter)
+                .filter((o) => activeFilter === "Transit" ? o.status !== "Maintenance" : o.status === activeFilter)
                 .map((order) => (
                   <OrderCard
                     key={order.id}

@@ -69,7 +69,7 @@ export default function AssetPanel({ onClose }: Props) {
   }, []);
 
   return (
-    <div className="dashboard-card flex w-80 flex-col gap-2.5 p-4">
+    <div className="dashboard-card flex w-96 flex-col gap-2.5 p-4">
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold">Asset Details</h2>
         <div className="flex items-center gap-1">
