@@ -9,11 +9,13 @@ import OrderCard from "@/components/OrderCard";
 import AssetPanel from "@/components/AssetPanel";
 import CalendarPicker from "@/components/CalendarPicker";
 import TransitPanel from "@/components/TransitPanel";
-import OnSiteView from "@/components/OnSiteView";
 import OffSiteView from "@/components/OffSiteView";
 import ProjectsView from "@/components/ProjectsView";
 import ExpensesCard from "@/components/ExpensesCard";
 import ObjectivesCard from "@/components/ObjectivesCard";
+import UtilityStockCard from "@/components/UtilityStockCard";
+import HourglassIcon from "@/components/HourglassIcon";
+import TaskBoard from "@/components/TaskBoard";
 import { orders, type OrderData } from "@/lib/orders";
 
 export default function Home() {
@@ -111,7 +113,7 @@ export default function Home() {
           {!selectedBuilding ? (
             <ProjectsView onSelect={handleBuildingSelect} />
           ) : activeFilter === "Utilities" ? (
-            <OnSiteView />
+            <TaskBoard />
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
@@ -147,7 +149,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="w-[380px] flex-shrink-0">
+              <div className="w-[380px] flex-shrink-0 space-y-6">
+                <UtilityStockCard />
                 <ExpensesCard />
               </div>
             </div>
