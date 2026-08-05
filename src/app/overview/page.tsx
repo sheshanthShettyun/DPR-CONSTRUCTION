@@ -14,6 +14,7 @@ import ProjectsView from "@/components/ProjectsView";
 import ExpensesCard from "@/components/ExpensesCard";
 import ObjectivesCard from "@/components/ObjectivesCard";
 import UtilityStockCard from "@/components/UtilityStockCard";
+import LevelStreakCard from "@/components/LevelStreakCard";
 import HourglassIcon from "@/components/HourglassIcon";
 import TaskBoard from "@/components/TaskBoard";
 import { orders, type OrderData } from "@/lib/orders";
@@ -62,7 +63,6 @@ export default function Home() {
                     <ArrowLeft size={16} />
                   </motion.button>
                   <h1 className="text-3xl font-semibold">{buildingName}</h1>
-                  <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">{activeFilter}</span>
                   <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">{activeFilter}</span>
                 </>
               ) : (
@@ -117,12 +117,16 @@ export default function Home() {
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
-            <div className="grid grid-cols-[380px_1fr_380px] gap-8">
-              <div className="space-y-6">
-                <div className="max-w-[380px]">
-                  <ObjectivesCard />
-                </div>
-                <div className="max-w-[380px]">
+            <div className="grid grid-cols-[8fr_9fr_8fr] gap-6">
+              <div className="col-span-2">
+                <LevelStreakCard />
+              </div>
+
+              <UtilityStockCard />
+
+              <div className="flex flex-col gap-6">
+                <ObjectivesCard />
+                <div>
                   <div className="mb-4">
                     <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
                   </div>
@@ -150,23 +154,21 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex items-start justify-center pt-[280px]">
-                <div className="dashboard-card flex w-[320px] flex-col items-center gap-4 py-6">
-                  <div className="flex items-center gap-1.5 rounded-full bg-[#e2f1a6]/10 px-2.5 py-0.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
-                    <span className="text-[10px] font-medium text-[#e2f1a6]">Progress</span>
-                  </div>
+              <div className="relative">
+                <div className="dashboard-card absolute inset-x-0 bottom-0 top-[128px] flex flex-col items-center justify-center gap-6">
                   <HourglassIcon progress={selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91} size={170} />
-                  <p className="text-center text-sm font-medium text-white">{buildingName || "Project Progress"}</p>
-                  <div className="h-px w-10 bg-white/5" />
-                  <p className="text-center text-[11px] text-[#8c8c8c]">Tracked in real time</p>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-4xl font-semibold tracking-tight text-white">
+                      {selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91}%
+                    </span>
+                    <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
+                      {selectedBuilding === "building-a" ? "Building A" : selectedBuilding === "building-b" ? "Building B" : "Building C"} · Progress
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-6">
-                <UtilityStockCard />
-                <ExpensesCard />
-              </div>
+              <ExpensesCard />
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-6">
