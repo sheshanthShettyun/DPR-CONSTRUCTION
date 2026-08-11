@@ -3,16 +3,25 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 
-const projects = [
-  { id: "building-a", name: "Meridian Heights — Tower B", location: "Dallas, TX", date: "Dec 2026", progress: 62, equipment: 412, crew: 128, status: "In Progress" },
-  { id: "building-b", name: "Harbour Vista — Phase 2", location: "Berlin, DE", date: "Mar 2027", progress: 45, equipment: 287, crew: 94, status: "In Progress" },
-];
+export interface ProjectData {
+  id: string;
+  name: string;
+  location: string;
+  targetDate: string;
+  progress: number;
+  equipment: number;
+  crew: number;
+  status: string;
+  svgType: "tower" | "factory" | "residential";
+  modules: number[];
+}
 
 interface Props {
+  projects: ProjectData[];
   onSelect: (id: string) => void;
 }
 
-export default function ProjectsView({ onSelect }: Props) {
+export default function ProjectsView({ projects, onSelect }: Props) {
   return (
     <div className="flex flex-col gap-5">
       {projects.map((p, i) => (
@@ -37,7 +46,7 @@ export default function ProjectsView({ onSelect }: Props) {
               <span className="h-1 w-1 rounded-full bg-[#8c8c8c]/40" />
               <div className="flex items-center gap-1.5">
                 <Calendar size={16} strokeWidth={2} />
-                {p.date}
+                {p.targetDate}
               </div>
             </div>
           </div>

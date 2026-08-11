@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Search, Bell, ChevronDown } from "lucide-react";
 
-const navItems = ["ALL", "Personnel", "Documents", "Budget", "Safety"];
+const navItems = ["ALL", "Personnel", "Documents", "Budget", "Safety", "Risk Assessment"];
 
 export default function TopNav() {
   return (
@@ -30,7 +30,7 @@ export default function TopNav() {
               transition={{ delay: 0.1 + i * 0.04 }}
               className="flex items-center rounded-[10px] px-3 text-[13px] font-medium text-[#8c8c8c] transition-all duration-200 hover:bg-white/[0.04] hover:text-white"
               style={{ height: 30 }}
-              href={item === "ALL" ? "/overview" : "#"}
+              href={item === "ALL" ? "/overview" : item === "Risk Assessment" ? "/intake" : "#"}
             >
               {item}
             </motion.a>
