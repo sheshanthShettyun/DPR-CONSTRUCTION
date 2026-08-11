@@ -117,20 +117,20 @@ export default function Home() {
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
-            <div className="grid grid-cols-[8fr_9fr_8fr] gap-6">
+            <div className="grid grid-cols-[8fr_9fr_8fr] gap-4">
               <div className="col-span-2">
                 <LevelStreakCard />
               </div>
 
               <UtilityStockCard />
 
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
                 <ObjectivesCard />
                 <div>
                   <div className="mb-4">
                     <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
                   </div>
-                  <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-4">
                     {orders
                       .filter((o) => o.status === "Delivered")
                       .map((order) => (
@@ -154,11 +154,11 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative">
-                <div className="dashboard-card absolute inset-x-0 bottom-0 top-[128px] flex flex-col items-center justify-center gap-6">
-                  <HourglassIcon progress={selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91} size={170} />
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-4xl font-semibold tracking-tight text-white">
+              <div className="flex items-center justify-center">
+                <div className="dashboard-card flex w-[412px] flex-col items-center justify-center gap-3">
+                  <HourglassIcon progress={selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91} size={95} />
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="text-2xl font-semibold tracking-tight text-white">
                       {selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91}%
                     </span>
                     <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
@@ -171,7 +171,7 @@ export default function Home() {
               <ExpensesCard />
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-4">
               {orders
                 .filter((o) => activeFilter === "Transit" ? o.status !== "Maintenance" : o.status === activeFilter)
                 .map((order) => (
