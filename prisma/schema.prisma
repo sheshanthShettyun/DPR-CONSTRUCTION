@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Project {
+  id          String   @id
+  name        String
+  location    String
+  targetDate  String
+  progress    Int
+  equipment   Int
+  crew        Int
+  status      String
+  svgType     String
+  modulesJson String // JSON-encoded array of 0/1, e.g. "[1,1,0,0,0,0]"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id        String   @id // e.g. "#US045861"
+  from      String
+  to        String
+  flag      String
+  sub       String
+  load      String
+  status    String
+  color     String
+  eta       String
+  distance  String
+  stages    Stage[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Stage {
+  id       Int     @id @default(autoincrement())
+  orderId  String
+  order    Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  label    String
+  time     String
+  done     Boolean @default(false)
+  active   Boolean @default(false)
+  position Int
+}
+
+model TaskColumn {
+  id       Int        @id @default(autoincrement())
+  title    String
+  position Int
+  cards    TaskCard[]
+}
+
+model TaskCard {
+  id       Int        @id @default(autoincrement())
+  columnId Int
+  column   TaskColumn @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  title    String
+  desc     String
+  date     String
+  comments Int    @default(0)
+  files    Int    @default(0)
+  level    String // Plenty | Low | Critical
+  type     String
+  position Int
+}
+
+model ExpenseCategory {
+  id           Int    @id @default(autoincrement())
+  name         String
+  amount       Int
+  pct          Float
+  color        String
+  icon         String
+  changeAmount Int    @default(0)
+  position     Int
+}
+
+model ExpenseSummary {
+  id               Int      @id @default(autoincrement())
+  month            String
+  totalSpent       Int
+  budget           Int
+  potentialSavings Int
+  savingsRatePct   Float
+  savingsTargetPct Float
+  sparklineFilled  Int
+  sparklineTotal   Int
+  updatedAt        DateTime @updatedAt
+}
+
+model Objective {
+  id       Int     @id @default(autoincrement())
+  title    String
+  time     String
+  done     Boolean @default(false)
+  dueDate  String
+  position Int
+}
+
+model UtilityStock {
+  id         Int      @id @default(autoincrement())
+  totalItems Int
+  available  Int
+  lowStock   Int
+  updatedAt  DateTime @updatedAt
+}
+
+model ProjectIntake {
+  id             String      @id @default(cuid())
+  name           String
+  location       String
+  projectType    String // Residential | Commercial | Industrial | Infrastructure
+  budget         Int
+  startDate      String
+  targetDate     String
+  crewSize       Int
+  scale          Int // square footage (thousands)
+  siteConditions String // Standard | Urban | Remote | Coastal | Seismic Zone | Flood Zone
+  createdAt      DateTime    @default(now())
+  risks          Risk[]
+  milestones     Milestone[]
+}
+
+model Risk {
+  id          Int           @id @default(autoincrement())
+  intakeId    String
+  intake      ProjectIntake @relation(fields: [intakeId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  severity    String // Low | Medium | High
+  category    String
+  position    Int
+}
+
+model Milestone {
+  id       Int           @id @default(autoincrement())
+  intakeId String
+  intake   ProjectIntake @relation(fields: [intakeId], references: [id], onDelete: Cascade)
+  title    String
+  date     String
+  phasePct Int
+  position Int
+}

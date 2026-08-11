@@ -42,17 +42,25 @@ const buildingSvgs: Record<string, React.ReactNode> = {
   ),
 };
 
-const projects = [
-  { id: "building-a", name: "Meridian Heights — Tower B", location: "Dallas, TX", date: "Dec 2026", progress: 62, equipment: 412, crew: 128, status: "In Progress", modules: [1, 1, 1, 0, 0, 0], svgType: "tower" as const },
-  { id: "building-b", name: "Harbour Vista — Phase 2", location: "Berlin, DE", date: "Mar 2027", progress: 45, equipment: 287, crew: 94, status: "In Progress", modules: [1, 1, 0, 0, 0, 0], svgType: "factory" as const },
-  { id: "building-c", name: "Riverside Industrial Park", location: "Warsaw, PL", date: "Oct 2026", progress: 91, equipment: 156, crew: 52, status: "Near Completion", modules: [1, 1, 1, 1, 1, 0], svgType: "residential" as const },
-];
+export interface ProjectData {
+  id: string;
+  name: string;
+  location: string;
+  targetDate: string;
+  progress: number;
+  equipment: number;
+  crew: number;
+  status: string;
+  svgType: "tower" | "factory" | "residential";
+  modules: number[];
+}
 
 interface Props {
+  projects: ProjectData[];
   onSelect: (id: string) => void;
 }
 
-export default function ProjectsView({ onSelect }: Props) {
+export default function ProjectsView({ projects, onSelect }: Props) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
       {projects.map((p, i) => (
@@ -85,7 +93,7 @@ export default function ProjectsView({ onSelect }: Props) {
               <span className="h-1 w-1 rounded-full bg-[#8e8e8e]/40" />
               <span className="flex items-center gap-1">
                 <Calendar size={12} strokeWidth={1.5} />
-                {p.date}
+                {p.targetDate}
               </span>
             </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PanelLeftOpen, X, Calendar, ArrowLeft } from "lucide-react";
 import TopNav from "@/components/TopNav";
@@ -10,32 +10,38 @@ import AssetPanel from "@/components/AssetPanel";
 import CalendarPicker from "@/components/CalendarPicker";
 import TransitPanel from "@/components/TransitPanel";
 import OffSiteView from "@/components/OffSiteView";
-import ProjectsView from "@/components/ProjectsView";
+import ProjectsView, { type ProjectData } from "@/components/ProjectsView";
 import ExpensesCard from "@/components/ExpensesCard";
 import ObjectivesCard from "@/components/ObjectivesCard";
 import UtilityStockCard from "@/components/UtilityStockCard";
 import LevelStreakCard from "@/components/LevelStreakCard";
 import HourglassIcon from "@/components/HourglassIcon";
 import TaskBoard from "@/components/TaskBoard";
-import { orders, type OrderData } from "@/lib/orders";
+import type { OrderData } from "@/lib/orders";
 
 export default function Home() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [calOpen, setCalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<OrderData>(orders[0]);
+  const [orders, setOrders] = useState<OrderData[]>([]);
+  const [projects, setProjects] = useState<ProjectData[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null);
   const [transitOpen, setTransitOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Dashboard");
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/orders").then((r) => r.json()).then(setOrders);
+    fetch("/api/projects").then((r) => r.json()).then(setProjects);
+  }, []);
 
   const handleBuildingSelect = (id: string) => {
     setSelectedBuilding(id);
     setActiveFilter("Transit");
   };
 
-  const buildingName = selectedBuilding === "building-a" ? "Meridian Heights — Tower B" :
-    selectedBuilding === "building-b" ? "Harbour Vista — Phase 2" :
-    selectedBuilding === "building-c" ? "Riverside Industrial Park" : "";
+  const selectedProject = projects.find((p) => p.id === selectedBuilding);
+  const buildingName = selectedProject?.name ?? "";
 
   const openTransit = (order: OrderData) => {
     setSelectedOrder(order);
@@ -68,7 +74,7 @@ export default function Home() {
               ) : (
                 <>
                   <h1 className="text-3xl font-semibold">All Projects</h1>
-                  <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">3 active</span>
+                  <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-sm text-[#8c8c8c]">{projects.length} active</span>
                 </>
               )}
             </div>
@@ -111,7 +117,7 @@ export default function Home() {
           </div>
 
           {!selectedBuilding ? (
-            <ProjectsView onSelect={handleBuildingSelect} />
+            <ProjectsView projects={projects} onSelect={handleBuildingSelect} />
           ) : activeFilter === "Utilities" ? (
             <TaskBoard />
           ) : activeFilter === "Off-Site" ? (
@@ -156,13 +162,13 @@ export default function Home() {
 
               <div className="relative">
                 <div className="dashboard-card absolute inset-x-0 bottom-0 top-[128px] flex flex-col items-center justify-center gap-6">
-                  <HourglassIcon progress={selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91} size={170} />
+                  <HourglassIcon progress={selectedProject?.progress ?? 0} size={170} />
                   <div className="flex flex-col items-center gap-1">
                     <span className="text-4xl font-semibold tracking-tight text-white">
-                      {selectedBuilding === "building-a" ? 62 : selectedBuilding === "building-b" ? 45 : 91}%
+                      {selectedProject?.progress ?? 0}%
                     </span>
                     <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
-                      {selectedBuilding === "building-a" ? "Building A" : selectedBuilding === "building-b" ? "Building B" : "Building C"} · Progress
+                      {buildingName} · Progress
                     </span>
                   </div>
                 </div>
@@ -213,7 +219,7 @@ export default function Home() {
       </main>
 
       <AnimatePresence>
-        {transitOpen && (
+        {transitOpen && selectedOrder && (
           <>
             <motion.div
               initial={{ opacity: 0 }}

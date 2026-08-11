@@ -8,21 +8,12 @@ interface Props {
   order: OrderData;
 }
 
-const stages = [
-  { label: "Loaded", time: "09:15", done: true },
-  { label: "Dispatched", time: "10:40", done: true },
-  { label: "In Transit", time: "11:30", done: true, active: true },
-  { label: "Checkpoint", time: "13:25", done: false },
-  { label: "Arriving", time: "14:50", done: false },
-  { label: "Delivered", time: "16:30", done: false },
-];
-
 const stagePositions = [94, 250, 437, 587, 751, 916];
 
 export default function TransitPanel({ order }: Props) {
-  const { from, to, eta, distance, load, status, sub } = order;
+  const { from, to, eta, distance, load, status, stages } = order;
   const doneCount = stages.filter((s) => s.done).length;
-  const progress = Math.round((doneCount / stages.length) * 100);
+  const progress = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
 
   return (
     <motion.div

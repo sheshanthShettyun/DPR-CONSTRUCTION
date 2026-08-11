@@ -1,15 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Check } from "lucide-react";
 
-const tasks = [
-  { title: "Daily Design Challenge", time: "09:00 - 09:30", done: true },
-  { title: "Weekly Team Meet", time: "16:45 - 17:45", done: false },
-  { title: "Teezaro Project Presentation", time: "19:15 - 20:00", done: false },
-];
+interface Objective {
+  id: number;
+  title: string;
+  time: string;
+  done: boolean;
+  dueDate: string;
+}
 
 export default function ObjectivesCard() {
+  const [tasks, setTasks] = useState<Objective[]>([]);
+
+  useEffect(() => {
+    fetch("/api/objectives").then((r) => r.json()).then(setTasks);
+  }, []);
+
+  const toggleDone = async (task: Objective) => {
+    setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t)));
+    await fetch(`/api/objectives/${task.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ done: !task.done }),
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -21,13 +39,13 @@ export default function ObjectivesCard() {
         <h2 className="text-[15px] font-medium tracking-wide text-[#8c8c8c]">Objectives</h2>
         <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#8c8c8c]">
           <Calendar size={13} strokeWidth={1.8} />
-          <span>Aug 23</span>
+          <span>{tasks[0]?.dueDate ?? ""}</span>
         </div>
       </div>
 
       <div className="flex flex-col justify-center">
         {tasks.map((task) => (
-          <div key={task.title} className="flex items-center justify-between py-2.5">
+          <div key={task.id} className="flex items-center justify-between py-2.5">
             <div className="min-w-0 pr-2">
               <h3 className={`truncate text-[13px] font-medium ${task.done ? "text-[#6b7280] line-through" : "text-[#8c8c8c]"}`}>
                 {task.title}
@@ -35,6 +53,7 @@ export default function ObjectivesCard() {
               <p className="mt-0.5 text-[11px] text-[#6b7280]">{task.time}</p>
             </div>
             <button
+              onClick={() => toggleDone(task)}
               className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full transition-colors ${
                 task.done ? "bg-[#e2f1a6]" : "border border-white/10 hover:border-white/25"
               }`}
