@@ -20,6 +20,7 @@ model Project {
   crew        Int
   status      String
   svgType     String
+  imageUrl    String?
   modulesJson String // JSON-encoded array of 0/1, e.g. "[1,1,0,0,0,0]"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -149,4 +150,15 @@ model Milestone {
   date     String
   phasePct Int
   position Int
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  filename    String
+  s3Key       String
+  contentType String
+  size        Int
+  entityType  String   // Project | TaskCard | Order | Intake
+  entityId    String
+  uploadedAt  DateTime @default(now())
 }
