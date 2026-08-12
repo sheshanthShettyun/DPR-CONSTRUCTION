@@ -3,7 +3,7 @@
 import Lottie from "lottie-react";
 import animationData from "@/lib/hourglass-animation.json";
 
-export default function HourglassIcon({ size = 170 }: { size?: number }) {
+export default function HourglassIcon({ size = 170 }: { size?: number; progress?: number }) {
   return (
     <div className="flex flex-col items-center">
       <Lottie
