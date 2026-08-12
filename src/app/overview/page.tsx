@@ -37,7 +37,7 @@ export default function Home() {
 
   const handleBuildingSelect = (id: string) => {
     setSelectedBuilding(id);
-    setActiveFilter("Transit");
+    setActiveFilter("Dashboard");
   };
 
   const selectedProject = projects.find((p) => p.id === selectedBuilding);
