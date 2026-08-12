@@ -1063,6 +1063,7 @@ export type ObjectiveCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many Objectives.
    */
   data: Prisma.ObjectiveCreateManyInput | Prisma.ObjectiveCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1081,6 +1082,7 @@ export type ObjectiveCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many Objectives.
    */
   data: Prisma.ObjectiveCreateManyInput | Prisma.ObjectiveCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

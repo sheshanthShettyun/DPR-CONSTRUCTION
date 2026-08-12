@@ -1211,6 +1211,7 @@ export type ExpenseSummaryCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many ExpenseSummaries.
    */
   data: Prisma.ExpenseSummaryCreateManyInput | Prisma.ExpenseSummaryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1229,6 +1230,7 @@ export type ExpenseSummaryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many ExpenseSummaries.
    */
   data: Prisma.ExpenseSummaryCreateManyInput | Prisma.ExpenseSummaryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

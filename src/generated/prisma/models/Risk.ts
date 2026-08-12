@@ -474,6 +474,7 @@ export type RiskCreateOrConnectWithoutIntakeInput = {
 
 export type RiskCreateManyIntakeInputEnvelope = {
   data: Prisma.RiskCreateManyIntakeInput | Prisma.RiskCreateManyIntakeInput[]
+  skipDuplicates?: boolean
 }
 
 export type RiskUpsertWithWhereUniqueWithoutIntakeInput = {
@@ -1274,6 +1275,7 @@ export type RiskCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Risks.
    */
   data: Prisma.RiskCreateManyInput | Prisma.RiskCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1292,6 +1294,7 @@ export type RiskCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Risks.
    */
   data: Prisma.RiskCreateManyInput | Prisma.RiskCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

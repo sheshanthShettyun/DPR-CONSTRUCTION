@@ -564,6 +564,7 @@ export type TaskCardCreateOrConnectWithoutColumnInput = {
 
 export type TaskCardCreateManyColumnInputEnvelope = {
   data: Prisma.TaskCardCreateManyColumnInput | Prisma.TaskCardCreateManyColumnInput[]
+  skipDuplicates?: boolean
 }
 
 export type TaskCardUpsertWithWhereUniqueWithoutColumnInput = {
@@ -1397,6 +1398,7 @@ export type TaskCardCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many TaskCards.
    */
   data: Prisma.TaskCardCreateManyInput | Prisma.TaskCardCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1415,6 +1417,7 @@ export type TaskCardCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many TaskCards.
    */
   data: Prisma.TaskCardCreateManyInput | Prisma.TaskCardCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

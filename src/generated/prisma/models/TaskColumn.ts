@@ -1107,6 +1107,7 @@ export type TaskColumnCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many TaskColumns.
    */
   data: Prisma.TaskColumnCreateManyInput | Prisma.TaskColumnCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1125,6 +1126,7 @@ export type TaskColumnCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many TaskColumns.
    */
   data: Prisma.TaskColumnCreateManyInput | Prisma.TaskColumnCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

@@ -20,7 +20,7 @@ const filters = [
 export default function FilterSidebar({ active, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const handleEnter = () => {
     clearTimeout(timer.current);

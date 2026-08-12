@@ -1145,6 +1145,7 @@ export type ExpenseCategoryCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many ExpenseCategories.
    */
   data: Prisma.ExpenseCategoryCreateManyInput | Prisma.ExpenseCategoryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1163,6 +1164,7 @@ export type ExpenseCategoryCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many ExpenseCategories.
    */
   data: Prisma.ExpenseCategoryCreateManyInput | Prisma.ExpenseCategoryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

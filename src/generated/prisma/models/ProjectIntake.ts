@@ -1488,6 +1488,7 @@ export type ProjectIntakeCreateManyArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many ProjectIntakes.
    */
   data: Prisma.ProjectIntakeCreateManyInput | Prisma.ProjectIntakeCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1506,6 +1507,7 @@ export type ProjectIntakeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * The data used to create many ProjectIntakes.
    */
   data: Prisma.ProjectIntakeCreateManyInput | Prisma.ProjectIntakeCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

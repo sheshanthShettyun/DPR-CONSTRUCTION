@@ -1047,6 +1047,7 @@ export type UtilityStockCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many UtilityStocks.
    */
   data: Prisma.UtilityStockCreateManyInput | Prisma.UtilityStockCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1065,6 +1066,7 @@ export type UtilityStockCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many UtilityStocks.
    */
   data: Prisma.UtilityStockCreateManyInput | Prisma.UtilityStockCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

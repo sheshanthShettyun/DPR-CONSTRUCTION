@@ -87,8 +87,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-[16px] font-light leading-[1.65] text-white/75"
-            style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif" }}
-            style={{ maxWidth: 440, marginBottom: 36 }}
+            style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", maxWidth: 440, marginBottom: 36 }}
           >
             The operations management platform for modern construction. Track fleet, manage assets, and monitor site progress in real-time.
           </motion.p>
