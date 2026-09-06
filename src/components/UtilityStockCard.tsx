@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import OptimizerPanel from "@/components/OptimizerPanel";
 
 interface Stock {
   totalItems: number;
@@ -12,6 +13,7 @@ interface Stock {
 
 export default function UtilityStockCard() {
   const [stock, setStock] = useState<Stock | null>(null);
+  const [optOpen, setOptOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/utility-stock").then((r) => r.json()).then(setStock);
@@ -29,7 +31,7 @@ export default function UtilityStockCard() {
     >
       <div className="flex items-start justify-between">
         <h2 className="text-[15px] font-medium tracking-wide text-[#8c8c8c]">Utility in Stock</h2>
-        <button className="text-[#8c8c8c] transition-colors hover:text-white">
+        <button onClick={() => setOptOpen(true)} className="text-[#8c8c8c] transition-colors hover:text-white" title="Open DPR Optimizer">
           <ArrowUpRight size={16} strokeWidth={2.5} />
         </button>
       </div>
@@ -57,6 +59,7 @@ export default function UtilityStockCard() {
           />
         </div>
       </div>
+      <OptimizerPanel open={optOpen} onClose={() => setOptOpen(false)} />
     </motion.div>
   );
 }
