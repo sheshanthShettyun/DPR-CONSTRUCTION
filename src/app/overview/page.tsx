@@ -165,7 +165,7 @@ export default function Home() {
 
                 <div className="relative col-span-2">
                   <div className="dashboard-card absolute inset-x-0 bottom-0 top-[128px] flex flex-col items-center justify-center gap-6">
-                    <HourglassIcon progress={selectedProject?.progress ?? 0} size={220} />
+                    <HourglassIcon size={220} />
                     <div className="flex flex-col items-center gap-1">
                       <span className="text-4xl font-semibold tracking-tight text-white">
                         {selectedProject?.progress ?? 0}%
