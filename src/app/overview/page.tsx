@@ -49,10 +49,10 @@ export default function Home() {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-10">
       <TopNav />
 
-      <main className="relative flex gap-6">
+      <main className="relative flex gap-8">
         {selectedBuilding && <FilterSidebar active={activeFilter} onChange={setActiveFilter} />}
 
         <section className="flex-1">
@@ -123,58 +123,60 @@ export default function Home() {
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
-            <div className="grid grid-cols-[8fr_9fr_8fr] gap-4">
-              <div className="col-span-2">
-                <LevelStreakCard />
-              </div>
-
-              <UtilityStockCard />
-
-              <div className="flex flex-col gap-4">
-                <ObjectivesCard />
-                <div>
-                  <div className="mb-4">
-                    <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    {orders
-                      .filter((o) => o.status === "Delivered")
-                      .map((order) => (
-                        <OrderCard
-                          key={order.id}
-                          {...order}
-                          onClick={() => openTransit(order)}
-                        />
-                      ))}
-                  </div>
-                  <div className="mt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setActiveFilter("Transit")}
-                      className="flex items-center gap-1 rounded-lg bg-white/5 px-2 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
-                    >
-                      See All →
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-center">
-                <div className="dashboard-card flex w-[412px] flex-col items-center justify-center gap-3">
-                  <HourglassIcon progress={selectedProject?.progress ?? 0} size={95} />
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className="text-2xl font-semibold tracking-tight text-white">
-                      {selectedProject?.progress ?? 0}%
-                    </span>
-                    <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
-                      {buildingName} · Progress
-                    </span>
-                  </div>
-                </div>
-              </div>
-
+            <div className="flex flex-col gap-8">
               <ExpensesCard />
+
+              <div className="grid grid-cols-[8fr_9fr_8fr] gap-8">
+                <div className="col-span-2">
+                  <LevelStreakCard />
+                </div>
+
+                <UtilityStockCard />
+
+                <div className="flex flex-col gap-8">
+                  <ObjectivesCard />
+                  <div>
+                    <div className="mb-4">
+                      <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
+                    </div>
+                    <div className="flex flex-col gap-6">
+                      {orders
+                        .filter((o) => o.status === "Delivered")
+                        .map((order) => (
+                          <OrderCard
+                            key={order.id}
+                            {...order}
+                            onClick={() => openTransit(order)}
+                          />
+                        ))}
+                    </div>
+                    <div className="mt-4">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setActiveFilter("Transit")}
+                        className="flex items-center gap-1 rounded-lg bg-white/5 px-2 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
+                      >
+                        See All →
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative col-span-2">
+                  <div className="dashboard-card absolute inset-x-0 bottom-0 top-[128px] flex flex-col items-center justify-center gap-6">
+                    <HourglassIcon progress={selectedProject?.progress ?? 0} size={220} />
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-4xl font-semibold tracking-tight text-white">
+                        {selectedProject?.progress ?? 0}%
+                      </span>
+                      <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
+                        {buildingName} · Progress
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-4">

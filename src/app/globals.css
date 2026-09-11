@@ -14,7 +14,18 @@ body {
 .dashboard-card {
   background-color: #1a1a1a;
   border-radius: 1rem;
-  padding: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid transparent;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px) scale(1.012);
+  border-color: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 20px 45px -20px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(168, 85, 247, 0.08);
 }
 
 .status-chip {

@@ -93,7 +93,7 @@ export default function ExpensesCard() {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {statsCards.map((s) => (
           <div key={s.label} className="flex flex-col gap-1 rounded-xl bg-[#1f1f1f] p-3">
             <span className="text-[9px] font-medium uppercase tracking-wider text-[#8c8c8c]">{s.label}</span>
