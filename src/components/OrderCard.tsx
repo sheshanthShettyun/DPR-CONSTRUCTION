@@ -33,11 +33,11 @@ export default function OrderCard({ id, from, to, flag, sub, load, status, color
       whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}
       className="dashboard-card"
     >
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <span className="font-bold">{id}</span>
         <div className="flex items-center gap-2 text-[10px] text-[#8c8c8c]">Job Site</div>
       </div>
-      <div className="mb-6 space-y-3">
+      <div className="mb-5 space-y-2.5">
         <div className="flex justify-between text-sm">
           <span className="text-[#8c8c8c]">Job Site</span>
           <span className="font-medium">{site} <span className="ml-1">{flag}</span></span>
@@ -51,7 +51,7 @@ export default function OrderCard({ id, from, to, flag, sub, load, status, color
           <span className="font-medium">{load}</span>
         </div>
       </div>
-      <div className="flex items-center justify-between border-t border-white/5 pt-4">
+      <div className="flex items-center justify-between border-t border-white/5 pt-3.5">
         <span className="text-[10px] uppercase tracking-wider text-[#8c8c8c]">Job Site</span>
         <div className="flex items-center gap-3">
           <motion.button

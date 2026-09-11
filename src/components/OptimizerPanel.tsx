@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles, Check, TriangleAlert } from "lucide-react";
 import { ITEMS, RECIPES, type DayPlan, type Inventory } from "@/lib/dprOptimizer";
@@ -12,6 +13,12 @@ export default function OptimizerPanel({ open, onClose }: { open: boolean; onClo
   const [picked, setPicked] = useState<string[]>(["slab-pour-100", "dewater-pit3", "compaction-bay2"]);
   const [plan, setPlan] = useState<DayPlan | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) setPlan(null);
@@ -31,14 +38,16 @@ export default function OptimizerPanel({ open, onClose }: { open: boolean; onClo
     setLoading(false);
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
           onClick={onClose}
         >
           <motion.div
@@ -163,6 +172,7 @@ export default function OptimizerPanel({ open, onClose }: { open: boolean; onClo
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

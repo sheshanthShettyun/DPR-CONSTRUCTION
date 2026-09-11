@@ -10,7 +10,7 @@ export default function HourglassIcon({ size = 200 }: { size?: number }) {
         animationData={animationData}
         loop
         autoplay
-        style={{ width: size * 1.4, height: size * 1.4 }}
+        style={{ width: size, height: size }}
       />
     </div>
   );

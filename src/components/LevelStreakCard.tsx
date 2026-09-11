@@ -11,7 +11,7 @@ export default function LevelStreakCard() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-      className="dashboard-card flex flex-col gap-6"
+      className="dashboard-card flex flex-col gap-5"
     >
       <div className="flex items-start justify-between">
         <div className="flex flex-col">
@@ -50,7 +50,7 @@ export default function LevelStreakCard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-2">
           <div className="relative h-2 w-full overflow-hidden rounded-full bg-zinc-800">
             <motion.div

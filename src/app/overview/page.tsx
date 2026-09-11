@@ -49,14 +49,14 @@ export default function Home() {
   };
 
   return (
-    <div className="p-10">
+    <div className="px-8 pb-8 pt-7 lg:px-10">
       <TopNav />
 
-      <main className="relative flex gap-8">
+      <main className="relative flex gap-6">
         {selectedBuilding && <FilterSidebar active={activeFilter} onChange={setActiveFilter} />}
 
         <section className="flex-1">
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               {selectedBuilding ? (
                 <>
@@ -123,25 +123,42 @@ export default function Home() {
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
-            <div className="flex flex-col gap-8">
-              <ExpensesCard />
+            <div className="flex flex-col gap-5">
+              {/* Row 1: Level/XP (full width) */}
+              <LevelStreakCard />
 
-              <div className="grid grid-cols-[8fr_9fr_8fr] gap-8">
-                <div className="col-span-2">
-                  <LevelStreakCard />
+              <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(340px,0.9fr)]">
+                <div className="flex min-w-0 flex-col gap-5">
+                  <ExpensesCard />
+
+                  <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
+                    <ObjectivesCard />
+
+                    <div className="dashboard-card flex min-h-[196px] w-full flex-col items-center justify-center gap-4 py-6">
+                      <HourglassIcon size={128} />
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-4xl font-semibold tracking-tight text-white">
+                          {selectedProject?.progress ?? 0}%
+                        </span>
+                        <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
+                          {buildingName} · Progress
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <UtilityStockCard />
+                <aside className="flex min-w-0 flex-col gap-5">
+                  <UtilityStockCard />
 
-                <div className="flex flex-col gap-8">
-                  <ObjectivesCard />
                   <div>
-                    <div className="mb-4">
+                    <div className="mb-3">
                       <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
                     </div>
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-3">
                       {orders
                         .filter((o) => o.status === "Delivered")
+                        .slice(0, 2)
                         .map((order) => (
                           <OrderCard
                             key={order.id}
@@ -150,10 +167,10 @@ export default function Home() {
                           />
                         ))}
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-3">
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.96 }}
                         onClick={() => setActiveFilter("Transit")}
                         className="flex items-center gap-1 rounded-lg bg-white/5 px-2 py-1 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
                       >
@@ -161,21 +178,7 @@ export default function Home() {
                       </motion.button>
                     </div>
                   </div>
-                </div>
-
-                <div className="relative col-span-2">
-                  <div className="dashboard-card absolute inset-x-0 bottom-0 top-[128px] flex flex-col items-center justify-center gap-6">
-                    <HourglassIcon size={220} />
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-4xl font-semibold tracking-tight text-white">
-                        {selectedProject?.progress ?? 0}%
-                      </span>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
-                        {buildingName} · Progress
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                </aside>
               </div>
             </div>
           ) : (

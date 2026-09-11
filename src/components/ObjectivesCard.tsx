@@ -28,24 +28,35 @@ export default function ObjectivesCard() {
     });
   };
 
+  const completedCount = tasks.filter((t) => t.done).length;
+  const dueDates = [...new Set(tasks.map((t) => t.dueDate).filter(Boolean))];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-      className="dashboard-card flex flex-col gap-5"
+      className="dashboard-card flex min-h-[196px] flex-col gap-3"
     >
       <div className="flex items-start justify-between">
-        <h2 className="text-[15px] font-medium tracking-wide text-[#8c8c8c]">Objectives</h2>
+        <div>
+          <h2 className="text-[15px] font-medium tracking-wide text-[#8c8c8c]">Objectives</h2>
+          <p className="mt-1 text-[11px] text-[#6b7280]">
+            {completedCount} of {tasks.length} completed
+          </p>
+        </div>
         <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#8c8c8c]">
           <Calendar size={13} strokeWidth={1.8} />
-          <span>{tasks[0]?.dueDate ?? ""}</span>
+          <span>
+            {dueDates[0] ?? ""}
+            {dueDates.length > 1 ? ` +${dueDates.length - 1} more` : ""}
+          </span>
         </div>
       </div>
 
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center divide-y divide-white/5">
         {tasks.map((task) => (
-          <div key={task.id} className="flex items-center justify-between py-2.5">
+          <div key={task.id} className="flex items-center justify-between py-1.5">
             <div className="min-w-0 pr-2">
               <h3 className={`truncate text-[13px] font-medium ${task.done ? "text-[#6b7280] line-through" : "text-[#8c8c8c]"}`}>
                 {task.title}
@@ -54,11 +65,11 @@ export default function ObjectivesCard() {
             </div>
             <button
               onClick={() => toggleDone(task)}
-              className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full transition-colors ${
+              className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full transition-colors ${
                 task.done ? "bg-[#e2f1a6]" : "border border-white/10 hover:border-white/25"
               }`}
             >
-              {task.done && <Check size={11} strokeWidth={3} className="text-black" />}
+              {task.done && <Check size={13} strokeWidth={3} className="text-black" />}
             </button>
           </div>
         ))}
