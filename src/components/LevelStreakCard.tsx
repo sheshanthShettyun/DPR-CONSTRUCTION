@@ -3,8 +3,6 @@
 import { motion } from "framer-motion";
 import { Flame, Trophy, Star } from "lucide-react";
 
-const XP_MILESTONES = [0, 20, 40, 60, 80, 100];
-
 export default function LevelStreakCard() {
   return (
     <motion.div
@@ -17,7 +15,7 @@ export default function LevelStreakCard() {
         <div className="flex flex-col">
           <div className="mb-2 flex items-center gap-1.5">
             <span className="text-[10px] font-semibold uppercase tracking-widest text-[#8c8c8c]">Level</span>
-            <span className="flex items-center gap-1 rounded-full bg-[#a855f7]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#c084fc]">
+            <span className="flex items-center gap-1 rounded-full bg-[#e2f1a6]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#e2f1a6]">
               <Trophy size={9} strokeWidth={2.5} />
               Gold Tier
             </span>
@@ -26,7 +24,7 @@ export default function LevelStreakCard() {
             <motion.div
               animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.06, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-              className="pointer-events-none absolute -left-3 -top-3 h-16 w-16 rounded-full bg-[#a855f7]/25 blur-xl"
+              className="pointer-events-none absolute -left-3 -top-3 h-16 w-16 rounded-full bg-[#e2f1a6]/25 blur-xl"
             />
             <span className="relative text-5xl font-semibold leading-none tracking-tight text-white">24</span>
             <span className="relative text-2xl font-medium text-[#8c8c8c]">/50</span>
@@ -57,19 +55,12 @@ export default function LevelStreakCard() {
               initial={{ width: 0 }}
               animate={{ width: "49.6%" }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="h-full rounded-full bg-gradient-to-r from-[#a855f7] to-[#e2f1a6]"
+              className="h-full rounded-full bg-[#8c8c8c]"
             />
-            {XP_MILESTONES.slice(1, -1).map((m) => (
-              <span
-                key={m}
-                className="absolute top-0 h-full w-px bg-black/40"
-                style={{ left: `${m}%` }}
-              />
-            ))}
           </div>
           <div className="flex items-center justify-between text-[11px] font-medium">
             <span className="flex items-center gap-1 uppercase tracking-wider text-[#8c8c8c]">
-              <Star size={10} strokeWidth={2.5} className="text-[#a855f7]" />
+              <Star size={10} strokeWidth={2.5} className="text-[#e2f1a6]" />
               XP
             </span>
             <div className="text-white">
@@ -100,7 +91,7 @@ export default function LevelStreakCard() {
 
       <div className="flex items-center justify-between rounded-xl bg-[#1f1f1f] px-3 py-2 text-[10px]">
         <span className="text-[#8c8c8c]">Next reward unlocks at</span>
-        <span className="flex items-center gap-1 font-semibold text-[#c084fc]">
+        <span className="flex items-center gap-1 font-semibold text-[#e2f1a6]">
           <Trophy size={11} strokeWidth={2.5} />
           Level 25
         </span>

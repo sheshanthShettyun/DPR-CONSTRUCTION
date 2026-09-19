@@ -123,15 +123,16 @@ export default function Home() {
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 [zoom:0.8]">
               {/* Row 1: Level/XP (full width) */}
               <LevelStreakCard />
 
               <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(340px,0.9fr)]">
-                <div className="flex min-w-0 flex-col gap-5">
-                  <ExpensesCard />
+                <ExpensesCard />
 
-                  <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
+                <UtilityStockCard />
+
+                  <div className="grid min-w-0 grid-cols-1 items-start gap-5 lg:grid-cols-2">
                     <ObjectivesCard />
 
                     <div className="dashboard-card flex min-h-[196px] w-full flex-col items-center justify-center gap-4 py-6">
@@ -146,16 +147,12 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <aside className="flex min-w-0 flex-col gap-5">
-                  <UtilityStockCard />
-
-                  <div>
+                  <div className="min-w-0">
                     <div className="mb-3">
                       <span className="text-xs font-medium text-[#8c8c8c]">Completed Deliveries</span>
                     </div>
-                    <div className="flex flex-col gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                       {orders
                         .filter((o) => o.status === "Delivered")
                         .slice(0, 2)
@@ -178,7 +175,6 @@ export default function Home() {
                       </motion.button>
                     </div>
                   </div>
-                </aside>
               </div>
             </div>
           ) : (
@@ -243,7 +239,13 @@ export default function Home() {
               onClick={() => setTransitOpen(false)}
             >
               <div onClick={(e) => e.stopPropagation()} className="mx-auto w-full max-w-[960px]">
-                <TransitPanel order={selectedOrder} />
+                <TransitPanel
+                  order={selectedOrder}
+                  onStatusChange={(updated) => {
+                    setSelectedOrder(updated);
+                    setOrders((prev) => prev.map((o) => (o.id === updated.id ? { ...o, ...updated } : o)));
+                  }}
+                />
               </div>
             </motion.div>
           </>

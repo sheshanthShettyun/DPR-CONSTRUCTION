@@ -29,10 +29,38 @@ const levelStyles: Record<string, { text: string; bg: string; border: string }> 
 
 export default function TaskBoard() {
   const [columns, setColumns] = useState<TaskColumn[]>([]);
+  const [addingCol, setAddingCol] = useState<number | null>(null);
+  const [newTitle, setNewTitle] = useState("");
+
+  const refresh = () => fetch("/api/tasks").then((r) => r.json()).then(setColumns);
 
   useEffect(() => {
-    fetch("/api/tasks").then((r) => r.json()).then(setColumns);
+    refresh();
   }, []);
+
+  const addCard = async (columnId: number) => {
+    if (!newTitle.trim()) return;
+    await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        columnId,
+        title: newTitle.trim(),
+        desc: "New utility item",
+        date: new Date().toLocaleDateString(),
+        level: "Plenty",
+        type: "Utility",
+      }),
+    });
+    setNewTitle("");
+    setAddingCol(null);
+    refresh();
+  };
+
+  const removeCard = async (id: number) => {
+    await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    refresh();
+  };
 
   return (
     <motion.div
@@ -50,7 +78,13 @@ export default function TaskBoard() {
               <span className="text-xs text-[#8c8c8c]">{col.cards.length}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <button className="flex items-center gap-1 rounded-md bg-[#2A2A2A] px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-[#3A3A3A]">
+              <button
+                onClick={() => {
+                  setAddingCol(col.id);
+                  setNewTitle("");
+                }}
+                className="flex items-center gap-1 rounded-md bg-[#2A2A2A] px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-[#3A3A3A]"
+              >
                 <Plus size={11} />
                 Add Utility
               </button>
@@ -61,6 +95,27 @@ export default function TaskBoard() {
           </div>
 
           <div className="flex flex-col">
+            {addingCol === col.id && (
+              <div className="flex items-center gap-2 px-3 py-2">
+                <input
+                  autoFocus
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addCard(col.id);
+                    if (e.key === "Escape") setAddingCol(null);
+                  }}
+                  placeholder="New utility title…"
+                  className="min-w-0 flex-1 rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
+                />
+                <button
+                  onClick={() => addCard(col.id)}
+                  className="rounded-md bg-[#e2f1a6] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-[#d4f05a]"
+                >
+                  Add
+                </button>
+              </div>
+            )}
             {col.cards.map((card) => {
               const s = levelStyles[card.level];
               return (
@@ -97,6 +152,13 @@ export default function TaskBoard() {
                     <span className={`rounded border px-1.5 py-0.5 text-[10px] font-medium ${s.text} ${s.bg} ${s.border}`}>
                       {card.level}
                     </span>
+                    <button
+                      onClick={() => removeCard(card.id)}
+                      title="Delete card"
+                      className="text-white/0 transition-colors hover:text-rose-300 group-hover:text-white/25"
+                    >
+                      ×
+                    </button>
                   </div>
                 </div>
               );

@@ -1,19 +1,38 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Truck, MessageCircle } from "lucide-react";
 import type { OrderData } from "@/lib/orders";
 
 interface Props {
   order: OrderData;
+  onStatusChange?: (order: OrderData) => void;
 }
 
 const stagePositions = [94, 250, 437, 587, 751, 916];
 
-export default function TransitPanel({ order }: Props) {
+export default function TransitPanel({ order, onStatusChange }: Props) {
   const { from, to, eta, distance, load, status, stages } = order;
   const doneCount = stages.filter((s) => s.done).length;
   const progress = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
+  const [prevStatus, setPrevStatus] = useState(status === "Delayed" ? "In Transit" : status);
+  const [saving, setSaving] = useState(false);
+  const isDelayed = status === "Delayed";
+
+  const toggleIssue = async () => {
+    setSaving(true);
+    const next = isDelayed ? prevStatus : "Delayed";
+    if (!isDelayed) setPrevStatus(status);
+    const r = await fetch(`/api/orders/${order.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: next }),
+    });
+    const updated = await r.json();
+    setSaving(false);
+    onStatusChange?.({ ...order, ...updated });
+  };
 
   return (
     <motion.div
@@ -27,17 +46,25 @@ export default function TransitPanel({ order }: Props) {
           <span className="text-xs font-semibold text-[#e2f1a6]">TRANSIT TRACKING</span>
           <div className="flex items-center gap-4">
             <span className="text-[15px] text-[#8c8c8c]">{from} → {to}</span>
-            <span className="flex items-center gap-1.5 rounded-lg bg-[#e2f1a6]/10 px-[11px] py-1.5 text-xs font-medium text-[#e2f1a6]">
+            <span className={`flex items-center gap-1.5 rounded-lg px-[11px] py-1.5 text-xs font-medium ${
+              isDelayed ? "bg-amber-500/10 text-amber-300" : "bg-[#e2f1a6]/10 text-[#e2f1a6]"
+            }`}>
               {status}
-              <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
+              <span className={`h-1.5 w-1.5 rounded-full ${isDelayed ? "bg-amber-300" : "bg-[#e2f1a6]"}`} />
             </span>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1.5 rounded-lg bg-white/5 px-[11px] py-1.5 text-xs font-medium text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
+              onClick={toggleIssue}
+              disabled={saving}
+              className={`flex items-center gap-1.5 rounded-lg px-[11px] py-1.5 text-xs font-medium transition-colors ${
+                isDelayed
+                  ? "bg-amber-500/15 text-amber-300 hover:bg-amber-500/25"
+                  : "bg-white/5 text-[#8c8c8c] hover:bg-white/10 hover:text-white"
+              }`}
             >
               <MessageCircle size={13} />
-              Report Issue
+              {saving ? "Saving…" : isDelayed ? "Resolve Issue" : "Report Issue"}
             </motion.button>
           </div>
         </div>

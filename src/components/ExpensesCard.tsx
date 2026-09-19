@@ -39,38 +39,38 @@ function StatBox({ label, value, sub, category, color }: { label: string; value:
 
   return (
     <div
-      className="group relative cursor-pointer perspective-[600px]"
+      className="group relative cursor-pointer"
       onMouseEnter={() => setFlipped(true)}
       onMouseLeave={() => setFlipped(false)}
     >
-      <motion.div
-        className="relative h-full w-full"
-        initial={false}
-        animate={{ rotateX: flipped ? 180 : 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
+      <div className="relative h-full w-full">
         {/* Front */}
-        <div
-          className="flex flex-col gap-1 rounded-xl bg-[#1f1f1f] p-3"
-          style={{ backfaceVisibility: "hidden" }}
+        <motion.div
+          className="flex min-h-[104px] flex-col gap-1 rounded-xl bg-[#1f1f1f] p-3"
+          initial={false}
+          animate={{ scaleY: flipped ? 0 : 1, opacity: flipped ? 0 : 1 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformOrigin: "center" }}
         >
           <span className="text-[9px] font-medium uppercase tracking-wider text-[#8c8c8c]">{label}</span>
           <span className="text-lg font-bold text-white">{value}</span>
           <span className="text-[9px] text-[#8c8c8c]">{sub}</span>
-        </div>
+        </motion.div>
 
         {/* Back */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl p-3 text-center"
-          style={{ backfaceVisibility: "hidden", transform: "rotateX(180deg)", background: color ?? "#1f1f1f" }}
+        <motion.div
+          className="absolute inset-0 flex flex-col items-start justify-center gap-1.5 overflow-hidden rounded-xl p-3 text-left"
+          style={{ background: color ?? "#1f1f1f", transformOrigin: "center" }}
+          initial={false}
+          animate={{ scaleY: flipped ? 1 : 0, opacity: flipped ? 1 : 0 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
           {Icon && <Icon size={20} strokeWidth={1.5} className="text-white" />}
           <span className="text-[11px] font-semibold text-white">{category?.name}</span>
           <span className="text-lg font-bold text-white">${category?.amount}</span>
           <span className="text-[9px] text-white/70">{category?.pct}% of budget</span>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
@@ -78,10 +78,43 @@ function StatBox({ label, value, sub, category, color }: { label: string; value:
 export default function ExpensesCard() {
   const [data, setData] = useState<ExpensesData | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editAmt, setEditAmt] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newAmt, setNewAmt] = useState("");
+
+  const refresh = () => fetch("/api/expenses").then((r) => r.json()).then(setData);
 
   useEffect(() => {
-    fetch("/api/expenses").then((r) => r.json()).then(setData);
+    refresh();
   }, []);
+
+  const saveAmount = async (id: number) => {
+    await fetch(`/api/expenses/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: Number(editAmt) || 0 }),
+    });
+    setEditingId(null);
+    refresh();
+  };
+
+  const removeCat = async (id: number) => {
+    await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+    refresh();
+  };
+
+  const addCat = async () => {
+    if (!newName.trim()) return;
+    await fetch("/api/expenses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newName.trim(), amount: Number(newAmt) || 0 }),
+    });
+    setNewName("");
+    setNewAmt("");
+    refresh();
+  };
 
   if (!data || !data.summary) return null;
   const { categories, summary, stats } = data;
@@ -167,7 +200,7 @@ export default function ExpensesCard() {
               {categories.map((cat) => {
                 const Icon = iconMap[cat.icon] ?? Wrench;
                 return (
-                  <div key={cat.id} className="grid grid-cols-[2fr_1fr_1fr] items-center py-1">
+                  <div key={cat.id} className="group/row grid grid-cols-[2fr_1fr_1fr_auto] items-center py-1">
                     <div className="flex items-center gap-2">
                       <Icon size={12} strokeWidth={1.5} className="text-[#8c8c8c]" />
                       <span className="text-[12px] text-white">{cat.name}</span>
@@ -183,10 +216,70 @@ export default function ExpensesCard() {
                       </div>
                       <span className="w-8 text-[9px] text-[#8c8c8c]">{cat.pct}%</span>
                     </div>
-                    <span className="text-right text-[12px] font-medium text-white">${cat.amount}</span>
+                    {editingId === cat.id ? (
+                      <input
+                        autoFocus
+                        type="number"
+                        min={0}
+                        value={editAmt}
+                        onChange={(e) => setEditAmt(e.target.value)}
+                        onBlur={() => saveAmount(cat.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveAmount(cat.id);
+                          if (e.key === "Escape") setEditingId(null);
+                        }}
+                        className="w-20 rounded bg-black/40 px-1.5 py-0.5 text-right text-[12px] font-medium text-white outline-none"
+                      />
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setEditingId(cat.id);
+                          setEditAmt(String(cat.amount));
+                        }}
+                        title="Click to edit amount"
+                        className="text-right text-[12px] font-medium text-white hover:text-[#e2f1a6]"
+                      >
+                        ${cat.amount}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => removeCat(cat.id)}
+                      title="Delete category"
+                      className="ml-1 text-white/20 transition-colors hover:text-rose-300"
+                    >
+                      ×
+                    </button>
                   </div>
                 );
               })}
+              <div className="mt-1 grid grid-cols-[2fr_1fr_auto] items-center gap-2 border-t border-white/5 pt-2.5">
+                <input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addCat();
+                  }}
+                  placeholder="New category name"
+                  className="rounded-lg bg-black/40 px-2.5 py-1.5 text-[12px] text-white placeholder:text-[#52525b] outline-none"
+                />
+                <input
+                  type="number"
+                  min={0}
+                  value={newAmt}
+                  onChange={(e) => setNewAmt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addCat();
+                  }}
+                  placeholder="$ amount"
+                  className="rounded-lg bg-black/40 px-2.5 py-1.5 text-[12px] text-white placeholder:text-[#52525b] outline-none"
+                />
+                <button
+                  onClick={addCat}
+                  className="rounded-lg bg-[#e2f1a6] px-3 py-1.5 text-[12px] font-semibold text-black transition-colors hover:bg-[#d4f05a]"
+                >
+                  Add
+                </button>
+              </div>
             </div>
           )}
         </div>
