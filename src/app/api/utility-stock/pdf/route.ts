@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
 import { getStockSummary } from "@/app/api/utility-stock/route";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,21 +13,6 @@ const MUTED = "#6b7280";
 const FAINT = "#e5e7eb";
 const PANEL = "#f4f4f5";
 const ZEBRA = "#f7f7f5";
-let REG = "Helvetica";
-let BOLD = "Helvetica-Bold";
-
-function setupFonts(doc: PDFDoc) {
-  try {
-    const root = process.cwd();
-    doc.registerFont("Outfit", root + "/src/lib/fonts/outfit-400.ttf");
-    doc.registerFont("Outfit-Bold", root + "/src/lib/fonts/outfit-700.ttf");
-    REG = "Outfit";
-    BOLD = "Outfit-Bold";
-  } catch {
-    REG = "Helvetica";
-    BOLD = "Helvetica-Bold";
-  }
-}
 
 const LEFT = 48;
 const RIGHT = 547;
@@ -45,7 +32,7 @@ interface StockLine {
   level: string;
 }
 
-function headerBand(doc: PDFDoc, projectName: string) {
+function headerBand(doc: PDFDoc, projectName: string, REG: string, BOLD: string) {
   doc.save();
   doc.fillColor(INK).rect(0, 0, 595, 118).fill();
   doc.fillColor("#ffffff").rect(LEFT, 32, 10, 10).fill();
@@ -64,7 +51,7 @@ function headerBand(doc: PDFDoc, projectName: string) {
   doc.y = 140;
 }
 
-function kpiRow(doc: PDFDoc, kpis: { label: string; value: string }[]) {
+function kpisRow(doc: PDFDoc, kpis: { label: string; value: string }[], REG: string, BOLD: string) {
   const gap = 12;
   const w = (WIDTH - gap * (kpis.length - 1)) / kpis.length;
   const y0 = doc.y;
@@ -81,9 +68,7 @@ function kpiRow(doc: PDFDoc, kpis: { label: string; value: string }[]) {
   doc.y = y0 + h + 18;
 }
 
-/** Boxed section: renders content, then strokes a border box around it.
-    The border is skipped when content spills across pages (coordinates reset per page). */
-function boxedSection(doc: PDFDoc, title: string, count: string, body: () => void) {
+function boxedSection(doc: PDFDoc, title: string, count: string, body: () => void, REG: string, BOLD: string) {
   if (doc.y > 700) doc.addPage();
   const y0 = doc.y;
   const pagesBefore = doc.bufferedPageRange().count;
@@ -103,7 +88,7 @@ function boxedSection(doc: PDFDoc, title: string, count: string, body: () => voi
   doc.y = y1 + 16;
 }
 
-function tableHead(doc: PDFDoc, cols: { label: string; x: number; width: number; align: "left" | "right" }[]) {
+function tableHead(doc: PDFDoc, cols: { label: string; x: number; width: number; align: "left" | "right" }[], REG: string, BOLD: string) {
   const y0 = doc.y;
   doc.save();
   doc.fillColor(PANEL).roundedRect(LEFT + 12, y0, WIDTH - 24, 22, 6).fill();
@@ -113,7 +98,13 @@ function tableHead(doc: PDFDoc, cols: { label: string; x: number; width: number;
   doc.y = y0 + 22;
 }
 
-function tableRow(doc: PDFDoc, cells: { text: string; x: number; width: number; align: "left" | "right"; bold?: boolean }[], zebra: boolean) {
+function tableRow(
+  doc: PDFDoc,
+  cells: { text: string; x: number; width: number; align: "left" | "right"; bold?: boolean }[],
+  zebra: boolean,
+  REG: string,
+  BOLD: string
+) {
   if (doc.y > 745) doc.addPage();
   const y0 = doc.y;
   const h = 24;
@@ -129,27 +120,28 @@ function tableRow(doc: PDFDoc, cells: { text: string; x: number; width: number; 
       .fontSize(10)
       .text(c.text, c.x, y0 + 7, { width: c.width, align: c.align });
   }
-  // First cell (item name) prints dark
   doc.y = y0 + h;
 }
 
-function itemRow(doc: PDFDoc, title: string, right: string, zebra: boolean) {
+function itemRow(doc: PDFDoc, title: string, right: string, zebra: boolean, REG: string, BOLD: string) {
   tableRow(
     doc,
     [
       { text: title, x: LEFT + 24, width: WIDTH - 190, align: "left", bold: true },
       { text: right, x: LEFT + WIDTH - 150, width: 126, align: "right" },
     ],
-    zebra
+    zebra,
+    REG,
+    BOLD
   );
 }
 
-function emptyNote(doc: PDFDoc, msg: string) {
+function emptyNote(doc: PDFDoc, msg: string, REG: string) {
   doc.fillColor(MUTED).font(REG).fontSize(10).text(msg, LEFT + 24, doc.y + 4);
   doc.y += 22;
 }
 
-function footer(doc: PDFDoc) {
+function footer(doc: PDFDoc, REG: string) {
   const y = 800;
   doc.save();
   doc.strokeColor(FAINT).lineWidth(1).moveTo(LEFT, y).lineTo(RIGHT, y).stroke();
@@ -171,34 +163,46 @@ function generatePdf(
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     const doc = new PDFDocument({ margin: 0, size: "A4", bufferPages: true });
+
+    let REG = "Helvetica";
+    let BOLD = "Helvetica-Bold";
+
     try {
       const root = process.cwd();
-      doc.registerFont(REG, root + "/src/lib/fonts/outfit-400.ttf");
-      doc.registerFont(BOLD, root + "/src/lib/fonts/outfit-700.ttf");
+      const fontRegPath = path.join(root, "src", "lib", "fonts", "outfit-400.ttf");
+      const fontBoldPath = path.join(root, "src", "lib", "fonts", "outfit-700.ttf");
+
+      if (fs.existsSync(fontRegPath) && fs.existsSync(fontBoldPath)) {
+        doc.registerFont("Outfit", fontRegPath);
+        doc.registerFont("Outfit-Bold", fontBoldPath);
+        REG = "Outfit";
+        BOLD = "Outfit-Bold";
+      }
     } catch {
-      // fall back to built-in fonts below
+      REG = "Helvetica";
+      BOLD = "Helvetica-Bold";
     }
 
     doc.on("data", (chunk: Buffer) => chunks.push(chunk));
     doc.on("end", () => resolve(Buffer.concat(chunks)));
     doc.on("error", reject);
 
-    headerBand(doc, projectName);
+    headerBand(doc, projectName, REG, BOLD);
 
-    kpiRow(doc, [
+    kpisRow(doc, [
       { label: "Stock units", value: summary.totalItems.toLocaleString() },
       { label: "Delivered orders", value: String(delivered.length) },
       { label: "Pending orders", value: String(pending.length) },
       { label: "Low / out items", value: String(lowStock.length) },
-    ]);
+    ], REG, BOLD);
 
     boxedSection(doc, "Delivered", `${delivered.length} orders`, () => {
-      if (delivered.length === 0) return emptyNote(doc, "No delivered orders yet.");
+      if (delivered.length === 0) return emptyNote(doc, "No delivered orders yet.", REG);
       tableHead(doc, [
         { label: "ORDER", x: LEFT + 24, width: 90, align: "left" },
         { label: "ROUTE", x: LEFT + 120, width: WIDTH - 280, align: "left" },
         { label: "LOAD", x: LEFT + WIDTH - 150, width: 126, align: "right" },
-      ]);
+      ], REG, BOLD);
       delivered.forEach((o, i) =>
         tableRow(
           doc,
@@ -207,19 +211,21 @@ function generatePdf(
             { text: o.route, x: LEFT + 120, width: WIDTH - 280, align: "left" },
             { text: o.load, x: LEFT + WIDTH - 150, width: 126, align: "right" },
           ],
-          i % 2 === 1
+          i % 2 === 1,
+          REG,
+          BOLD
         )
       );
-    });
+    }, REG, BOLD);
 
     boxedSection(doc, "Pending", `${pending.length} orders`, () => {
-      if (pending.length === 0) return emptyNote(doc, "Nothing pending — all orders delivered.");
+      if (pending.length === 0) return emptyNote(doc, "Nothing pending — all orders delivered.", REG);
       tableHead(doc, [
         { label: "ORDER", x: LEFT + 24, width: 80, align: "left" },
         { label: "ROUTE", x: LEFT + 110, width: WIDTH - 330, align: "left" },
         { label: "STATUS", x: LEFT + WIDTH - 210, width: 90, align: "left" },
         { label: "ETA", x: LEFT + WIDTH - 110, width: 86, align: "right" },
-      ]);
+      ], REG, BOLD);
       pending.forEach((o, i) =>
         tableRow(
           doc,
@@ -229,30 +235,32 @@ function generatePdf(
             { text: o.status, x: LEFT + WIDTH - 210, width: 90, align: "left", bold: true },
             { text: o.eta, x: LEFT + WIDTH - 110, width: 86, align: "right" },
           ],
-          i % 2 === 1
+          i % 2 === 1,
+          REG,
+          BOLD
         )
       );
-    });
+    }, REG, BOLD);
 
     boxedSection(doc, "In stock", `${inStock.length} items · ${summary.available.toLocaleString()} units`, () => {
-      if (inStock.length === 0) return emptyNote(doc, "No stocked items recorded.");
+      if (inStock.length === 0) return emptyNote(doc, "No stocked items recorded.", REG);
       tableHead(doc, [
         { label: "ITEM", x: LEFT + 24, width: WIDTH - 190, align: "left" },
         { label: "QTY", x: LEFT + WIDTH - 150, width: 126, align: "right" },
-      ]);
-      inStock.forEach((it, i) => itemRow(doc, it.title, `${it.qty} units`, i % 2 === 1));
-    });
+      ], REG, BOLD);
+      inStock.forEach((it, i) => itemRow(doc, it.title, `${it.qty} units`, i % 2 === 1, REG, BOLD));
+    }, REG, BOLD);
 
     boxedSection(doc, "Low / out of stock", `${lowStock.length} items`, () => {
-      if (lowStock.length === 0) return emptyNote(doc, "Everything is sufficiently stocked.");
+      if (lowStock.length === 0) return emptyNote(doc, "Everything is sufficiently stocked.", REG);
       tableHead(doc, [
         { label: "ITEM", x: LEFT + 24, width: WIDTH - 190, align: "left" },
         { label: "QTY", x: LEFT + WIDTH - 150, width: 126, align: "right" },
-      ]);
-      lowStock.forEach((it, i) => itemRow(doc, `${it.title}  ·  ${it.level}`, `${it.qty} left`, i % 2 === 1));
-    });
+      ], REG, BOLD);
+      lowStock.forEach((it, i) => itemRow(doc, `${it.title}  ·  ${it.level}`, `${it.qty} left`, i % 2 === 1, REG, BOLD));
+    }, REG, BOLD);
 
-    footer(doc);
+    footer(doc, REG);
     doc.end();
   });
 }
@@ -275,10 +283,6 @@ export async function GET(request: NextRequest) {
       }),
       projectId ? prisma.project.findUnique({ where: { id: projectId }, select: { name: true } }) : null,
     ]);
-
-    if (summary.totalItems === 0 && orders.length === 0 && cards.length === 0) {
-      return NextResponse.json({ error: "No data found for this report" }, { status: 404 });
-    }
 
     const isLow = (level: string) => level === "Low" || level === "Critical";
     const delivered: OrderLine[] = orders
@@ -303,7 +307,7 @@ export async function GET(request: NextRequest) {
     const pdfBuffer = await generatePdf(project?.name ?? "All projects", summary, delivered, pending, inStock, lowStock);
     const filename = "Site_Operations_Report_" + new Date().toISOString().split("T")[0] + ".pdf";
 
-    return new NextResponse(pdfBuffer as unknown as BodyInit, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": 'attachment; filename="' + filename + '"',
