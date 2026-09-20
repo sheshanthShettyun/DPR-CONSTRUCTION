@@ -31,6 +31,7 @@ export async function getStockSummary(projectId?: string | null) {
     totalItems: cardTotal + (stored?.totalItems ?? 0),
     available: cardTotal - cardLow + (stored?.available ?? 0),
     lowStock: cardLow + (stored?.lowStock ?? 0),
+    unassigned: stored?.available ?? 0,
     lowItems,
     topItems,
   };

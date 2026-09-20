@@ -4,13 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Bell, ChevronDown, FolderKanban, LogOut } from "lucide-react";
+import { ChevronDown, FolderKanban, LogOut, FileText } from "lucide-react";
+import DownloadHistoryModal from "@/components/DownloadHistoryModal";
 
-const navItems = ["ALL", "Personnel", "Documents"];
+const navItems = ["ALL", "Documents"];
 
 export default function TopNav() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [docsOpen, setDocsOpen] = useState(false);
+  const [docsProject, setDocsProject] = useState<string | null>(null);
   const [userName, setUserName] = useState("SRIYAAN");
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -58,36 +61,44 @@ export default function TopNav() {
           <span className="text-2xl font-bold tracking-tight">DPR</span>
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map((item, i) => (
-            <motion.a
-              key={item}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.1 + i * 0.04 }}
-              className="flex items-center rounded-[10px] px-3 text-[13px] font-medium text-[#8c8c8c] transition-all duration-200 hover:bg-white/[0.04] hover:text-white"
-              style={{ height: 30 }}
-              href={item === "ALL" ? "/overview" : "#"}
-            >
-              {item}
-            </motion.a>
-          ))}
+          {navItems.map((item, i) =>
+            item === "Documents" ? (
+              <motion.button
+                key={item}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 + i * 0.04 }}
+                onClick={() => {
+                  try {
+                    setDocsProject(sessionStorage.getItem("dpr:building"));
+                  } catch {
+                    setDocsProject(null);
+                  }
+                  setDocsOpen(true);
+                }}
+                className="flex items-center gap-1.5 rounded-[10px] px-3 text-[13px] font-medium text-[#8c8c8c] transition-all duration-200 hover:bg-white/[0.04] hover:text-white"
+                style={{ height: 30 }}
+              >
+                <FileText size={13} />
+                {item}
+              </motion.button>
+            ) : (
+              <motion.a
+                key={item}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 + i * 0.04 }}
+                className="flex items-center rounded-[10px] px-3 text-[13px] font-medium text-[#8c8c8c] transition-all duration-200 hover:bg-white/[0.04] hover:text-white"
+                style={{ height: 30 }}
+                href="/overview"
+              >
+                {item}
+              </motion.a>
+            )
+          )}
         </nav>
       </div>
       <div className="flex items-center gap-4">
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          className="rounded-full bg-[#1a1a1a] p-2 text-white transition-colors hover:bg-zinc-800"
-        >
-          <Search size={20} />
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          className="rounded-full bg-[#1a1a1a] p-2 text-white transition-colors hover:bg-zinc-800"
-        >
-          <Bell size={20} />
-        </motion.button>
         <div ref={menuRef} className="relative">
           <button
             onClick={() => setMenuOpen((o) => !o)}
@@ -134,6 +145,7 @@ export default function TopNav() {
           </AnimatePresence>
         </div>
       </div>
+      <DownloadHistoryModal open={docsOpen} onClose={() => setDocsOpen(false)} projectId={docsProject} />
     </motion.header>
   );
 }

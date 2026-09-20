@@ -67,7 +67,8 @@ export const ModelName = {
   User: 'User',
   OtpCode: 'OtpCode',
   Session: 'Session',
-  PlayerState: 'PlayerState'
+  PlayerState: 'PlayerState',
+  DownloadHistory: 'DownloadHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -322,6 +323,17 @@ export const PlayerStateScalarFieldEnum = {
 } as const
 
 export type PlayerStateScalarFieldEnum = (typeof PlayerStateScalarFieldEnum)[keyof typeof PlayerStateScalarFieldEnum]
+
+
+export const DownloadHistoryScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  filename: 'filename',
+  kind: 'kind',
+  createdAt: 'createdAt'
+} as const
+
+export type DownloadHistoryScalarFieldEnum = (typeof DownloadHistoryScalarFieldEnum)[keyof typeof DownloadHistoryScalarFieldEnum]
 
 
 export const SortOrder = {

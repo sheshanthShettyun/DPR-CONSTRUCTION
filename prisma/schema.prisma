@@ -208,3 +208,11 @@ model PlayerState {
   streakDays Int      @default(0)
   updatedAt  DateTime @updatedAt
 }
+
+model DownloadHistory {
+  id        Int      @id @default(autoincrement())
+  projectId String?
+  filename  String
+  kind      String   @default("utility-stock")
+  createdAt DateTime @default(now())
+}

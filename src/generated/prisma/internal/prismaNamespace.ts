@@ -413,7 +413,8 @@ export const ModelName = {
   User: 'User',
   OtpCode: 'OtpCode',
   Session: 'Session',
-  PlayerState: 'PlayerState'
+  PlayerState: 'PlayerState',
+  DownloadHistory: 'DownloadHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -429,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "project" | "order" | "stage" | "taskColumn" | "taskCard" | "expenseCategory" | "expenseSummary" | "objective" | "utilityStock" | "projectIntake" | "risk" | "milestone" | "document" | "user" | "otpCode" | "session" | "playerState"
+    modelProps: "project" | "order" | "stage" | "taskColumn" | "taskCard" | "expenseCategory" | "expenseSummary" | "objective" | "utilityStock" | "projectIntake" | "risk" | "milestone" | "document" | "user" | "otpCode" | "session" | "playerState" | "downloadHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1691,6 +1692,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DownloadHistory: {
+      payload: Prisma.$DownloadHistoryPayload<ExtArgs>
+      fields: Prisma.DownloadHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DownloadHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DownloadHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.DownloadHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DownloadHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.DownloadHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.DownloadHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.DownloadHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DownloadHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.DownloadHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>
+        }
+        update: {
+          args: Prisma.DownloadHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.DownloadHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DownloadHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DownloadHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.DownloadHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DownloadHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.DownloadHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDownloadHistory>
+        }
+        groupBy: {
+          args: Prisma.DownloadHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DownloadHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DownloadHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DownloadHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1968,6 +2043,17 @@ export const PlayerStateScalarFieldEnum = {
 export type PlayerStateScalarFieldEnum = (typeof PlayerStateScalarFieldEnum)[keyof typeof PlayerStateScalarFieldEnum]
 
 
+export const DownloadHistoryScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  filename: 'filename',
+  kind: 'kind',
+  createdAt: 'createdAt'
+} as const
+
+export type DownloadHistoryScalarFieldEnum = (typeof DownloadHistoryScalarFieldEnum)[keyof typeof DownloadHistoryScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2228,6 +2314,7 @@ export type GlobalOmitConfig = {
   otpCode?: Prisma.OtpCodeOmit
   session?: Prisma.SessionOmit
   playerState?: Prisma.PlayerStateOmit
+  downloadHistory?: Prisma.DownloadHistoryOmit
 }
 
 /* Types for Logging */

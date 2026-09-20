@@ -126,3 +126,8 @@ export type Session = Prisma.SessionModel
  * 
  */
 export type PlayerState = Prisma.PlayerStateModel
+/**
+ * Model DownloadHistory
+ * 
+ */
+export type DownloadHistory = Prisma.DownloadHistoryModel

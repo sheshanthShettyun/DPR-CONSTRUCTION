@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Upload, X } from "lucide-react";
+import { ArrowUpRight, Upload, X, History } from "lucide-react";
 import OptimizerPanel from "@/components/OptimizerPanel";
 import ImportSheetModal from "@/components/ImportSheetModal";
+import DownloadHistoryModal from "@/components/DownloadHistoryModal";
 
 interface StockItem {
   title: string;
@@ -27,6 +28,7 @@ export default function UtilityStockCard({ projectId }: { projectId?: string | n
   const [optOpen, setOptOpen] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState({ totalItems: 0, available: 0, lowStock: 0 });
 
@@ -229,29 +231,50 @@ export default function UtilityStockCard({ projectId }: { projectId?: string | n
         </button>
       </div>
 
-      <button
-        onClick={() => window.open(`/api/utility-stock/pdf${qs}`, "_blank")}
-        className="flex items-center justify-center gap-1.5 rounded-lg bg-[#101010] py-1.5 text-[10px] font-medium text-[#e2f1a6] transition-colors hover:bg-[#1a1a1a] hover:text-white"
-        title="Download as PDF"
-      >
-        <svg
-          width={14}
-          height={14}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#e2f1a6"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
+      <div className="flex gap-2">
+        <button
+          onClick={() => {
+            window.open(`/api/utility-stock/pdf${qs}`, "_blank");
+            fetch("/api/downloads", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                filename: "Site_Operations_Report_" + new Date().toISOString().split("T")[0] + ".pdf",
+                projectId: projectId ?? null,
+                kind: "site-report",
+              }),
+            }).catch(() => {});
+          }}
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#101010] py-1.5 text-[10px] font-medium text-[#e2f1a6] transition-colors hover:bg-[#1a1a1a] hover:text-white"
+          title="Download as PDF"
         >
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-          <path d="M5 3h14" />
-          <path d="L3 11h6a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4h-6" />
-          <line x1="9" y1="20" x2="9.01" y2="20" />
-          <line x1="15" y1="20" x2="15.01" y2="20" />
-        </svg>
-        Download PDF
-      </button>
+          <svg
+            width={14}
+            height={14}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#e2f1a6"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 3h14" />
+            <path d="L3 11h6a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4h-6" />
+            <line x1="9" y1="20" x2="9.01" y2="20" />
+            <line x1="15" y1="20" x2="15.01" y2="20" />
+          </svg>
+          Download PDF
+        </button>
+        <button
+          onClick={() => setHistoryOpen(true)}
+          title="Download history"
+          className="flex items-center justify-center rounded-lg bg-[#101010] px-2.5 text-[#8c8c8c] transition-colors hover:bg-[#1a1a1a] hover:text-white"
+        >
+          <History size={13} />
+        </button>
+      </div>
+      <DownloadHistoryModal open={historyOpen} onClose={() => setHistoryOpen(false)} projectId={projectId} />
       <OptimizerPanel open={optOpen} onClose={() => setOptOpen(false)} />
       <ImportSheetModal
         open={importOpen}
