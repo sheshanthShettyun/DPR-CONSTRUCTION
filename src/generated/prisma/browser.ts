@@ -82,3 +82,23 @@ export type Milestone = Prisma.MilestoneModel
  * 
  */
 export type Document = Prisma.DocumentModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model OtpCode
+ * 
+ */
+export type OtpCode = Prisma.OtpCodeModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model PlayerState
+ * 
+ */
+export type PlayerState = Prisma.PlayerStateModel

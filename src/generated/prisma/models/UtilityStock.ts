@@ -42,6 +42,7 @@ export type UtilityStockSumAggregateOutputType = {
 
 export type UtilityStockMinAggregateOutputType = {
   id: number | null
+  projectId: string | null
   totalItems: number | null
   available: number | null
   lowStock: number | null
@@ -50,6 +51,7 @@ export type UtilityStockMinAggregateOutputType = {
 
 export type UtilityStockMaxAggregateOutputType = {
   id: number | null
+  projectId: string | null
   totalItems: number | null
   available: number | null
   lowStock: number | null
@@ -58,6 +60,7 @@ export type UtilityStockMaxAggregateOutputType = {
 
 export type UtilityStockCountAggregateOutputType = {
   id: number
+  projectId: number
   totalItems: number
   available: number
   lowStock: number
@@ -82,6 +85,7 @@ export type UtilityStockSumAggregateInputType = {
 
 export type UtilityStockMinAggregateInputType = {
   id?: true
+  projectId?: true
   totalItems?: true
   available?: true
   lowStock?: true
@@ -90,6 +94,7 @@ export type UtilityStockMinAggregateInputType = {
 
 export type UtilityStockMaxAggregateInputType = {
   id?: true
+  projectId?: true
   totalItems?: true
   available?: true
   lowStock?: true
@@ -98,6 +103,7 @@ export type UtilityStockMaxAggregateInputType = {
 
 export type UtilityStockCountAggregateInputType = {
   id?: true
+  projectId?: true
   totalItems?: true
   available?: true
   lowStock?: true
@@ -193,6 +199,7 @@ export type UtilityStockGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type UtilityStockGroupByOutputType = {
   id: number
+  projectId: string | null
   totalItems: number
   available: number
   lowStock: number
@@ -224,6 +231,7 @@ export type UtilityStockWhereInput = {
   OR?: Prisma.UtilityStockWhereInput[]
   NOT?: Prisma.UtilityStockWhereInput | Prisma.UtilityStockWhereInput[]
   id?: Prisma.IntFilter<"UtilityStock"> | number
+  projectId?: Prisma.StringNullableFilter<"UtilityStock"> | string | null
   totalItems?: Prisma.IntFilter<"UtilityStock"> | number
   available?: Prisma.IntFilter<"UtilityStock"> | number
   lowStock?: Prisma.IntFilter<"UtilityStock"> | number
@@ -232,6 +240,7 @@ export type UtilityStockWhereInput = {
 
 export type UtilityStockOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   totalItems?: Prisma.SortOrder
   available?: Prisma.SortOrder
   lowStock?: Prisma.SortOrder
@@ -243,6 +252,7 @@ export type UtilityStockWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UtilityStockWhereInput | Prisma.UtilityStockWhereInput[]
   OR?: Prisma.UtilityStockWhereInput[]
   NOT?: Prisma.UtilityStockWhereInput | Prisma.UtilityStockWhereInput[]
+  projectId?: Prisma.StringNullableFilter<"UtilityStock"> | string | null
   totalItems?: Prisma.IntFilter<"UtilityStock"> | number
   available?: Prisma.IntFilter<"UtilityStock"> | number
   lowStock?: Prisma.IntFilter<"UtilityStock"> | number
@@ -251,6 +261,7 @@ export type UtilityStockWhereUniqueInput = Prisma.AtLeast<{
 
 export type UtilityStockOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   totalItems?: Prisma.SortOrder
   available?: Prisma.SortOrder
   lowStock?: Prisma.SortOrder
@@ -267,6 +278,7 @@ export type UtilityStockScalarWhereWithAggregatesInput = {
   OR?: Prisma.UtilityStockScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UtilityStockScalarWhereWithAggregatesInput | Prisma.UtilityStockScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"UtilityStock"> | number
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"UtilityStock"> | string | null
   totalItems?: Prisma.IntWithAggregatesFilter<"UtilityStock"> | number
   available?: Prisma.IntWithAggregatesFilter<"UtilityStock"> | number
   lowStock?: Prisma.IntWithAggregatesFilter<"UtilityStock"> | number
@@ -274,6 +286,7 @@ export type UtilityStockScalarWhereWithAggregatesInput = {
 }
 
 export type UtilityStockCreateInput = {
+  projectId?: string | null
   totalItems: number
   available: number
   lowStock: number
@@ -282,6 +295,7 @@ export type UtilityStockCreateInput = {
 
 export type UtilityStockUncheckedCreateInput = {
   id?: number
+  projectId?: string | null
   totalItems: number
   available: number
   lowStock: number
@@ -289,6 +303,7 @@ export type UtilityStockUncheckedCreateInput = {
 }
 
 export type UtilityStockUpdateInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalItems?: Prisma.IntFieldUpdateOperationsInput | number
   available?: Prisma.IntFieldUpdateOperationsInput | number
   lowStock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -297,6 +312,7 @@ export type UtilityStockUpdateInput = {
 
 export type UtilityStockUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalItems?: Prisma.IntFieldUpdateOperationsInput | number
   available?: Prisma.IntFieldUpdateOperationsInput | number
   lowStock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -305,6 +321,7 @@ export type UtilityStockUncheckedUpdateInput = {
 
 export type UtilityStockCreateManyInput = {
   id?: number
+  projectId?: string | null
   totalItems: number
   available: number
   lowStock: number
@@ -312,6 +329,7 @@ export type UtilityStockCreateManyInput = {
 }
 
 export type UtilityStockUpdateManyMutationInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalItems?: Prisma.IntFieldUpdateOperationsInput | number
   available?: Prisma.IntFieldUpdateOperationsInput | number
   lowStock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -320,6 +338,7 @@ export type UtilityStockUpdateManyMutationInput = {
 
 export type UtilityStockUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalItems?: Prisma.IntFieldUpdateOperationsInput | number
   available?: Prisma.IntFieldUpdateOperationsInput | number
   lowStock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -328,6 +347,7 @@ export type UtilityStockUncheckedUpdateManyInput = {
 
 export type UtilityStockCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   totalItems?: Prisma.SortOrder
   available?: Prisma.SortOrder
   lowStock?: Prisma.SortOrder
@@ -343,6 +363,7 @@ export type UtilityStockAvgOrderByAggregateInput = {
 
 export type UtilityStockMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   totalItems?: Prisma.SortOrder
   available?: Prisma.SortOrder
   lowStock?: Prisma.SortOrder
@@ -351,6 +372,7 @@ export type UtilityStockMaxOrderByAggregateInput = {
 
 export type UtilityStockMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   totalItems?: Prisma.SortOrder
   available?: Prisma.SortOrder
   lowStock?: Prisma.SortOrder
@@ -368,6 +390,7 @@ export type UtilityStockSumOrderByAggregateInput = {
 
 export type UtilityStockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   totalItems?: boolean
   available?: boolean
   lowStock?: boolean
@@ -376,6 +399,7 @@ export type UtilityStockSelect<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type UtilityStockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   totalItems?: boolean
   available?: boolean
   lowStock?: boolean
@@ -384,6 +408,7 @@ export type UtilityStockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 
 export type UtilityStockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   totalItems?: boolean
   available?: boolean
   lowStock?: boolean
@@ -392,19 +417,21 @@ export type UtilityStockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 
 export type UtilityStockSelectScalar = {
   id?: boolean
+  projectId?: boolean
   totalItems?: boolean
   available?: boolean
   lowStock?: boolean
   updatedAt?: boolean
 }
 
-export type UtilityStockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "totalItems" | "available" | "lowStock" | "updatedAt", ExtArgs["result"]["utilityStock"]>
+export type UtilityStockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "totalItems" | "available" | "lowStock" | "updatedAt", ExtArgs["result"]["utilityStock"]>
 
 export type $UtilityStockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UtilityStock"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    projectId: string | null
     totalItems: number
     available: number
     lowStock: number
@@ -833,6 +860,7 @@ export interface Prisma__UtilityStockClient<T, Null = never, ExtArgs extends run
  */
 export interface UtilityStockFieldRefs {
   readonly id: Prisma.FieldRef<"UtilityStock", 'Int'>
+  readonly projectId: Prisma.FieldRef<"UtilityStock", 'String'>
   readonly totalItems: Prisma.FieldRef<"UtilityStock", 'Int'>
   readonly available: Prisma.FieldRef<"UtilityStock", 'Int'>
   readonly lowStock: Prisma.FieldRef<"UtilityStock", 'Int'>

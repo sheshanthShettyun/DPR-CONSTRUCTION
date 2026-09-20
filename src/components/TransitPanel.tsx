@@ -16,14 +16,13 @@ export default function TransitPanel({ order, onStatusChange }: Props) {
   const { from, to, eta, distance, load, status, stages } = order;
   const doneCount = stages.filter((s) => s.done).length;
   const progress = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
-  const [prevStatus, setPrevStatus] = useState(status === "Delayed" ? "In Transit" : status);
+  const [prevStatus, setPrevStatus] = useState(status === "Delayed" || status === "Delivered" ? "In Transit" : status);
   const [saving, setSaving] = useState(false);
   const isDelayed = status === "Delayed";
+  const isDelivered = status === "Delivered";
 
-  const toggleIssue = async () => {
+  const saveStatus = async (next: string) => {
     setSaving(true);
-    const next = isDelayed ? prevStatus : "Delayed";
-    if (!isDelayed) setPrevStatus(status);
     const r = await fetch(`/api/orders/${order.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -32,6 +31,18 @@ export default function TransitPanel({ order, onStatusChange }: Props) {
     const updated = await r.json();
     setSaving(false);
     onStatusChange?.({ ...order, ...updated });
+  };
+
+  const toggleIssue = async () => {
+    const next = isDelayed ? prevStatus : "Delayed";
+    if (!isDelayed) setPrevStatus(status);
+    await saveStatus(next);
+  };
+
+  const toggleDelivered = async () => {
+    const next = isDelivered ? prevStatus : "Delivered";
+    if (!isDelivered && !isDelayed) setPrevStatus(status);
+    await saveStatus(next);
   };
 
   return (
@@ -65,6 +76,19 @@ export default function TransitPanel({ order, onStatusChange }: Props) {
             >
               <MessageCircle size={13} />
               {saving ? "Saving…" : isDelayed ? "Resolve Issue" : "Report Issue"}
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleDelivered}
+              disabled={saving}
+              className={`flex items-center gap-1.5 rounded-lg px-[11px] py-1.5 text-xs font-medium transition-colors ${
+                isDelivered
+                  ? "bg-white/5 text-[#8c8c8c] hover:bg-white/10 hover:text-white"
+                  : "bg-[#e2f1a6]/10 text-[#e2f1a6] hover:bg-[#e2f1a6]/20"
+              }`}
+            >
+              {saving ? "Saving…" : isDelivered ? "Reopen Order" : "Mark Delivered"}
             </motion.button>
           </div>
         </div>

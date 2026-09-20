@@ -63,7 +63,11 @@ export const ModelName = {
   ProjectIntake: 'ProjectIntake',
   Risk: 'Risk',
   Milestone: 'Milestone',
-  Document: 'Document'
+  Document: 'Document',
+  User: 'User',
+  OtpCode: 'OtpCode',
+  Session: 'Session',
+  PlayerState: 'PlayerState'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -103,6 +107,7 @@ export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeo
 
 export const OrderScalarFieldEnum = {
   id: 'id',
+  projectId: 'projectId',
   from: 'from',
   to: 'to',
   flag: 'flag',
@@ -159,6 +164,7 @@ export type TaskCardScalarFieldEnum = (typeof TaskCardScalarFieldEnum)[keyof typ
 
 export const ExpenseCategoryScalarFieldEnum = {
   id: 'id',
+  projectId: 'projectId',
   name: 'name',
   amount: 'amount',
   pct: 'pct',
@@ -173,6 +179,7 @@ export type ExpenseCategoryScalarFieldEnum = (typeof ExpenseCategoryScalarFieldE
 
 export const ExpenseSummaryScalarFieldEnum = {
   id: 'id',
+  projectId: 'projectId',
   month: 'month',
   totalSpent: 'totalSpent',
   budget: 'budget',
@@ -189,6 +196,7 @@ export type ExpenseSummaryScalarFieldEnum = (typeof ExpenseSummaryScalarFieldEnu
 
 export const ObjectiveScalarFieldEnum = {
   id: 'id',
+  projectId: 'projectId',
   title: 'title',
   time: 'time',
   done: 'done',
@@ -201,6 +209,7 @@ export type ObjectiveScalarFieldEnum = (typeof ObjectiveScalarFieldEnum)[keyof t
 
 export const UtilityStockScalarFieldEnum = {
   id: 'id',
+  projectId: 'projectId',
   totalItems: 'totalItems',
   available: 'available',
   lowStock: 'lowStock',
@@ -264,6 +273,52 @@ export const DocumentScalarFieldEnum = {
 } as const
 
 export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  verified: 'verified',
+  createdAt: 'createdAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const OtpCodeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  createdAt: 'createdAt'
+} as const
+
+export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const PlayerStateScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  xp: 'xp',
+  streakDays: 'streakDays',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlayerStateScalarFieldEnum = (typeof PlayerStateScalarFieldEnum)[keyof typeof PlayerStateScalarFieldEnum]
 
 
 export const SortOrder = {

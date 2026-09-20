@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { ArrowUpRight, X } from "lucide-react";
+import { ArrowUpRight, Upload, X } from "lucide-react";
 import OptimizerPanel from "@/components/OptimizerPanel";
+import ImportSheetModal from "@/components/ImportSheetModal";
 
 interface Stock {
   totalItems: number;
@@ -12,22 +13,34 @@ interface Stock {
   lowStock: number;
 }
 
-export default function UtilityStockCard() {
+export default function UtilityStockCard({ projectId }: { projectId?: string | null }) {
   const [stock, setStock] = useState<Stock | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const [optOpen, setOptOpen] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState({ totalItems: 0, available: 0, lowStock: 0 });
 
-  const refresh = () => fetch("/api/utility-stock").then((r) => r.json()).then(setStock);
+  const qs = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
+  const refresh = () =>
+    fetch(`/api/utility-stock${qs}`)
+      .then((r) => r.json())
+      .then((d) => {
+        setStock(d);
+        setLoaded(true);
+      });
 
   useEffect(() => {
     setMounted(true);
     refresh();
-  }, []);
+    const h = () => refresh();
+    window.addEventListener("dpr:refresh", h);
+    return () => window.removeEventListener("dpr:refresh", h);
+  }, [projectId]);
 
   const openManage = () => {
-    if (stock) setForm({ totalItems: stock.totalItems, available: stock.available, lowStock: stock.lowStock });
+    if (stock) setForm({ totalItems: data.totalItems, available: data.available, lowStock: data.lowStock });
     setManageOpen(true);
   };
 
@@ -36,6 +49,7 @@ export default function UtilityStockCard() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        projectId: projectId ?? null,
         totalItems: Math.max(0, Number(form.totalItems) || 0),
         available: Math.max(0, Number(form.available) || 0),
         lowStock: Math.max(0, Number(form.lowStock) || 0),
@@ -45,9 +59,10 @@ export default function UtilityStockCard() {
     refresh();
   };
 
-  if (!stock) return null;
-  const pct = stock.totalItems > 0 ? Math.round((stock.available / stock.totalItems) * 100) : 0;
-  const lowPct = stock.totalItems > 0 ? Math.round((stock.lowStock / stock.totalItems) * 100) : 0;
+  if (!loaded) return null;
+  const data: Stock = stock ?? { totalItems: 0, available: 0, lowStock: 0 };
+  const pct = data.totalItems > 0 ? Math.round((data.available / data.totalItems) * 100) : 0;
+  const lowPct = data.totalItems > 0 ? Math.round((data.lowStock / data.totalItems) * 100) : 0;
 
   return (
     <motion.div
@@ -58,23 +73,28 @@ export default function UtilityStockCard() {
     >
       <div className="flex items-start justify-between">
         <h2 className="text-[15px] font-medium tracking-wide text-[#8c8c8c]">Utility in Stock</h2>
-        <button onClick={() => setOptOpen(true)} className="text-[#8c8c8c] transition-colors hover:text-white" title="Open DPR Optimizer">
-          <ArrowUpRight size={16} strokeWidth={2.5} />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button onClick={() => setImportOpen(true)} className="text-[#8c8c8c] transition-colors hover:text-white" title="Import utilities sheet">
+            <Upload size={14} strokeWidth={2.5} />
+          </button>
+          <button onClick={() => setOptOpen(true)} className="text-[#8c8c8c] transition-colors hover:text-white" title="Open DPR Optimizer">
+            <ArrowUpRight size={16} strokeWidth={2.5} />
+          </button>
+        </div>
       </div>
 
       <div>
-        <div className="mb-2 text-[28px] font-bold leading-none tracking-tight text-white">{stock.totalItems}</div>
+        <div className="mb-2 text-[28px] font-bold leading-none tracking-tight text-white">{data.totalItems}</div>
         <div className="text-[15px] font-medium text-[#8c8c8c]">Total items</div>
       </div>
 
       <div>
         <div className="mb-3 flex items-end justify-between">
           <div className="text-[15px] text-[#8c8c8c]">
-            <span className="mr-1 font-semibold text-white">{stock.available}</span> available
+            <span className="mr-1 font-semibold text-white">{data.available}</span> available
           </div>
           <div className="text-[15px] text-[#8c8c8c]">
-            <span className="mr-1 font-semibold text-white">{stock.lowStock}</span> low stock
+            <span className="mr-1 font-semibold text-white">{data.lowStock}</span> low stock
           </div>
         </div>
         <div className="relative h-2 w-full overflow-hidden rounded-full bg-[#333]">
@@ -93,7 +113,7 @@ export default function UtilityStockCard() {
           <div className="mb-1.5 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
             <span className="flex-1 text-[12px] text-white">Available units</span>
-            <span className="text-[12px] font-semibold text-white">{stock.available}</span>
+            <span className="text-[12px] font-semibold text-white">{data.available}</span>
             <span className="rounded-full bg-[#e2f1a6]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#e2f1a6]">{pct}%</span>
           </div>
           <div className="h-1 w-full overflow-hidden rounded-full bg-white/5">
@@ -109,7 +129,7 @@ export default function UtilityStockCard() {
           <div className="mb-1.5 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
             <span className="flex-1 text-[12px] text-white">Low-stock units</span>
-            <span className="text-[12px] font-semibold text-white">{stock.lowStock}</span>
+            <span className="text-[12px] font-semibold text-white">{data.lowStock}</span>
             <span className="rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-medium text-amber-500">{lowPct}%</span>
           </div>
           <div className="h-1 w-full overflow-hidden rounded-full bg-white/5">
@@ -142,7 +162,7 @@ export default function UtilityStockCard() {
       </div>
 
       <button
-        onClick={() => window.open("/api/utility-stock/pdf", "_blank")}
+        onClick={() => window.open(`/api/utility-stock/pdf${qs}`, "_blank")}
         className="flex items-center justify-center gap-1.5 rounded-lg bg-[#101010] py-1.5 text-[10px] font-medium text-[#e2f1a6] transition-colors hover:bg-[#1a1a1a] hover:text-white"
         title="Download as PDF"
       >
@@ -165,6 +185,14 @@ export default function UtilityStockCard() {
         Download PDF
       </button>
       <OptimizerPanel open={optOpen} onClose={() => setOptOpen(false)} />
+      <ImportSheetModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={() => {
+          refresh();
+          window.dispatchEvent(new Event("dpr:refresh"));
+        }}
+      />
 
       {mounted &&
         createPortal(

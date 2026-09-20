@@ -44,6 +44,7 @@ export type ExpenseCategorySumAggregateOutputType = {
 
 export type ExpenseCategoryMinAggregateOutputType = {
   id: number | null
+  projectId: string | null
   name: string | null
   amount: number | null
   pct: number | null
@@ -55,6 +56,7 @@ export type ExpenseCategoryMinAggregateOutputType = {
 
 export type ExpenseCategoryMaxAggregateOutputType = {
   id: number | null
+  projectId: string | null
   name: string | null
   amount: number | null
   pct: number | null
@@ -66,6 +68,7 @@ export type ExpenseCategoryMaxAggregateOutputType = {
 
 export type ExpenseCategoryCountAggregateOutputType = {
   id: number
+  projectId: number
   name: number
   amount: number
   pct: number
@@ -95,6 +98,7 @@ export type ExpenseCategorySumAggregateInputType = {
 
 export type ExpenseCategoryMinAggregateInputType = {
   id?: true
+  projectId?: true
   name?: true
   amount?: true
   pct?: true
@@ -106,6 +110,7 @@ export type ExpenseCategoryMinAggregateInputType = {
 
 export type ExpenseCategoryMaxAggregateInputType = {
   id?: true
+  projectId?: true
   name?: true
   amount?: true
   pct?: true
@@ -117,6 +122,7 @@ export type ExpenseCategoryMaxAggregateInputType = {
 
 export type ExpenseCategoryCountAggregateInputType = {
   id?: true
+  projectId?: true
   name?: true
   amount?: true
   pct?: true
@@ -215,6 +221,7 @@ export type ExpenseCategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 
 export type ExpenseCategoryGroupByOutputType = {
   id: number
+  projectId: string | null
   name: string
   amount: number
   pct: number
@@ -249,6 +256,7 @@ export type ExpenseCategoryWhereInput = {
   OR?: Prisma.ExpenseCategoryWhereInput[]
   NOT?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
   id?: Prisma.IntFilter<"ExpenseCategory"> | number
+  projectId?: Prisma.StringNullableFilter<"ExpenseCategory"> | string | null
   name?: Prisma.StringFilter<"ExpenseCategory"> | string
   amount?: Prisma.IntFilter<"ExpenseCategory"> | number
   pct?: Prisma.FloatFilter<"ExpenseCategory"> | number
@@ -260,6 +268,7 @@ export type ExpenseCategoryWhereInput = {
 
 export type ExpenseCategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   pct?: Prisma.SortOrder
@@ -274,6 +283,7 @@ export type ExpenseCategoryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
   OR?: Prisma.ExpenseCategoryWhereInput[]
   NOT?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
+  projectId?: Prisma.StringNullableFilter<"ExpenseCategory"> | string | null
   name?: Prisma.StringFilter<"ExpenseCategory"> | string
   amount?: Prisma.IntFilter<"ExpenseCategory"> | number
   pct?: Prisma.FloatFilter<"ExpenseCategory"> | number
@@ -285,6 +295,7 @@ export type ExpenseCategoryWhereUniqueInput = Prisma.AtLeast<{
 
 export type ExpenseCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   pct?: Prisma.SortOrder
@@ -304,6 +315,7 @@ export type ExpenseCategoryScalarWhereWithAggregatesInput = {
   OR?: Prisma.ExpenseCategoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ExpenseCategoryScalarWhereWithAggregatesInput | Prisma.ExpenseCategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"ExpenseCategory"> | number
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"ExpenseCategory"> | string
   amount?: Prisma.IntWithAggregatesFilter<"ExpenseCategory"> | number
   pct?: Prisma.FloatWithAggregatesFilter<"ExpenseCategory"> | number
@@ -314,6 +326,7 @@ export type ExpenseCategoryScalarWhereWithAggregatesInput = {
 }
 
 export type ExpenseCategoryCreateInput = {
+  projectId?: string | null
   name: string
   amount: number
   pct: number
@@ -325,6 +338,7 @@ export type ExpenseCategoryCreateInput = {
 
 export type ExpenseCategoryUncheckedCreateInput = {
   id?: number
+  projectId?: string | null
   name: string
   amount: number
   pct: number
@@ -335,6 +349,7 @@ export type ExpenseCategoryUncheckedCreateInput = {
 }
 
 export type ExpenseCategoryUpdateInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   pct?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -346,6 +361,7 @@ export type ExpenseCategoryUpdateInput = {
 
 export type ExpenseCategoryUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   pct?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -357,6 +373,7 @@ export type ExpenseCategoryUncheckedUpdateInput = {
 
 export type ExpenseCategoryCreateManyInput = {
   id?: number
+  projectId?: string | null
   name: string
   amount: number
   pct: number
@@ -367,6 +384,7 @@ export type ExpenseCategoryCreateManyInput = {
 }
 
 export type ExpenseCategoryUpdateManyMutationInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   pct?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -378,6 +396,7 @@ export type ExpenseCategoryUpdateManyMutationInput = {
 
 export type ExpenseCategoryUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   pct?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -389,6 +408,7 @@ export type ExpenseCategoryUncheckedUpdateManyInput = {
 
 export type ExpenseCategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   pct?: Prisma.SortOrder
@@ -408,6 +428,7 @@ export type ExpenseCategoryAvgOrderByAggregateInput = {
 
 export type ExpenseCategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   pct?: Prisma.SortOrder
@@ -419,6 +440,7 @@ export type ExpenseCategoryMaxOrderByAggregateInput = {
 
 export type ExpenseCategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   pct?: Prisma.SortOrder
@@ -448,6 +470,7 @@ export type FloatFieldUpdateOperationsInput = {
 
 export type ExpenseCategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   name?: boolean
   amount?: boolean
   pct?: boolean
@@ -459,6 +482,7 @@ export type ExpenseCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
 
 export type ExpenseCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   name?: boolean
   amount?: boolean
   pct?: boolean
@@ -470,6 +494,7 @@ export type ExpenseCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 
 export type ExpenseCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   name?: boolean
   amount?: boolean
   pct?: boolean
@@ -481,6 +506,7 @@ export type ExpenseCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 
 export type ExpenseCategorySelectScalar = {
   id?: boolean
+  projectId?: boolean
   name?: boolean
   amount?: boolean
   pct?: boolean
@@ -490,13 +516,14 @@ export type ExpenseCategorySelectScalar = {
   position?: boolean
 }
 
-export type ExpenseCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "amount" | "pct" | "color" | "icon" | "changeAmount" | "position", ExtArgs["result"]["expenseCategory"]>
+export type ExpenseCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "name" | "amount" | "pct" | "color" | "icon" | "changeAmount" | "position", ExtArgs["result"]["expenseCategory"]>
 
 export type $ExpenseCategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ExpenseCategory"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    projectId: string | null
     name: string
     amount: number
     pct: number
@@ -928,6 +955,7 @@ export interface Prisma__ExpenseCategoryClient<T, Null = never, ExtArgs extends 
  */
 export interface ExpenseCategoryFieldRefs {
   readonly id: Prisma.FieldRef<"ExpenseCategory", 'Int'>
+  readonly projectId: Prisma.FieldRef<"ExpenseCategory", 'String'>
   readonly name: Prisma.FieldRef<"ExpenseCategory", 'String'>
   readonly amount: Prisma.FieldRef<"ExpenseCategory", 'Int'>
   readonly pct: Prisma.FieldRef<"ExpenseCategory", 'Float'>

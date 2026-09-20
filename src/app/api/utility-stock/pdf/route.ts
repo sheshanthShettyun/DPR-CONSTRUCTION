@@ -135,7 +135,9 @@ function generatePdf(
 
 export async function GET(request: NextRequest) {
   try {
+    const projectId = new URL(request.url).searchParams.get("projectId");
     const stock = await prisma.utilityStock.findFirst({
+      where: projectId ? { projectId } : {},
       orderBy: { updatedAt: "desc" },
     });
 

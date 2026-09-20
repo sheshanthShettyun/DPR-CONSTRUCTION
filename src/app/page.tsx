@@ -100,12 +100,19 @@ export default function Home() {
             style={{ marginBottom: 56 }}
           >
             <Link
-              href="/overview"
+              href="/signup"
               className="flex h-[48px] items-center gap-2.5 rounded-xl bg-white px-7 text-[14px] font-semibold tracking-tight text-black shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-200 hover:-translate-y-px hover:bg-[#f2f2f2]"
               style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif" }}
             >
               Get Started
               <ArrowRight size={15} strokeWidth={2} />
+            </Link>
+            <Link
+              href="/login"
+              className="flex h-[48px] items-center rounded-xl px-2 text-[14px] font-medium tracking-tight text-white/70 transition-colors hover:text-white"
+              style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif" }}
+            >
+              Log in
             </Link>
           </motion.div>
 

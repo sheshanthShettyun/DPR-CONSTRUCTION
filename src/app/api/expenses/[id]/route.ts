@@ -10,13 +10,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.amount !== undefined) data.amount = Math.max(0, Number(body.amount) || 0);
   if (body.changeAmount !== undefined) data.changeAmount = Number(body.changeAmount) || 0;
   const category = await prisma.expenseCategory.update({ where: { id: Number(id) }, data });
-  await recomputeSummary();
+  await recomputeSummary(category.projectId);
   return NextResponse.json(category);
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const existing = await prisma.expenseCategory.findUnique({ where: { id: Number(id) } });
   await prisma.expenseCategory.delete({ where: { id: Number(id) } });
-  await recomputeSummary();
+  await recomputeSummary(existing?.projectId ?? null);
   return NextResponse.json({ ok: true });
 }

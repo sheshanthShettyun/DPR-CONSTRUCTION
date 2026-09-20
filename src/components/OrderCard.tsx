@@ -19,11 +19,24 @@ interface Props {
   status: string;
   color: string;
   onClick: () => void;
+  onStatusChange?: (id: string, status: string) => void;
 }
 
-export default function OrderCard({ id, from, to, flag, sub, load, status, color, onClick }: Props) {
-  const c = colorMap[color];
+const STATUSES = ["Picked Up", "In Transit", "Delayed", "Delivered", "Maintenance"];
+
+export default function OrderCard({ id, from, to, flag, sub, load, status, color, onClick, onStatusChange }: Props) {
+  const c = colorMap[color] ?? colorMap.emerald;
   const site = `${from} → ${to}`;
+
+  const changeStatus = async (next: string) => {
+    if (next === status) return;
+    await fetch(`/api/orders/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: next }),
+    });
+    onStatusChange?.(id, next);
+  };
 
   return (
     <motion.div
@@ -65,7 +78,24 @@ export default function OrderCard({ id, from, to, flag, sub, load, status, color
           </motion.button>
           <div className={`status-chip ${c.bg} ${c.text}`}>
             <div className={`status-dot ${c.dot}`} />
-            {status}
+            {onStatusChange ? (
+              <select
+                value={STATUSES.includes(status) ? status : "In Transit"}
+                onChange={(e) => changeStatus(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                title="Change status"
+                className="cursor-pointer appearance-none bg-transparent pr-3 outline-none [&>option]:bg-[#1a1a1a]"
+                style={{ backgroundImage: "none" }}
+              >
+                {STATUSES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              status
+            )}
           </div>
         </div>
       </div>

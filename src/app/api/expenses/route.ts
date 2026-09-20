@@ -14,8 +14,9 @@ function buildStats(categories: { id: number; amount: number; changeAmount: numb
   };
 }
 
-export async function recomputeSummary() {
-  const categories = await prisma.expenseCategory.findMany();
+export async function recomputeSummary(projectId?: string | null) {
+  const where = projectId ? { projectId } : {};
+  const categories = await prisma.expenseCategory.findMany({ where });
   const total = categories.reduce((s, c) => s + c.amount, 0);
   await Promise.all(
     categories.map((c) =>
@@ -25,16 +26,33 @@ export async function recomputeSummary() {
       })
     )
   );
-  const summary = await prisma.expenseSummary.findFirst({ orderBy: { updatedAt: "desc" } });
+  const summary = await prisma.expenseSummary.findFirst({ where, orderBy: { updatedAt: "desc" } });
   if (summary) {
     await prisma.expenseSummary.update({ where: { id: summary.id }, data: { totalSpent: total } });
+  } else if (projectId) {
+    const now = new Date();
+    await prisma.expenseSummary.create({
+      data: {
+        projectId,
+        month: now.toLocaleString("en-US", { month: "short", year: "numeric" }),
+        totalSpent: total,
+        budget: 0,
+        potentialSavings: 0,
+        savingsRatePct: 0,
+        savingsTargetPct: 20,
+        sparklineFilled: 0,
+        sparklineTotal: 10,
+      },
+    });
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const projectId = new URL(req.url).searchParams.get("projectId");
+  const where = projectId ? { projectId } : {};
   const [categories, summary] = await Promise.all([
-    prisma.expenseCategory.findMany({ orderBy: { position: "asc" } }),
-    prisma.expenseSummary.findFirst({ orderBy: { updatedAt: "desc" } }),
+    prisma.expenseCategory.findMany({ where, orderBy: { position: "asc" } }),
+    prisma.expenseSummary.findFirst({ where, orderBy: { updatedAt: "desc" } }),
   ]);
 
   const stats = buildStats(categories);
@@ -57,9 +75,11 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const count = await prisma.expenseCategory.count();
+  const projectId = typeof body.projectId === "string" && body.projectId ? body.projectId : null;
+  const count = await prisma.expenseCategory.count({ where: projectId ? { projectId } : {} });
   const category = await prisma.expenseCategory.create({
     data: {
+      projectId,
       name: String(body.name ?? "New category").slice(0, 60),
       amount: Math.max(0, Number(body.amount) || 0),
       pct: 0,
@@ -69,6 +89,6 @@ export async function POST(req: NextRequest) {
       position: count,
     },
   });
-  await recomputeSummary();
+  await recomputeSummary(projectId);
   return NextResponse.json(category, { status: 201 });
 }

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PanelLeftOpen, X, Calendar, ArrowLeft } from "lucide-react";
+import { Zap, X, Calendar, ArrowLeft, Plus } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import FilterSidebar from "@/components/FilterSidebar";
 import OrderCard from "@/components/OrderCard";
-import AssetPanel from "@/components/AssetPanel";
+import QuickOrderPanel from "@/components/QuickOrderPanel";
 import CalendarPicker from "@/components/CalendarPicker";
 import TransitPanel from "@/components/TransitPanel";
 import OffSiteView from "@/components/OffSiteView";
@@ -17,6 +17,8 @@ import UtilityStockCard from "@/components/UtilityStockCard";
 import LevelStreakCard from "@/components/LevelStreakCard";
 import HourglassIcon from "@/components/HourglassIcon";
 import TaskBoard from "@/components/TaskBoard";
+import ImportOverlay from "@/components/ImportOverlay";
+import AddOrderModal from "@/components/AddOrderModal";
 import type { OrderData } from "@/lib/orders";
 
 export default function Home() {
@@ -29,11 +31,27 @@ export default function Home() {
   const [transitOpen, setTransitOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Dashboard");
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+  const [addOrderOpen, setAddOrderOpen] = useState(false);
+
+  const refreshOrders = (pid: string | null) => {
+    const qs = pid ? `?projectId=${encodeURIComponent(pid)}` : "";
+    fetch(`/api/orders${qs}`).then((r) => r.json()).then(setOrders);
+  };
 
   useEffect(() => {
-    fetch("/api/orders").then((r) => r.json()).then(setOrders);
+    refreshOrders(selectedBuilding);
     fetch("/api/projects").then((r) => r.json()).then(setProjects);
-  }, []);
+    try {
+      if (sessionStorage.getItem("dpr:projects") === "1") {
+        sessionStorage.removeItem("dpr:projects");
+        setSelectedBuilding(null);
+        setActiveFilter("Dashboard");
+      }
+    } catch {}
+    const h = () => refreshOrders(selectedBuilding);
+    window.addEventListener("dpr:refresh", h);
+    return () => window.removeEventListener("dpr:refresh", h);
+  }, [selectedBuilding]);
 
   const handleBuildingSelect = (id: string) => {
     setSelectedBuilding(id);
@@ -107,17 +125,23 @@ export default function Home() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setPanelOpen(!panelOpen)}
-                className={`rounded-xl border border-white/5 p-2 transition-colors ${
-                  panelOpen ? "bg-[#e2f1a6] text-black" : "bg-[#1a1a1a] text-[#8c8c8c]"
+                title="Quick emergency stock order"
+                className={`flex items-center gap-1.5 rounded-xl border border-white/5 px-3 py-2 text-[12px] font-medium transition-colors ${
+                  panelOpen ? "bg-[#e2f1a6] text-black" : "bg-[#1a1a1a] text-[#8c8c8c] hover:text-white"
                 }`}
               >
-                {panelOpen ? <X size={20} /> : <PanelLeftOpen size={20} />}
+                {panelOpen ? <X size={16} /> : <Zap size={16} />}
+                {panelOpen ? "" : "Quick Order"}
               </motion.button>
             </div>
           </div>
 
           {!selectedBuilding ? (
-            <ProjectsView projects={projects} onSelect={handleBuildingSelect} />
+            <ProjectsView
+              projects={projects}
+              onSelect={handleBuildingSelect}
+              onChanged={() => fetch("/api/projects").then((r) => r.json()).then(setProjects)}
+            />
           ) : activeFilter === "Utilities" ? (
             <TaskBoard />
           ) : activeFilter === "Off-Site" ? (
@@ -128,12 +152,12 @@ export default function Home() {
               <LevelStreakCard />
 
               <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(340px,0.9fr)]">
-                <ExpensesCard />
+                <ExpensesCard projectId={selectedBuilding} />
 
-                <UtilityStockCard />
+                <UtilityStockCard projectId={selectedBuilding} />
 
                   <div className="grid min-w-0 grid-cols-1 items-start gap-5 lg:grid-cols-2">
-                    <ObjectivesCard />
+                    <ObjectivesCard projectId={selectedBuilding} />
 
                     <div className="dashboard-card flex min-h-[196px] w-full flex-col items-center justify-center gap-4 py-6">
                       <HourglassIcon size={128} />
@@ -157,11 +181,12 @@ export default function Home() {
                         .filter((o) => o.status === "Delivered")
                         .slice(0, 2)
                         .map((order) => (
-                          <OrderCard
-                            key={order.id}
-                            {...order}
-                            onClick={() => openTransit(order)}
-                          />
+                        <OrderCard
+                          key={order.id}
+                          {...order}
+                          onClick={() => openTransit(order)}
+                          onStatusChange={() => refreshOrders(selectedBuilding)}
+                        />
                         ))}
                     </div>
                     <div className="mt-3">
@@ -178,19 +203,56 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-4">
+            <>
+              <div className="mb-4 flex items-center justify-between">
+                <span className="text-[13px] text-[#8c8c8c]">
+                  {orders.filter((o) => activeFilter === "Transit" ? o.status !== "Maintenance" : o.status === activeFilter).length} order(s) · {activeFilter}
+                </span>
+                <button
+                  onClick={() => setAddOrderOpen(true)}
+                  className="flex items-center gap-1.5 rounded-lg bg-[#e2f1a6] px-3.5 py-2 text-[12px] font-semibold text-black transition-colors hover:bg-[#d4f05a]"
+                >
+                  <Plus size={14} strokeWidth={2.5} />
+                  Add Order
+                </button>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
               {orders
                 .filter((o) => activeFilter === "Transit" ? o.status !== "Maintenance" : o.status === activeFilter)
                 .map((order) => (
-                  <OrderCard
-                    key={order.id}
-                    {...order}
-                    onClick={() => openTransit(order)}
-                  />
+                  <div key={order.id} className="group/transit relative">
+                    <OrderCard
+                      {...order}
+                      onClick={() => openTransit(order)}
+                      onStatusChange={() => refreshOrders(selectedBuilding)}
+                    />
+                    <button
+                      onClick={async () => {
+                        if (!window.confirm(`Delete order ${order.id}?`)) return;
+                        await fetch(`/api/orders/${encodeURIComponent(order.id)}`, { method: "DELETE" });
+                        refreshOrders(selectedBuilding);
+                        if (selectedOrder?.id === order.id) {
+                          setSelectedOrder(null);
+                          setTransitOpen(false);
+                        }
+                      }}
+                      title={`Delete order ${order.id}`}
+                      className="absolute right-3 top-3 text-white/0 transition-colors hover:text-rose-300 group-hover/transit:text-white/25"
+                    >
+                      ×
+                    </button>
+                  </div>
                 ))}
-            </div>
+              </div>
+            </>
           )}
         </section>
+      <AddOrderModal
+        open={addOrderOpen}
+        onClose={() => setAddOrderOpen(false)}
+        projectId={selectedBuilding}
+        onAdded={() => refreshOrders(selectedBuilding)}
+      />
 
         <AnimatePresence>
           {panelOpen && (
@@ -212,12 +274,17 @@ export default function Home() {
                 style={{ transformOrigin: "top right" }}
                 className="absolute right-0 top-12 z-50"
               >
-                <AssetPanel onClose={() => setPanelOpen(false)} />
+                <QuickOrderPanel
+                  onClose={() => setPanelOpen(false)}
+                  onOrdered={() => setActiveFilter("Transit")}
+                  projectId={selectedBuilding}
+                />
               </motion.div>
             </>
           )}
         </AnimatePresence>
       </main>
+      <ImportOverlay />
 
       <AnimatePresence>
         {transitOpen && selectedOrder && (

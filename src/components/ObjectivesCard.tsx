@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Check } from "lucide-react";
+import { XP_PER_OBJECTIVE } from "@/lib/xp";
 
 interface Objective {
   id: number;
@@ -12,24 +13,33 @@ interface Objective {
   dueDate: string;
 }
 
-export default function ObjectivesCard() {
+export default function ObjectivesCard({ projectId }: { projectId?: string | null }) {
   const [tasks, setTasks] = useState<Objective[]>([]);
   const [adding, setAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  const refresh = () => fetch("/api/objectives").then((r) => r.json()).then(setTasks);
+  const qs = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
+  const refresh = () => fetch(`/api/objectives${qs}`).then((r) => r.json()).then(setTasks);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [projectId]);
 
   const toggleDone = async (task: Objective) => {
-    setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t)));
+    const next = !task.done;
+    setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, done: next } : t)));
     await fetch(`/api/objectives/${task.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ done: !task.done }),
+      body: JSON.stringify({ done: next }),
     });
+    const xpRes = await fetch("/api/xp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ delta: next ? XP_PER_OBJECTIVE : -XP_PER_OBJECTIVE }),
+    });
+    const xp = await xpRes.json().catch(() => null);
+    window.dispatchEvent(new CustomEvent("dpr:refresh", { detail: { leveledUp: xp?.leveledUp ?? false } }));
   };
 
   const addTask = async () => {
@@ -37,7 +47,7 @@ export default function ObjectivesCard() {
     await fetch("/api/objectives", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTitle.trim(), time: "Today", done: false, dueDate: "" }),
+      body: JSON.stringify({ title: newTitle.trim(), time: "Today", done: false, dueDate: "", projectId: projectId ?? null }),
     });
     setNewTitle("");
     setAdding(false);

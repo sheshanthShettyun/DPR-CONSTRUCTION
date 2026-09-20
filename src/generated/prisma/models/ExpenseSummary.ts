@@ -50,6 +50,7 @@ export type ExpenseSummarySumAggregateOutputType = {
 
 export type ExpenseSummaryMinAggregateOutputType = {
   id: number | null
+  projectId: string | null
   month: string | null
   totalSpent: number | null
   budget: number | null
@@ -63,6 +64,7 @@ export type ExpenseSummaryMinAggregateOutputType = {
 
 export type ExpenseSummaryMaxAggregateOutputType = {
   id: number | null
+  projectId: string | null
   month: string | null
   totalSpent: number | null
   budget: number | null
@@ -76,6 +78,7 @@ export type ExpenseSummaryMaxAggregateOutputType = {
 
 export type ExpenseSummaryCountAggregateOutputType = {
   id: number
+  projectId: number
   month: number
   totalSpent: number
   budget: number
@@ -113,6 +116,7 @@ export type ExpenseSummarySumAggregateInputType = {
 
 export type ExpenseSummaryMinAggregateInputType = {
   id?: true
+  projectId?: true
   month?: true
   totalSpent?: true
   budget?: true
@@ -126,6 +130,7 @@ export type ExpenseSummaryMinAggregateInputType = {
 
 export type ExpenseSummaryMaxAggregateInputType = {
   id?: true
+  projectId?: true
   month?: true
   totalSpent?: true
   budget?: true
@@ -139,6 +144,7 @@ export type ExpenseSummaryMaxAggregateInputType = {
 
 export type ExpenseSummaryCountAggregateInputType = {
   id?: true
+  projectId?: true
   month?: true
   totalSpent?: true
   budget?: true
@@ -239,6 +245,7 @@ export type ExpenseSummaryGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 
 export type ExpenseSummaryGroupByOutputType = {
   id: number
+  projectId: string | null
   month: string
   totalSpent: number
   budget: number
@@ -275,6 +282,7 @@ export type ExpenseSummaryWhereInput = {
   OR?: Prisma.ExpenseSummaryWhereInput[]
   NOT?: Prisma.ExpenseSummaryWhereInput | Prisma.ExpenseSummaryWhereInput[]
   id?: Prisma.IntFilter<"ExpenseSummary"> | number
+  projectId?: Prisma.StringNullableFilter<"ExpenseSummary"> | string | null
   month?: Prisma.StringFilter<"ExpenseSummary"> | string
   totalSpent?: Prisma.IntFilter<"ExpenseSummary"> | number
   budget?: Prisma.IntFilter<"ExpenseSummary"> | number
@@ -288,6 +296,7 @@ export type ExpenseSummaryWhereInput = {
 
 export type ExpenseSummaryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   month?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   budget?: Prisma.SortOrder
@@ -304,6 +313,7 @@ export type ExpenseSummaryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ExpenseSummaryWhereInput | Prisma.ExpenseSummaryWhereInput[]
   OR?: Prisma.ExpenseSummaryWhereInput[]
   NOT?: Prisma.ExpenseSummaryWhereInput | Prisma.ExpenseSummaryWhereInput[]
+  projectId?: Prisma.StringNullableFilter<"ExpenseSummary"> | string | null
   month?: Prisma.StringFilter<"ExpenseSummary"> | string
   totalSpent?: Prisma.IntFilter<"ExpenseSummary"> | number
   budget?: Prisma.IntFilter<"ExpenseSummary"> | number
@@ -317,6 +327,7 @@ export type ExpenseSummaryWhereUniqueInput = Prisma.AtLeast<{
 
 export type ExpenseSummaryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   month?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   budget?: Prisma.SortOrder
@@ -338,6 +349,7 @@ export type ExpenseSummaryScalarWhereWithAggregatesInput = {
   OR?: Prisma.ExpenseSummaryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ExpenseSummaryScalarWhereWithAggregatesInput | Prisma.ExpenseSummaryScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"ExpenseSummary"> | number
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"ExpenseSummary"> | string | null
   month?: Prisma.StringWithAggregatesFilter<"ExpenseSummary"> | string
   totalSpent?: Prisma.IntWithAggregatesFilter<"ExpenseSummary"> | number
   budget?: Prisma.IntWithAggregatesFilter<"ExpenseSummary"> | number
@@ -350,6 +362,7 @@ export type ExpenseSummaryScalarWhereWithAggregatesInput = {
 }
 
 export type ExpenseSummaryCreateInput = {
+  projectId?: string | null
   month: string
   totalSpent: number
   budget: number
@@ -363,6 +376,7 @@ export type ExpenseSummaryCreateInput = {
 
 export type ExpenseSummaryUncheckedCreateInput = {
   id?: number
+  projectId?: string | null
   month: string
   totalSpent: number
   budget: number
@@ -375,6 +389,7 @@ export type ExpenseSummaryUncheckedCreateInput = {
 }
 
 export type ExpenseSummaryUpdateInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   month?: Prisma.StringFieldUpdateOperationsInput | string
   totalSpent?: Prisma.IntFieldUpdateOperationsInput | number
   budget?: Prisma.IntFieldUpdateOperationsInput | number
@@ -388,6 +403,7 @@ export type ExpenseSummaryUpdateInput = {
 
 export type ExpenseSummaryUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   month?: Prisma.StringFieldUpdateOperationsInput | string
   totalSpent?: Prisma.IntFieldUpdateOperationsInput | number
   budget?: Prisma.IntFieldUpdateOperationsInput | number
@@ -401,6 +417,7 @@ export type ExpenseSummaryUncheckedUpdateInput = {
 
 export type ExpenseSummaryCreateManyInput = {
   id?: number
+  projectId?: string | null
   month: string
   totalSpent: number
   budget: number
@@ -413,6 +430,7 @@ export type ExpenseSummaryCreateManyInput = {
 }
 
 export type ExpenseSummaryUpdateManyMutationInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   month?: Prisma.StringFieldUpdateOperationsInput | string
   totalSpent?: Prisma.IntFieldUpdateOperationsInput | number
   budget?: Prisma.IntFieldUpdateOperationsInput | number
@@ -426,6 +444,7 @@ export type ExpenseSummaryUpdateManyMutationInput = {
 
 export type ExpenseSummaryUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   month?: Prisma.StringFieldUpdateOperationsInput | string
   totalSpent?: Prisma.IntFieldUpdateOperationsInput | number
   budget?: Prisma.IntFieldUpdateOperationsInput | number
@@ -439,6 +458,7 @@ export type ExpenseSummaryUncheckedUpdateManyInput = {
 
 export type ExpenseSummaryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   month?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   budget?: Prisma.SortOrder
@@ -463,6 +483,7 @@ export type ExpenseSummaryAvgOrderByAggregateInput = {
 
 export type ExpenseSummaryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   month?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   budget?: Prisma.SortOrder
@@ -476,6 +497,7 @@ export type ExpenseSummaryMaxOrderByAggregateInput = {
 
 export type ExpenseSummaryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   month?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   budget?: Prisma.SortOrder
@@ -502,6 +524,7 @@ export type ExpenseSummarySumOrderByAggregateInput = {
 
 export type ExpenseSummarySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   month?: boolean
   totalSpent?: boolean
   budget?: boolean
@@ -515,6 +538,7 @@ export type ExpenseSummarySelect<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type ExpenseSummarySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   month?: boolean
   totalSpent?: boolean
   budget?: boolean
@@ -528,6 +552,7 @@ export type ExpenseSummarySelectCreateManyAndReturn<ExtArgs extends runtime.Type
 
 export type ExpenseSummarySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   month?: boolean
   totalSpent?: boolean
   budget?: boolean
@@ -541,6 +566,7 @@ export type ExpenseSummarySelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 
 export type ExpenseSummarySelectScalar = {
   id?: boolean
+  projectId?: boolean
   month?: boolean
   totalSpent?: boolean
   budget?: boolean
@@ -552,13 +578,14 @@ export type ExpenseSummarySelectScalar = {
   updatedAt?: boolean
 }
 
-export type ExpenseSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "month" | "totalSpent" | "budget" | "potentialSavings" | "savingsRatePct" | "savingsTargetPct" | "sparklineFilled" | "sparklineTotal" | "updatedAt", ExtArgs["result"]["expenseSummary"]>
+export type ExpenseSummaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "month" | "totalSpent" | "budget" | "potentialSavings" | "savingsRatePct" | "savingsTargetPct" | "sparklineFilled" | "sparklineTotal" | "updatedAt", ExtArgs["result"]["expenseSummary"]>
 
 export type $ExpenseSummaryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ExpenseSummary"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    projectId: string | null
     month: string
     totalSpent: number
     budget: number
@@ -992,6 +1019,7 @@ export interface Prisma__ExpenseSummaryClient<T, Null = never, ExtArgs extends r
  */
 export interface ExpenseSummaryFieldRefs {
   readonly id: Prisma.FieldRef<"ExpenseSummary", 'Int'>
+  readonly projectId: Prisma.FieldRef<"ExpenseSummary", 'String'>
   readonly month: Prisma.FieldRef<"ExpenseSummary", 'String'>
   readonly totalSpent: Prisma.FieldRef<"ExpenseSummary", 'Int'>
   readonly budget: Prisma.FieldRef<"ExpenseSummary", 'Int'>

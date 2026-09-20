@@ -1,12 +1,48 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Search, Bell, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, Bell, ChevronDown, FolderKanban, LogOut } from "lucide-react";
 
 const navItems = ["ALL", "Personnel", "Documents"];
 
 export default function TopNav() {
+  const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [userName, setUserName] = useState("SRIYAAN");
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d) setUserName(`${d.firstName} ${d.lastName}`.trim().toUpperCase() || "SRIYAAN");
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const manageProjects = () => {
+    setMenuOpen(false);
+    try {
+      sessionStorage.setItem("dpr:projects", "1");
+    } catch {}
+    router.push("/overview");
+  };
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+  };
   return (
     <motion.header
       initial={{ opacity: 0, y: -12 }}
@@ -52,17 +88,50 @@ export default function TopNav() {
         >
           <Bell size={20} />
         </motion.button>
-        <div className="flex items-center gap-3 border-l border-white/10 pl-4">
-          <div className="text-right">
-            <p className="text-sm font-semibold">SRIYAAN</p>
-            <p className="text-[10px] text-[#8c8c8c]">Dispatch Officer</p>
-          </div>
-          <img
-            alt="User"
-            className="h-10 w-10 rounded-xl object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvYSuMtkkQpKUCrW4JVW1OfL25_IkiYgAcVoECR0frTh-42V505H_gGWnABESPyx1nj79No0ghp73gkYSlcx8AeehcaPEr3hg8T7nAOgq9AcXclX4XoyG7D6V6oKvFdM8Ltd388UAUf9PJ_l-CVWq8IDnvZsNBtoxZO3AfN1-n_3BbIZQu_fmgQAYg8VEpcad0WkPFPZRxIvdyqbhqXz9uVSTKot-fk3udyZv3XdJDvdv1t1JdFDEG"
-          />
-          <ChevronDown size={16} className="text-[#8c8c8c]" />
+        <div ref={menuRef} className="relative">
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            className="flex items-center gap-3 rounded-xl border-l border-white/10 py-1 pl-4 pr-1 transition-colors hover:bg-white/[0.03]"
+          >
+            <div className="text-right">
+              <p className="text-sm font-semibold">{userName}</p>
+              <p className="text-[10px] text-[#8c8c8c]">Dispatch Officer</p>
+            </div>
+            <img
+              alt="User"
+              className="h-10 w-10 rounded-xl object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvYSuMtkkQpKUCrW4JVW1OfL25_IkiYgAcVoECR0frTh-42V505H_gGWnABESPyx1nj79No0ghp73gkYSlcx8AeehcaPEr3hg8T7nAOgq9AcXclX4XoyG7D6V6oKvFdM8Ltd388UAUf9PJ_l-CVWq8IDnvZsNBtoxZO3AfN1-n_3BbIZQu_fmgQAYg8VEpcad0WkPFPZRxIvdyqbhqXz9uVSTKot-fk3udyZv3XdJDvdv1t1JdFDEG"
+            />
+            <motion.span animate={{ rotate: menuOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+              <ChevronDown size={16} className="text-[#8c8c8c]" />
+            </motion.span>
+          </button>
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-white/10 bg-[#1a1a1a] py-1 shadow-2xl"
+              >
+                <button
+                  onClick={manageProjects}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-[13px] text-white transition-colors hover:bg-white/5"
+                >
+                  <FolderKanban size={14} className="text-[#e2f1a6]" />
+                  Manage Projects
+                </button>
+                <button
+                  onClick={logout}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-[13px] text-white transition-colors hover:bg-white/5"
+                >
+                  <LogOut size={14} className="text-[#8c8c8c]" />
+                  Log out
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.header>

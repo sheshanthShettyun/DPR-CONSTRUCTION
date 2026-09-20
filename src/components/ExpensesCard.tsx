@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, Wrench, Fuel, Package, Users, Zap, Shield, Truck, HardHat, type LucideIcon } from "lucide-react";
+import { ChevronDown, Upload, Wrench, Fuel, Package, Users, Zap, Shield, Truck, HardHat, type LucideIcon } from "lucide-react";
+import ImportSheetModal from "@/components/ImportSheetModal";
 
 const iconMap: Record<string, LucideIcon> = { Wrench, Fuel, Package, Users, Zap, Shield, Truck, HardHat };
 
@@ -75,19 +76,30 @@ function StatBox({ label, value, sub, category, color }: { label: string; value:
   );
 }
 
-export default function ExpensesCard() {
+export default function ExpensesCard({ projectId }: { projectId?: string | null }) {
   const [data, setData] = useState<ExpensesData | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editAmt, setEditAmt] = useState("");
   const [newName, setNewName] = useState("");
   const [newAmt, setNewAmt] = useState("");
+  const [importOpen, setImportOpen] = useState(false);
 
-  const refresh = () => fetch("/api/expenses").then((r) => r.json()).then(setData);
+  const qs = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
+  const refresh = () =>
+    fetch(`/api/expenses${qs}`)
+      .then((r) => r.json())
+      .then((d) => {
+        setData(d);
+        if (d.categories?.length === 0) setExpanded(true);
+      });
 
   useEffect(() => {
     refresh();
-  }, []);
+    const h = () => refresh();
+    window.addEventListener("dpr:refresh", h);
+    return () => window.removeEventListener("dpr:refresh", h);
+  }, [projectId]);
 
   const saveAmount = async (id: number) => {
     await fetch(`/api/expenses/${id}`, {
@@ -109,15 +121,27 @@ export default function ExpensesCard() {
     await fetch("/api/expenses", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newName.trim(), amount: Number(newAmt) || 0 }),
+      body: JSON.stringify({ name: newName.trim(), amount: Number(newAmt) || 0, projectId: projectId ?? null }),
     });
     setNewName("");
     setNewAmt("");
     refresh();
   };
 
-  if (!data || !data.summary) return null;
-  const { categories, summary, stats } = data;
+  if (!data) return null;
+  const { categories } = data;
+  const summary: Summary = data.summary ?? {
+    month: "—",
+    totalSpent: 0,
+    budget: 0,
+    potentialSavings: 0,
+    savingsRatePct: 0,
+    savingsTargetPct: 20,
+    sparklineFilled: 0,
+    sparklineTotal: 10,
+  };
+  const { stats } = data;
+  const isEmpty = categories.length === 0;
 
   return (
     <motion.div
@@ -163,25 +187,49 @@ export default function ExpensesCard() {
       </div>
 
       {/* Stats grid with flip cards */}
-      {stats && (
+      {isEmpty ? (
+        <div className="flex flex-col items-center gap-2.5 rounded-xl bg-[#1f1f1f] px-3 py-5 text-center">
+          <p className="text-[12px] text-[#6b7280]">No expenses yet for this project.</p>
+          <button
+            onClick={() => setImportOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-[#e2f1a6] px-4 py-2 text-[12px] font-semibold text-black transition-colors hover:bg-[#d4f05a]"
+          >
+            <Upload size={13} />
+            Import PDF / Excel / CSV
+          </button>
+          <p className="text-[11px] text-[#52525b]">or add a category manually below</p>
+        </div>
+      ) : (
+        stats && (
         <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
           <StatBox label="Largest" value={`$${stats.largest.amount}`} sub={`${stats.largest.name} · ${stats.largest.pct}%`} category={stats.largest} color="rgba(226,241,166,0.15)" />
           <StatBox label="Smallest" value={`$${stats.smallest.amount}`} sub={`${stats.smallest.name} · ${stats.smallest.pct}%`} category={stats.smallest} color="rgba(226,241,166,0.10)" />
           <StatBox label="Most Volatile" value={`$${stats.mostVolatile.amount}`} sub={`${stats.mostVolatile.name} · $${stats.mostVolatile.changeAmount}↑`} category={stats.mostVolatile} color="rgba(245,158,11,0.12)" />
           <StatBox label="Most Stable" value={`$${stats.mostStable.amount}`} sub={`${stats.mostStable.name} · $${stats.mostStable.changeAmount} change`} category={stats.mostStable} color="rgba(100,116,139,0.12)" />
         </div>
+        )
       )}
 
-      {/* Expand toggle */}
-      <button
-        onClick={() => setExpanded((e) => !e)}
-        className="flex items-center justify-center gap-1.5 rounded-lg bg-[#1f1f1f] py-1.5 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/[0.04] hover:text-white"
-      >
-        {expanded ? "Collapse" : "View All Categories"}
-        <motion.span animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
-          <ChevronDown size={12} />
-        </motion.span>
-      </button>
+      {/* Expand toggle + import */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setExpanded((e) => !e)}
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1f1f1f] py-1.5 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/[0.04] hover:text-white"
+        >
+          {expanded ? "Collapse" : "View All Categories"}
+          <motion.span animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
+            <ChevronDown size={12} />
+          </motion.span>
+        </button>
+        <button
+          onClick={() => setImportOpen(true)}
+          title="Import utilities sheet"
+          className="flex items-center gap-1.5 rounded-lg bg-[#1f1f1f] px-3 py-1.5 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/[0.04] hover:text-white"
+        >
+          <Upload size={12} />
+          Import
+        </button>
+      </div>
 
       {/* Expanded category table */}
       <div
@@ -284,6 +332,15 @@ export default function ExpensesCard() {
           )}
         </div>
       </div>
+      <ImportSheetModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        projectId={projectId}
+        onImported={() => {
+          refresh();
+          window.dispatchEvent(new Event("dpr:refresh"));
+        }}
+      />
     </motion.div>
   );
 }

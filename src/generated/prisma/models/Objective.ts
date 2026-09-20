@@ -38,6 +38,7 @@ export type ObjectiveSumAggregateOutputType = {
 
 export type ObjectiveMinAggregateOutputType = {
   id: number | null
+  projectId: string | null
   title: string | null
   time: string | null
   done: boolean | null
@@ -47,6 +48,7 @@ export type ObjectiveMinAggregateOutputType = {
 
 export type ObjectiveMaxAggregateOutputType = {
   id: number | null
+  projectId: string | null
   title: string | null
   time: string | null
   done: boolean | null
@@ -56,6 +58,7 @@ export type ObjectiveMaxAggregateOutputType = {
 
 export type ObjectiveCountAggregateOutputType = {
   id: number
+  projectId: number
   title: number
   time: number
   done: number
@@ -77,6 +80,7 @@ export type ObjectiveSumAggregateInputType = {
 
 export type ObjectiveMinAggregateInputType = {
   id?: true
+  projectId?: true
   title?: true
   time?: true
   done?: true
@@ -86,6 +90,7 @@ export type ObjectiveMinAggregateInputType = {
 
 export type ObjectiveMaxAggregateInputType = {
   id?: true
+  projectId?: true
   title?: true
   time?: true
   done?: true
@@ -95,6 +100,7 @@ export type ObjectiveMaxAggregateInputType = {
 
 export type ObjectiveCountAggregateInputType = {
   id?: true
+  projectId?: true
   title?: true
   time?: true
   done?: true
@@ -191,6 +197,7 @@ export type ObjectiveGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type ObjectiveGroupByOutputType = {
   id: number
+  projectId: string | null
   title: string
   time: string
   done: boolean
@@ -223,6 +230,7 @@ export type ObjectiveWhereInput = {
   OR?: Prisma.ObjectiveWhereInput[]
   NOT?: Prisma.ObjectiveWhereInput | Prisma.ObjectiveWhereInput[]
   id?: Prisma.IntFilter<"Objective"> | number
+  projectId?: Prisma.StringNullableFilter<"Objective"> | string | null
   title?: Prisma.StringFilter<"Objective"> | string
   time?: Prisma.StringFilter<"Objective"> | string
   done?: Prisma.BoolFilter<"Objective"> | boolean
@@ -232,6 +240,7 @@ export type ObjectiveWhereInput = {
 
 export type ObjectiveOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   time?: Prisma.SortOrder
   done?: Prisma.SortOrder
@@ -244,6 +253,7 @@ export type ObjectiveWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ObjectiveWhereInput | Prisma.ObjectiveWhereInput[]
   OR?: Prisma.ObjectiveWhereInput[]
   NOT?: Prisma.ObjectiveWhereInput | Prisma.ObjectiveWhereInput[]
+  projectId?: Prisma.StringNullableFilter<"Objective"> | string | null
   title?: Prisma.StringFilter<"Objective"> | string
   time?: Prisma.StringFilter<"Objective"> | string
   done?: Prisma.BoolFilter<"Objective"> | boolean
@@ -253,6 +263,7 @@ export type ObjectiveWhereUniqueInput = Prisma.AtLeast<{
 
 export type ObjectiveOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   time?: Prisma.SortOrder
   done?: Prisma.SortOrder
@@ -270,6 +281,7 @@ export type ObjectiveScalarWhereWithAggregatesInput = {
   OR?: Prisma.ObjectiveScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ObjectiveScalarWhereWithAggregatesInput | Prisma.ObjectiveScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Objective"> | number
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"Objective"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"Objective"> | string
   time?: Prisma.StringWithAggregatesFilter<"Objective"> | string
   done?: Prisma.BoolWithAggregatesFilter<"Objective"> | boolean
@@ -278,6 +290,7 @@ export type ObjectiveScalarWhereWithAggregatesInput = {
 }
 
 export type ObjectiveCreateInput = {
+  projectId?: string | null
   title: string
   time: string
   done?: boolean
@@ -287,6 +300,7 @@ export type ObjectiveCreateInput = {
 
 export type ObjectiveUncheckedCreateInput = {
   id?: number
+  projectId?: string | null
   title: string
   time: string
   done?: boolean
@@ -295,6 +309,7 @@ export type ObjectiveUncheckedCreateInput = {
 }
 
 export type ObjectiveUpdateInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.StringFieldUpdateOperationsInput | string
   done?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -304,6 +319,7 @@ export type ObjectiveUpdateInput = {
 
 export type ObjectiveUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.StringFieldUpdateOperationsInput | string
   done?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -313,6 +329,7 @@ export type ObjectiveUncheckedUpdateInput = {
 
 export type ObjectiveCreateManyInput = {
   id?: number
+  projectId?: string | null
   title: string
   time: string
   done?: boolean
@@ -321,6 +338,7 @@ export type ObjectiveCreateManyInput = {
 }
 
 export type ObjectiveUpdateManyMutationInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.StringFieldUpdateOperationsInput | string
   done?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -330,6 +348,7 @@ export type ObjectiveUpdateManyMutationInput = {
 
 export type ObjectiveUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   time?: Prisma.StringFieldUpdateOperationsInput | string
   done?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -339,6 +358,7 @@ export type ObjectiveUncheckedUpdateManyInput = {
 
 export type ObjectiveCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   time?: Prisma.SortOrder
   done?: Prisma.SortOrder
@@ -353,6 +373,7 @@ export type ObjectiveAvgOrderByAggregateInput = {
 
 export type ObjectiveMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   time?: Prisma.SortOrder
   done?: Prisma.SortOrder
@@ -362,6 +383,7 @@ export type ObjectiveMaxOrderByAggregateInput = {
 
 export type ObjectiveMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   time?: Prisma.SortOrder
   done?: Prisma.SortOrder
@@ -378,6 +400,7 @@ export type ObjectiveSumOrderByAggregateInput = {
 
 export type ObjectiveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   title?: boolean
   time?: boolean
   done?: boolean
@@ -387,6 +410,7 @@ export type ObjectiveSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type ObjectiveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   title?: boolean
   time?: boolean
   done?: boolean
@@ -396,6 +420,7 @@ export type ObjectiveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
 
 export type ObjectiveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   title?: boolean
   time?: boolean
   done?: boolean
@@ -405,6 +430,7 @@ export type ObjectiveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 
 export type ObjectiveSelectScalar = {
   id?: boolean
+  projectId?: boolean
   title?: boolean
   time?: boolean
   done?: boolean
@@ -412,13 +438,14 @@ export type ObjectiveSelectScalar = {
   position?: boolean
 }
 
-export type ObjectiveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "time" | "done" | "dueDate" | "position", ExtArgs["result"]["objective"]>
+export type ObjectiveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "title" | "time" | "done" | "dueDate" | "position", ExtArgs["result"]["objective"]>
 
 export type $ObjectivePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Objective"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    projectId: string | null
     title: string
     time: string
     done: boolean
@@ -848,6 +875,7 @@ export interface Prisma__ObjectiveClient<T, Null = never, ExtArgs extends runtim
  */
 export interface ObjectiveFieldRefs {
   readonly id: Prisma.FieldRef<"Objective", 'Int'>
+  readonly projectId: Prisma.FieldRef<"Objective", 'String'>
   readonly title: Prisma.FieldRef<"Objective", 'String'>
   readonly time: Prisma.FieldRef<"Objective", 'String'>
   readonly done: Prisma.FieldRef<"Objective", 'Boolean'>

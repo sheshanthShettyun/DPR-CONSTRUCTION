@@ -26,6 +26,7 @@ export type AggregateOrder = {
 
 export type OrderMinAggregateOutputType = {
   id: string | null
+  projectId: string | null
   from: string | null
   to: string | null
   flag: string | null
@@ -41,6 +42,7 @@ export type OrderMinAggregateOutputType = {
 
 export type OrderMaxAggregateOutputType = {
   id: string | null
+  projectId: string | null
   from: string | null
   to: string | null
   flag: string | null
@@ -56,6 +58,7 @@ export type OrderMaxAggregateOutputType = {
 
 export type OrderCountAggregateOutputType = {
   id: number
+  projectId: number
   from: number
   to: number
   flag: number
@@ -73,6 +76,7 @@ export type OrderCountAggregateOutputType = {
 
 export type OrderMinAggregateInputType = {
   id?: true
+  projectId?: true
   from?: true
   to?: true
   flag?: true
@@ -88,6 +92,7 @@ export type OrderMinAggregateInputType = {
 
 export type OrderMaxAggregateInputType = {
   id?: true
+  projectId?: true
   from?: true
   to?: true
   flag?: true
@@ -103,6 +108,7 @@ export type OrderMaxAggregateInputType = {
 
 export type OrderCountAggregateInputType = {
   id?: true
+  projectId?: true
   from?: true
   to?: true
   flag?: true
@@ -191,6 +197,7 @@ export type OrderGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type OrderGroupByOutputType = {
   id: string
+  projectId: string | null
   from: string
   to: string
   flag: string
@@ -227,6 +234,7 @@ export type OrderWhereInput = {
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   id?: Prisma.StringFilter<"Order"> | string
+  projectId?: Prisma.StringNullableFilter<"Order"> | string | null
   from?: Prisma.StringFilter<"Order"> | string
   to?: Prisma.StringFilter<"Order"> | string
   flag?: Prisma.StringFilter<"Order"> | string
@@ -243,6 +251,7 @@ export type OrderWhereInput = {
 
 export type OrderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   from?: Prisma.SortOrder
   to?: Prisma.SortOrder
   flag?: Prisma.SortOrder
@@ -262,6 +271,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
+  projectId?: Prisma.StringNullableFilter<"Order"> | string | null
   from?: Prisma.StringFilter<"Order"> | string
   to?: Prisma.StringFilter<"Order"> | string
   flag?: Prisma.StringFilter<"Order"> | string
@@ -278,6 +288,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
 
 export type OrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   from?: Prisma.SortOrder
   to?: Prisma.SortOrder
   flag?: Prisma.SortOrder
@@ -299,6 +310,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   OR?: Prisma.OrderScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrderScalarWhereWithAggregatesInput | Prisma.OrderScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   from?: Prisma.StringWithAggregatesFilter<"Order"> | string
   to?: Prisma.StringWithAggregatesFilter<"Order"> | string
   flag?: Prisma.StringWithAggregatesFilter<"Order"> | string
@@ -314,6 +326,7 @@ export type OrderScalarWhereWithAggregatesInput = {
 
 export type OrderCreateInput = {
   id: string
+  projectId?: string | null
   from: string
   to: string
   flag: string
@@ -330,6 +343,7 @@ export type OrderCreateInput = {
 
 export type OrderUncheckedCreateInput = {
   id: string
+  projectId?: string | null
   from: string
   to: string
   flag: string
@@ -346,6 +360,7 @@ export type OrderUncheckedCreateInput = {
 
 export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   from?: Prisma.StringFieldUpdateOperationsInput | string
   to?: Prisma.StringFieldUpdateOperationsInput | string
   flag?: Prisma.StringFieldUpdateOperationsInput | string
@@ -362,6 +377,7 @@ export type OrderUpdateInput = {
 
 export type OrderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   from?: Prisma.StringFieldUpdateOperationsInput | string
   to?: Prisma.StringFieldUpdateOperationsInput | string
   flag?: Prisma.StringFieldUpdateOperationsInput | string
@@ -378,6 +394,7 @@ export type OrderUncheckedUpdateInput = {
 
 export type OrderCreateManyInput = {
   id: string
+  projectId?: string | null
   from: string
   to: string
   flag: string
@@ -393,6 +410,7 @@ export type OrderCreateManyInput = {
 
 export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   from?: Prisma.StringFieldUpdateOperationsInput | string
   to?: Prisma.StringFieldUpdateOperationsInput | string
   flag?: Prisma.StringFieldUpdateOperationsInput | string
@@ -408,6 +426,7 @@ export type OrderUpdateManyMutationInput = {
 
 export type OrderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   from?: Prisma.StringFieldUpdateOperationsInput | string
   to?: Prisma.StringFieldUpdateOperationsInput | string
   flag?: Prisma.StringFieldUpdateOperationsInput | string
@@ -423,6 +442,7 @@ export type OrderUncheckedUpdateManyInput = {
 
 export type OrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   from?: Prisma.SortOrder
   to?: Prisma.SortOrder
   flag?: Prisma.SortOrder
@@ -438,6 +458,7 @@ export type OrderCountOrderByAggregateInput = {
 
 export type OrderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   from?: Prisma.SortOrder
   to?: Prisma.SortOrder
   flag?: Prisma.SortOrder
@@ -453,6 +474,7 @@ export type OrderMaxOrderByAggregateInput = {
 
 export type OrderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   from?: Prisma.SortOrder
   to?: Prisma.SortOrder
   flag?: Prisma.SortOrder
@@ -487,6 +509,7 @@ export type OrderUpdateOneRequiredWithoutStagesNestedInput = {
 
 export type OrderCreateWithoutStagesInput = {
   id: string
+  projectId?: string | null
   from: string
   to: string
   flag: string
@@ -502,6 +525,7 @@ export type OrderCreateWithoutStagesInput = {
 
 export type OrderUncheckedCreateWithoutStagesInput = {
   id: string
+  projectId?: string | null
   from: string
   to: string
   flag: string
@@ -533,6 +557,7 @@ export type OrderUpdateToOneWithWhereWithoutStagesInput = {
 
 export type OrderUpdateWithoutStagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   from?: Prisma.StringFieldUpdateOperationsInput | string
   to?: Prisma.StringFieldUpdateOperationsInput | string
   flag?: Prisma.StringFieldUpdateOperationsInput | string
@@ -548,6 +573,7 @@ export type OrderUpdateWithoutStagesInput = {
 
 export type OrderUncheckedUpdateWithoutStagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   from?: Prisma.StringFieldUpdateOperationsInput | string
   to?: Prisma.StringFieldUpdateOperationsInput | string
   flag?: Prisma.StringFieldUpdateOperationsInput | string
@@ -594,6 +620,7 @@ export type OrderCountOutputTypeCountStagesArgs<ExtArgs extends runtime.Types.Ex
 
 export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   from?: boolean
   to?: boolean
   flag?: boolean
@@ -611,6 +638,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 
 export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   from?: boolean
   to?: boolean
   flag?: boolean
@@ -626,6 +654,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  projectId?: boolean
   from?: boolean
   to?: boolean
   flag?: boolean
@@ -641,6 +670,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type OrderSelectScalar = {
   id?: boolean
+  projectId?: boolean
   from?: boolean
   to?: boolean
   flag?: boolean
@@ -654,7 +684,7 @@ export type OrderSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "from" | "to" | "flag" | "sub" | "load" | "status" | "color" | "eta" | "distance" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "from" | "to" | "flag" | "sub" | "load" | "status" | "color" | "eta" | "distance" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stages?: boolean | Prisma.Order$stagesArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -669,6 +699,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    projectId: string | null
     from: string
     to: string
     flag: string
@@ -1105,6 +1136,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface OrderFieldRefs {
   readonly id: Prisma.FieldRef<"Order", 'String'>
+  readonly projectId: Prisma.FieldRef<"Order", 'String'>
   readonly from: Prisma.FieldRef<"Order", 'String'>
   readonly to: Prisma.FieldRef<"Order", 'String'>
   readonly flag: Prisma.FieldRef<"Order", 'String'>
