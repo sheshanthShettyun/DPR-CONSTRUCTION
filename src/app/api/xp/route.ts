@@ -19,6 +19,10 @@ export async function GET() {
     streakDays: state.streakDays,
     threshold,
     progress: threshold > 0 ? Math.min(100, Math.round((state.xp / threshold) * 100)) : 0,
+  }, {
+    headers: {
+      "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=15",
+    },
   });
 }
 

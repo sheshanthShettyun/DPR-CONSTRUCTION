@@ -7,7 +7,11 @@ export async function GET(req: NextRequest) {
     where: projectId ? { projectId } : {},
     orderBy: { position: "asc" },
   });
-  return NextResponse.json(objectives);
+  return NextResponse.json(objectives, {
+    headers: {
+      "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=15",
+    },
+  });
 }
 
 export async function POST(req: NextRequest) {

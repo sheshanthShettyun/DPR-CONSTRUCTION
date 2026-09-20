@@ -39,7 +39,11 @@ export async function getStockSummary(projectId?: string | null) {
 
 export async function GET(req: NextRequest) {
   const projectId = new URL(req.url).searchParams.get("projectId");
-  return NextResponse.json(await getStockSummary(projectId));
+  return NextResponse.json(await getStockSummary(projectId), {
+    headers: {
+      "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=15",
+    },
+  });
 }
 
 export async function PATCH(req: NextRequest) {

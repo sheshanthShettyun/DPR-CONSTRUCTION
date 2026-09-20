@@ -4,7 +4,12 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   const projects = await prisma.project.findMany({ orderBy: { createdAt: "asc" } });
   return NextResponse.json(
-    projects.map((p) => ({ ...p, modules: JSON.parse(p.modulesJson) }))
+    projects.map((p) => ({ ...p, modules: JSON.parse(p.modulesJson) })),
+    {
+      headers: {
+        "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=15",
+      },
+    }
   );
 }
 

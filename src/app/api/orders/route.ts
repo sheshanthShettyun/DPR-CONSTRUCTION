@@ -8,7 +8,11 @@ export async function GET(req: NextRequest) {
     include: { stages: { orderBy: { position: "asc" } } },
     orderBy: { createdAt: "asc" },
   });
-  return NextResponse.json(orders);
+  return NextResponse.json(orders, {
+    headers: {
+      "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=15",
+    },
+  });
 }
 
 export async function POST(req: NextRequest) {

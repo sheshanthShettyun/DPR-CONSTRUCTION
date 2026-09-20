@@ -70,6 +70,10 @@ export async function GET(req: NextRequest) {
           mostStable: resolve(stats.mostStable),
         }
       : null,
+  }, {
+    headers: {
+      "Cache-Control": "public, max-age=0, s-maxage=2, stale-while-revalidate=15",
+    },
   });
 }
 
