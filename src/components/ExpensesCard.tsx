@@ -81,8 +81,6 @@ export default function ExpensesCard({ projectId }: { projectId?: string | null 
   const [expanded, setExpanded] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editAmt, setEditAmt] = useState("");
-  const [newName, setNewName] = useState("");
-  const [newAmt, setNewAmt] = useState("");
   const [importOpen, setImportOpen] = useState(false);
 
   const qs = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
@@ -113,18 +111,6 @@ export default function ExpensesCard({ projectId }: { projectId?: string | null 
 
   const removeCat = async (id: number) => {
     await fetch(`/api/expenses/${id}`, { method: "DELETE" });
-    refresh();
-  };
-
-  const addCat = async () => {
-    if (!newName.trim()) return;
-    await fetch("/api/expenses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newName.trim(), amount: Number(newAmt) || 0, projectId: projectId ?? null }),
-    });
-    setNewName("");
-    setNewAmt("");
     refresh();
   };
 
@@ -197,7 +183,7 @@ export default function ExpensesCard({ projectId }: { projectId?: string | null 
             <Upload size={13} />
             Import PDF / Excel / CSV
           </button>
-          <p className="text-[11px] text-[#52525b]">or add a category manually below</p>
+          <p className="text-[11px] text-[#52525b]">or import a sheet to populate it</p>
         </div>
       ) : (
         stats && (
@@ -300,34 +286,9 @@ export default function ExpensesCard({ projectId }: { projectId?: string | null 
                   </div>
                 );
               })}
-              <div className="mt-1 grid grid-cols-[2fr_1fr_auto] items-center gap-2 border-t border-white/5 pt-2.5">
-                <input
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") addCat();
-                  }}
-                  placeholder="New category name"
-                  className="rounded-lg bg-black/40 px-2.5 py-1.5 text-[12px] text-white placeholder:text-[#52525b] outline-none"
-                />
-                <input
-                  type="number"
-                  min={0}
-                  value={newAmt}
-                  onChange={(e) => setNewAmt(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") addCat();
-                  }}
-                  placeholder="$ amount"
-                  className="rounded-lg bg-black/40 px-2.5 py-1.5 text-[12px] text-white placeholder:text-[#52525b] outline-none"
-                />
-                <button
-                  onClick={addCat}
-                  className="rounded-lg bg-[#e2f1a6] px-3 py-1.5 text-[12px] font-semibold text-black transition-colors hover:bg-[#d4f05a]"
-                >
-                  Add
-                </button>
-              </div>
+              <p className="mt-1 border-t border-white/5 pt-2 text-[11px] text-[#52525b]">
+                New categories arrive via sheet import — amounts remain editable above.
+              </p>
             </div>
           )}
         </div>

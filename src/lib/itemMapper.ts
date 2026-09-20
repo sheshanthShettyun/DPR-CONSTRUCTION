@@ -35,11 +35,20 @@ const SYNONYMS: Record<string, string[]> = {
 };
 
 function tokens(s: string): string[] {
-  return s
+  const raw = s
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
     .filter((t) => t && !STOP.has(t) && t.length > 1);
+  // Add singular forms so plurals hit the synonym graph ("helmets" -> "helmet")
+  const out = [...raw];
+  for (const t of raw) {
+    if (t.length > 3 && t.endsWith("s") && !/(ss|us|is)$/.test(t)) {
+      const singular = t.slice(0, -1);
+      if (!STOP.has(singular)) out.push(singular);
+    }
+  }
+  return out;
 }
 
 function expand(ts: string[]): Set<string> {

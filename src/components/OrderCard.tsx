@@ -22,7 +22,7 @@ interface Props {
   onStatusChange?: (id: string, status: string) => void;
 }
 
-const STATUSES = ["Picked Up", "In Transit", "Delayed", "Delivered", "Maintenance"];
+const STATUSES = ["Picked Up", "In Transit", "Delayed", "Delivered"];
 
 export default function OrderCard({ id, from, to, flag, sub, load, status, color, onClick, onStatusChange }: Props) {
   const c = colorMap[color] ?? colorMap.emerald;

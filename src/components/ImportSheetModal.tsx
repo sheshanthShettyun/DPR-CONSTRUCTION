@@ -48,7 +48,7 @@ export default function ImportSheetModal({
   const [itemCats, setItemCats] = useState<Record<string, number | null>>({});
   const [mapEngine, setMapEngine] = useState<"ai" | "local">("local");
   const [error, setError] = useState("");
-  const [result, setResult] = useState<{ categoriesAdded: number; totalCost: number; unitsAdded: number } | null>(null);
+  const [result, setResult] = useState<{ categoriesAdded: number; totalCost: number; unitsAdded: number; cardsAdded: number } | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -189,7 +189,8 @@ export default function ImportSheetModal({
               <h3 className="text-[15px] font-semibold text-white">Import complete</h3>
               <p className="text-[12px] text-[#8c8c8c]">
                 {result.categoriesAdded > 0 && `${result.categoriesAdded} categories · $${result.totalCost.toLocaleString()} `}
-                {result.unitsAdded > 0 && `${result.unitsAdded} units added to stock`}
+                {result.unitsAdded > 0 && `${result.unitsAdded} units added to stock `}
+                {result.cardsAdded > 0 && `· ${result.cardsAdded} utility cards`}
               </p>
               <button
                 onClick={close}
@@ -294,7 +295,7 @@ export default function ImportSheetModal({
                 </label>
                 <label className="flex cursor-pointer items-center gap-2">
                   <input type="checkbox" checked={toStock} onChange={(e) => setToStock(e.target.checked)} className="h-3.5 w-3.5 accent-[#e2f1a6]" />
-                  Utility stock <span className="text-white">+{totalUnits} units</span>
+                  Utility stock & cards <span className="text-white">+{totalUnits} units</span>
                 </label>
               </div>
 

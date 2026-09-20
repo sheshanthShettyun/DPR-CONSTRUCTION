@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, MapPin, Truck, Wrench, Archive, Plus } from "lucide-react";
+import { LayoutDashboard, MapPin, Truck, Archive, Plus } from "lucide-react";
 
 interface Props {
   active: string;
@@ -10,11 +10,10 @@ interface Props {
 }
 
 const filters = [
-  { id: "Dashboard", icon: LayoutDashboard, count: 1556 },
-  { id: "Transit", icon: Truck, count: 338 },
-  { id: "Utilities", icon: MapPin, count: 412 },
-  { id: "Maintenance", icon: Wrench, count: 147 },
-  { id: "Off-Site", icon: Archive, count: 659 },
+  { id: "Dashboard", icon: LayoutDashboard },
+  { id: "Transit", icon: Truck },
+  { id: "Utilities", icon: MapPin },
+  { id: "Off-Site", icon: Archive },
 ];
 
 export default function FilterSidebar({ active, onChange }: Props) {
@@ -63,7 +62,7 @@ export default function FilterSidebar({ active, onChange }: Props) {
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-center gap-0.5 overflow-hidden rounded-2xl bg-[#1a1a1a] py-2"
           >
-            {filters.map(({ id, icon: Icon, count }) => (
+            {filters.map(({ id, icon: Icon }) => (
               <motion.button
                 key={id}
                 onClick={() => onChange(id)}
@@ -83,24 +82,14 @@ export default function FilterSidebar({ active, onChange }: Props) {
               >
                 <Icon size={16} strokeWidth={2} />
                 {hovered && (
-                  <>
-                    <motion.span
-                      initial={{ opacity: 0, x: -4 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.12 }}
-                      className="whitespace-nowrap text-sm font-medium"
-                    >
-                      {id}
-                    </motion.span>
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.05 }}
-                      className="ml-auto text-[10px] opacity-50"
-                    >
-                      {count}
-                    </motion.span>
-                  </>
+                  <motion.span
+                    initial={{ opacity: 0, x: -4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.12 }}
+                    className="whitespace-nowrap text-sm font-medium"
+                  >
+                    {id}
+                  </motion.span>
                 )}
               </motion.button>
             ))}

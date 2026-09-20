@@ -143,7 +143,7 @@ export default function Home() {
               onChanged={() => fetch("/api/projects").then((r) => r.json()).then(setProjects)}
             />
           ) : activeFilter === "Utilities" ? (
-            <TaskBoard />
+            <TaskBoard projectId={selectedBuilding} />
           ) : activeFilter === "Off-Site" ? (
             <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
@@ -218,7 +218,7 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-3 gap-4">
               {orders
-                .filter((o) => activeFilter === "Transit" ? o.status !== "Maintenance" : o.status === activeFilter)
+                .filter((o) => activeFilter === "Transit" ? true : o.status === activeFilter)
                 .map((order) => (
                   <div key={order.id} className="group/transit relative">
                     <OrderCard

@@ -29,6 +29,7 @@ export type AggregateTaskCard = {
 export type TaskCardAvgAggregateOutputType = {
   id: number | null
   columnId: number | null
+  qty: number | null
   comments: number | null
   files: number | null
   position: number | null
@@ -37,6 +38,7 @@ export type TaskCardAvgAggregateOutputType = {
 export type TaskCardSumAggregateOutputType = {
   id: number | null
   columnId: number | null
+  qty: number | null
   comments: number | null
   files: number | null
   position: number | null
@@ -45,8 +47,10 @@ export type TaskCardSumAggregateOutputType = {
 export type TaskCardMinAggregateOutputType = {
   id: number | null
   columnId: number | null
+  projectId: string | null
   title: string | null
   desc: string | null
+  qty: number | null
   date: string | null
   comments: number | null
   files: number | null
@@ -58,8 +62,10 @@ export type TaskCardMinAggregateOutputType = {
 export type TaskCardMaxAggregateOutputType = {
   id: number | null
   columnId: number | null
+  projectId: string | null
   title: string | null
   desc: string | null
+  qty: number | null
   date: string | null
   comments: number | null
   files: number | null
@@ -71,8 +77,10 @@ export type TaskCardMaxAggregateOutputType = {
 export type TaskCardCountAggregateOutputType = {
   id: number
   columnId: number
+  projectId: number
   title: number
   desc: number
+  qty: number
   date: number
   comments: number
   files: number
@@ -86,6 +94,7 @@ export type TaskCardCountAggregateOutputType = {
 export type TaskCardAvgAggregateInputType = {
   id?: true
   columnId?: true
+  qty?: true
   comments?: true
   files?: true
   position?: true
@@ -94,6 +103,7 @@ export type TaskCardAvgAggregateInputType = {
 export type TaskCardSumAggregateInputType = {
   id?: true
   columnId?: true
+  qty?: true
   comments?: true
   files?: true
   position?: true
@@ -102,8 +112,10 @@ export type TaskCardSumAggregateInputType = {
 export type TaskCardMinAggregateInputType = {
   id?: true
   columnId?: true
+  projectId?: true
   title?: true
   desc?: true
+  qty?: true
   date?: true
   comments?: true
   files?: true
@@ -115,8 +127,10 @@ export type TaskCardMinAggregateInputType = {
 export type TaskCardMaxAggregateInputType = {
   id?: true
   columnId?: true
+  projectId?: true
   title?: true
   desc?: true
+  qty?: true
   date?: true
   comments?: true
   files?: true
@@ -128,8 +142,10 @@ export type TaskCardMaxAggregateInputType = {
 export type TaskCardCountAggregateInputType = {
   id?: true
   columnId?: true
+  projectId?: true
   title?: true
   desc?: true
+  qty?: true
   date?: true
   comments?: true
   files?: true
@@ -228,8 +244,10 @@ export type TaskCardGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type TaskCardGroupByOutputType = {
   id: number
   columnId: number
+  projectId: string | null
   title: string
   desc: string
+  qty: number
   date: string
   comments: number
   files: number
@@ -264,8 +282,10 @@ export type TaskCardWhereInput = {
   NOT?: Prisma.TaskCardWhereInput | Prisma.TaskCardWhereInput[]
   id?: Prisma.IntFilter<"TaskCard"> | number
   columnId?: Prisma.IntFilter<"TaskCard"> | number
+  projectId?: Prisma.StringNullableFilter<"TaskCard"> | string | null
   title?: Prisma.StringFilter<"TaskCard"> | string
   desc?: Prisma.StringFilter<"TaskCard"> | string
+  qty?: Prisma.IntFilter<"TaskCard"> | number
   date?: Prisma.StringFilter<"TaskCard"> | string
   comments?: Prisma.IntFilter<"TaskCard"> | number
   files?: Prisma.IntFilter<"TaskCard"> | number
@@ -278,8 +298,10 @@ export type TaskCardWhereInput = {
 export type TaskCardOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   desc?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   date?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
@@ -295,8 +317,10 @@ export type TaskCardWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TaskCardWhereInput[]
   NOT?: Prisma.TaskCardWhereInput | Prisma.TaskCardWhereInput[]
   columnId?: Prisma.IntFilter<"TaskCard"> | number
+  projectId?: Prisma.StringNullableFilter<"TaskCard"> | string | null
   title?: Prisma.StringFilter<"TaskCard"> | string
   desc?: Prisma.StringFilter<"TaskCard"> | string
+  qty?: Prisma.IntFilter<"TaskCard"> | number
   date?: Prisma.StringFilter<"TaskCard"> | string
   comments?: Prisma.IntFilter<"TaskCard"> | number
   files?: Prisma.IntFilter<"TaskCard"> | number
@@ -309,8 +333,10 @@ export type TaskCardWhereUniqueInput = Prisma.AtLeast<{
 export type TaskCardOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   desc?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   date?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
@@ -330,8 +356,10 @@ export type TaskCardScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TaskCardScalarWhereWithAggregatesInput | Prisma.TaskCardScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"TaskCard"> | number
   columnId?: Prisma.IntWithAggregatesFilter<"TaskCard"> | number
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"TaskCard"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"TaskCard"> | string
   desc?: Prisma.StringWithAggregatesFilter<"TaskCard"> | string
+  qty?: Prisma.IntWithAggregatesFilter<"TaskCard"> | number
   date?: Prisma.StringWithAggregatesFilter<"TaskCard"> | string
   comments?: Prisma.IntWithAggregatesFilter<"TaskCard"> | number
   files?: Prisma.IntWithAggregatesFilter<"TaskCard"> | number
@@ -341,8 +369,10 @@ export type TaskCardScalarWhereWithAggregatesInput = {
 }
 
 export type TaskCardCreateInput = {
+  projectId?: string | null
   title: string
   desc: string
+  qty?: number
   date: string
   comments?: number
   files?: number
@@ -355,8 +385,10 @@ export type TaskCardCreateInput = {
 export type TaskCardUncheckedCreateInput = {
   id?: number
   columnId: number
+  projectId?: string | null
   title: string
   desc: string
+  qty?: number
   date: string
   comments?: number
   files?: number
@@ -366,8 +398,10 @@ export type TaskCardUncheckedCreateInput = {
 }
 
 export type TaskCardUpdateInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -380,8 +414,10 @@ export type TaskCardUpdateInput = {
 export type TaskCardUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   columnId?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -393,8 +429,10 @@ export type TaskCardUncheckedUpdateInput = {
 export type TaskCardCreateManyInput = {
   id?: number
   columnId: number
+  projectId?: string | null
   title: string
   desc: string
+  qty?: number
   date: string
   comments?: number
   files?: number
@@ -404,8 +442,10 @@ export type TaskCardCreateManyInput = {
 }
 
 export type TaskCardUpdateManyMutationInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -417,8 +457,10 @@ export type TaskCardUpdateManyMutationInput = {
 export type TaskCardUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   columnId?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -440,8 +482,10 @@ export type TaskCardOrderByRelationAggregateInput = {
 export type TaskCardCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   desc?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   date?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
@@ -453,6 +497,7 @@ export type TaskCardCountOrderByAggregateInput = {
 export type TaskCardAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
   position?: Prisma.SortOrder
@@ -461,8 +506,10 @@ export type TaskCardAvgOrderByAggregateInput = {
 export type TaskCardMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   desc?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   date?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
@@ -474,8 +521,10 @@ export type TaskCardMaxOrderByAggregateInput = {
 export type TaskCardMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   desc?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   date?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
@@ -487,6 +536,7 @@ export type TaskCardMinOrderByAggregateInput = {
 export type TaskCardSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
+  qty?: Prisma.SortOrder
   comments?: Prisma.SortOrder
   files?: Prisma.SortOrder
   position?: Prisma.SortOrder
@@ -535,8 +585,10 @@ export type TaskCardUncheckedUpdateManyWithoutColumnNestedInput = {
 }
 
 export type TaskCardCreateWithoutColumnInput = {
+  projectId?: string | null
   title: string
   desc: string
+  qty?: number
   date: string
   comments?: number
   files?: number
@@ -547,8 +599,10 @@ export type TaskCardCreateWithoutColumnInput = {
 
 export type TaskCardUncheckedCreateWithoutColumnInput = {
   id?: number
+  projectId?: string | null
   title: string
   desc: string
+  qty?: number
   date: string
   comments?: number
   files?: number
@@ -589,8 +643,10 @@ export type TaskCardScalarWhereInput = {
   NOT?: Prisma.TaskCardScalarWhereInput | Prisma.TaskCardScalarWhereInput[]
   id?: Prisma.IntFilter<"TaskCard"> | number
   columnId?: Prisma.IntFilter<"TaskCard"> | number
+  projectId?: Prisma.StringNullableFilter<"TaskCard"> | string | null
   title?: Prisma.StringFilter<"TaskCard"> | string
   desc?: Prisma.StringFilter<"TaskCard"> | string
+  qty?: Prisma.IntFilter<"TaskCard"> | number
   date?: Prisma.StringFilter<"TaskCard"> | string
   comments?: Prisma.IntFilter<"TaskCard"> | number
   files?: Prisma.IntFilter<"TaskCard"> | number
@@ -601,8 +657,10 @@ export type TaskCardScalarWhereInput = {
 
 export type TaskCardCreateManyColumnInput = {
   id?: number
+  projectId?: string | null
   title: string
   desc: string
+  qty?: number
   date: string
   comments?: number
   files?: number
@@ -612,8 +670,10 @@ export type TaskCardCreateManyColumnInput = {
 }
 
 export type TaskCardUpdateWithoutColumnInput = {
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -624,8 +684,10 @@ export type TaskCardUpdateWithoutColumnInput = {
 
 export type TaskCardUncheckedUpdateWithoutColumnInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -636,8 +698,10 @@ export type TaskCardUncheckedUpdateWithoutColumnInput = {
 
 export type TaskCardUncheckedUpdateManyWithoutColumnInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   desc?: Prisma.StringFieldUpdateOperationsInput | string
+  qty?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.IntFieldUpdateOperationsInput | number
   files?: Prisma.IntFieldUpdateOperationsInput | number
@@ -651,8 +715,10 @@ export type TaskCardUncheckedUpdateManyWithoutColumnInput = {
 export type TaskCardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   columnId?: boolean
+  projectId?: boolean
   title?: boolean
   desc?: boolean
+  qty?: boolean
   date?: boolean
   comments?: boolean
   files?: boolean
@@ -665,8 +731,10 @@ export type TaskCardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type TaskCardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   columnId?: boolean
+  projectId?: boolean
   title?: boolean
   desc?: boolean
+  qty?: boolean
   date?: boolean
   comments?: boolean
   files?: boolean
@@ -679,8 +747,10 @@ export type TaskCardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type TaskCardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   columnId?: boolean
+  projectId?: boolean
   title?: boolean
   desc?: boolean
+  qty?: boolean
   date?: boolean
   comments?: boolean
   files?: boolean
@@ -693,8 +763,10 @@ export type TaskCardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type TaskCardSelectScalar = {
   id?: boolean
   columnId?: boolean
+  projectId?: boolean
   title?: boolean
   desc?: boolean
+  qty?: boolean
   date?: boolean
   comments?: boolean
   files?: boolean
@@ -703,7 +775,7 @@ export type TaskCardSelectScalar = {
   position?: boolean
 }
 
-export type TaskCardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "columnId" | "title" | "desc" | "date" | "comments" | "files" | "level" | "type" | "position", ExtArgs["result"]["taskCard"]>
+export type TaskCardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "columnId" | "projectId" | "title" | "desc" | "qty" | "date" | "comments" | "files" | "level" | "type" | "position", ExtArgs["result"]["taskCard"]>
 export type TaskCardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   column?: boolean | Prisma.TaskColumnDefaultArgs<ExtArgs>
 }
@@ -722,8 +794,10 @@ export type $TaskCardPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     columnId: number
+    projectId: string | null
     title: string
     desc: string
+    qty: number
     date: string
     comments: number
     files: number
@@ -1156,8 +1230,10 @@ export interface Prisma__TaskCardClient<T, Null = never, ExtArgs extends runtime
 export interface TaskCardFieldRefs {
   readonly id: Prisma.FieldRef<"TaskCard", 'Int'>
   readonly columnId: Prisma.FieldRef<"TaskCard", 'Int'>
+  readonly projectId: Prisma.FieldRef<"TaskCard", 'String'>
   readonly title: Prisma.FieldRef<"TaskCard", 'String'>
   readonly desc: Prisma.FieldRef<"TaskCard", 'String'>
+  readonly qty: Prisma.FieldRef<"TaskCard", 'Int'>
   readonly date: Prisma.FieldRef<"TaskCard", 'String'>
   readonly comments: Prisma.FieldRef<"TaskCard", 'Int'>
   readonly files: Prisma.FieldRef<"TaskCard", 'Int'>

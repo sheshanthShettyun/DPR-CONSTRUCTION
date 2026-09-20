@@ -7,10 +7,18 @@ import { ArrowUpRight, Upload, X } from "lucide-react";
 import OptimizerPanel from "@/components/OptimizerPanel";
 import ImportSheetModal from "@/components/ImportSheetModal";
 
+interface StockItem {
+  title: string;
+  qty: number;
+  level: string;
+}
+
 interface Stock {
   totalItems: number;
   available: number;
   lowStock: number;
+  lowItems?: StockItem[];
+  topItems?: StockItem[];
 }
 
 export default function UtilityStockCard({ projectId }: { projectId?: string | null }) {
@@ -44,8 +52,21 @@ export default function UtilityStockCard({ projectId }: { projectId?: string | n
     setManageOpen(true);
   };
 
-  const saveManage = async () => {
+  const bump = async (delta: number) => {
+    if (!stock && delta < 0) return;
+    const base = stock ?? { totalItems: 0, available: 0, lowStock: 0 };
+    const available = Math.max(0, base.available + delta);
+    const totalItems = Math.max(0, base.totalItems + delta);
+    setStock({ ...base, available, totalItems });
     await fetch("/api/utility-stock", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectId: projectId ?? null, available, totalItems }),
+    });
+    refresh();
+  };
+
+  const saveManage = async () => {    await fetch("/api/utility-stock", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -84,8 +105,28 @@ export default function UtilityStockCard({ projectId }: { projectId?: string | n
       </div>
 
       <div>
-        <div className="mb-2 text-[28px] font-bold leading-none tracking-tight text-white">{data.totalItems}</div>
-        <div className="text-[15px] font-medium text-[#8c8c8c]">Total items</div>
+        <div className="mb-2 flex items-end justify-between">
+          <div>
+            <div className="mb-2 text-[28px] font-bold leading-none tracking-tight text-white">{data.totalItems}</div>
+            <div className="text-[15px] font-medium text-[#8c8c8c]">Total items</div>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => bump(-1)}
+              title="Remove one from stock"
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#1f1f1f] text-[14px] leading-none text-[#8c8c8c] transition-colors hover:bg-white/10 hover:text-white"
+            >
+              −
+            </button>
+            <button
+              onClick={() => bump(1)}
+              title="Add one to stock"
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e2f1a6]/15 text-[14px] leading-none text-[#e2f1a6] transition-colors hover:bg-[#e2f1a6]/25"
+            >
+              +
+            </button>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -140,7 +181,34 @@ export default function UtilityStockCard({ projectId }: { projectId?: string | n
               className="h-full rounded-full bg-amber-500"
             />
           </div>
+          {(data.lowItems ?? []).length > 0 && (
+            <div className="mt-1.5 flex flex-col gap-1">
+              {(data.lowItems ?? []).map((it) => (
+                <div key={it.title} className="flex items-center gap-2 text-[11px]">
+                  <span className={`h-1 w-1 rounded-full ${it.level === "Critical" ? "bg-rose-400" : "bg-amber-500"}`} />
+                  <span className="flex-1 truncate text-[#8c8c8c]">{it.title}</span>
+                  <span className="font-medium text-amber-300">{it.qty} left</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+        {(data.topItems ?? []).length > 0 && (
+          <div className="rounded-xl bg-[#1f1f1f] p-2.5">
+            <div className="mb-1.5 flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#e2f1a6]" />
+              <span className="flex-1 text-[12px] text-white">Well stocked</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              {(data.topItems ?? []).map((it) => (
+                <div key={it.title} className="flex items-center gap-2 text-[11px]">
+                  <span className="flex-1 truncate text-[#8c8c8c]">{it.title}</span>
+                  <span className="font-medium text-[#e2f1a6]">{it.qty} units</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex-1" />

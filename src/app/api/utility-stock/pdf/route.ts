@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import PDFDocument from "pdfkit";
+import { getStockSummary } from "@/app/api/utility-stock/route";
 
 interface Stock {
   totalItems: number;
@@ -136,12 +136,9 @@ function generatePdf(
 export async function GET(request: NextRequest) {
   try {
     const projectId = new URL(request.url).searchParams.get("projectId");
-    const stock = await prisma.utilityStock.findFirst({
-      where: projectId ? { projectId } : {},
-      orderBy: { updatedAt: "desc" },
-    });
+    const stock = await getStockSummary(projectId);
 
-    if (!stock) {
+    if (stock.totalItems === 0) {
       return NextResponse.json(
         { error: "No utility stock data found" },
         { status: 404 }

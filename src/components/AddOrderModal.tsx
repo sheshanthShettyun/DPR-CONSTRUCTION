@@ -7,7 +7,7 @@ import { X, Truck } from "lucide-react";
 const inputCls =
   "w-full rounded-lg bg-black/40 px-3 py-2 text-[13px] text-white placeholder:text-[#52525b] outline-none";
 
-const STATUSES = ["In Transit", "Picked Up", "Delivered", "Maintenance"];
+const STATUSES = ["In Transit", "Picked Up", "Delivered"];
 
 export default function AddOrderModal({
   open,

@@ -94,6 +94,7 @@ export const ProjectScalarFieldEnum = {
   progress: 'progress',
   equipment: 'equipment',
   crew: 'crew',
+  budget: 'budget',
   status: 'status',
   svgType: 'svgType',
   imageUrl: 'imageUrl',
@@ -149,8 +150,10 @@ export type TaskColumnScalarFieldEnum = (typeof TaskColumnScalarFieldEnum)[keyof
 export const TaskCardScalarFieldEnum = {
   id: 'id',
   columnId: 'columnId',
+  projectId: 'projectId',
   title: 'title',
   desc: 'desc',
+  qty: 'qty',
   date: 'date',
   comments: 'comments',
   files: 'files',

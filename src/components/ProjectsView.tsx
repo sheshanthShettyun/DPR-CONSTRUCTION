@@ -13,6 +13,7 @@ export interface ProjectData {
   progress: number;
   equipment: number;
   crew: number;
+  budget: number;
   status: string;
   svgType: "tower" | "factory" | "residential";
   modules: number[];
@@ -29,7 +30,7 @@ const inputCls =
 
 export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
   const [addOpen, setAddOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", location: "", targetDate: "", equipment: "", crew: "", status: "Active" });
+  const [form, setForm] = useState({ name: "", location: "", targetDate: "", budget: "", status: "Active" });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -55,8 +56,9 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
         location: form.location.trim().slice(0, 80),
         targetDate: form.targetDate || new Date().toISOString().split("T")[0],
         progress: 0,
-        equipment: Math.max(0, Number(form.equipment) || 0),
-        crew: Math.max(0, Number(form.crew) || 0),
+        equipment: 0,
+        crew: 0,
+        budget: Math.max(0, Number(form.budget) || 0),
         status: form.status,
         svgType: "tower",
         modules: [],
@@ -67,7 +69,7 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
       setError("Could not create the project");
       return;
     }
-    setForm({ name: "", location: "", targetDate: "", equipment: "", crew: "", status: "Active" });
+    setForm({ name: "", location: "", targetDate: "", budget: "", status: "Active" });
     setAddOpen(false);
     onChanged?.();
   };
@@ -115,6 +117,14 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
                 <Calendar size={16} strokeWidth={2} />
                 {p.targetDate}
               </div>
+              {p.budget > 0 && (
+                <>
+                  <span className="h-1 w-1 rounded-full bg-[#8c8c8c]/40" />
+                  <div className="flex items-center gap-1.5 font-medium text-[#e2f1a6]">
+                    ${p.budget.toLocaleString()} budget
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -174,19 +184,13 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
                       <input type="date" value={form.targetDate} onChange={(e) => setForm({ ...form, targetDate: e.target.value })} className={`${inputCls} [color-scheme:dark]`} />
                     </div>
                     <div>
-                      <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Status</label>
-                      <input value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} placeholder="Active" className={inputCls} />
+                      <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Budget ($)</label>
+                      <input type="number" min={0} value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} placeholder="eg. 50000" className={inputCls} />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Equipment</label>
-                      <input type="number" min={0} value={form.equipment} onChange={(e) => setForm({ ...form, equipment: e.target.value })} placeholder="0" className={inputCls} />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Crew</label>
-                      <input type="number" min={0} value={form.crew} onChange={(e) => setForm({ ...form, crew: e.target.value })} placeholder="0" className={inputCls} />
-                    </div>
+                  <div>
+                    <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Status</label>
+                    <input value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} placeholder="Active" className={inputCls} />
                   </div>
                 </div>
                 {error && <p className="mt-3 text-[12px] text-rose-300">{error}</p>}

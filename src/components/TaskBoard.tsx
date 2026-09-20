@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Ellipsis, MessageSquare, Paperclip, Calendar, CircleDot } from "lucide-react";
+import { Plus, Ellipsis, MessageSquare, Paperclip, Calendar, CircleDot, Pencil } from "lucide-react";
 
 interface TaskCard {
   id: number;
   title: string;
   desc: string;
+  qty: number;
   date: string;
   comments: number;
   files: number;
@@ -27,16 +28,20 @@ const levelStyles: Record<string, { text: string; bg: string; border: string }> 
   Critical: { text: "text-rose-300", bg: "bg-rose-500/10", border: "border-rose-300/20" },
 };
 
-export default function TaskBoard() {
+export default function TaskBoard({ projectId }: { projectId?: string | null }) {
   const [columns, setColumns] = useState<TaskColumn[]>([]);
   const [addingCol, setAddingCol] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState({ title: "", desc: "", level: "Plenty", qty: "" });
+  const [newQty, setNewQty] = useState("");
 
-  const refresh = () => fetch("/api/tasks").then((r) => r.json()).then(setColumns);
+  const qs = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
+  const refresh = () => fetch(`/api/tasks${qs}`).then((r) => r.json()).then(setColumns);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [projectId]);
 
   const addCard = async (columnId: number) => {
     if (!newTitle.trim()) return;
@@ -45,20 +50,45 @@ export default function TaskBoard() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         columnId,
+        projectId: projectId ?? null,
         title: newTitle.trim(),
         desc: "New utility item",
+        qty: Math.max(0, Math.floor(Number(newQty) || 0)),
         date: new Date().toLocaleDateString(),
         level: "Plenty",
         type: "Utility",
       }),
     });
     setNewTitle("");
+    setNewQty("");
     setAddingCol(null);
     refresh();
   };
 
   const removeCard = async (id: number) => {
+    if (!window.confirm("Remove this utility?")) return;
     await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    refresh();
+  };
+
+  const startEdit = (card: TaskCard) => {
+    setEditingId(card.id);
+    setEditForm({ title: card.title, desc: card.desc, level: card.level, qty: String(card.qty ?? 0) });
+  };
+
+  const saveEdit = async (id: number) => {
+    if (!editForm.title.trim()) return;
+    await fetch(`/api/tasks/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: editForm.title.trim(),
+        desc: editForm.desc,
+        level: editForm.level,
+        qty: Math.max(0, Math.floor(Number(editForm.qty) || 0)),
+      }),
+    });
+    setEditingId(null);
     refresh();
   };
 
@@ -106,7 +136,19 @@ export default function TaskBoard() {
                     if (e.key === "Escape") setAddingCol(null);
                   }}
                   placeholder="New utility title…"
-                  className="min-w-0 flex-1 rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
+                  className="min-w-0 flex-[2] rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
+                />
+                <input
+                  type="number"
+                  min={0}
+                  value={newQty}
+                  onChange={(e) => setNewQty(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addCard(col.id);
+                    if (e.key === "Escape") setAddingCol(null);
+                  }}
+                  placeholder="Qty"
+                  className="w-20 rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
                 />
                 <button
                   onClick={() => addCard(col.id)}
@@ -117,7 +159,63 @@ export default function TaskBoard() {
               </div>
             )}
             {col.cards.map((card) => {
-              const s = levelStyles[card.level];
+              const s = levelStyles[card.level] ?? levelStyles.Plenty;
+              if (editingId === card.id) {
+                return (
+                  <div key={card.id} className="flex items-center gap-2 px-3 py-2">
+                    <input
+                      autoFocus
+                      value={editForm.title}
+                      onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEdit(card.id);
+                        if (e.key === "Escape") setEditingId(null);
+                      }}
+                      placeholder="Title"
+                      className="min-w-0 flex-1 rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
+                    />
+                    <input
+                      value={editForm.desc}
+                      onChange={(e) => setEditForm({ ...editForm, desc: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEdit(card.id);
+                        if (e.key === "Escape") setEditingId(null);
+                      }}
+                      placeholder="Details (specs)"
+                      className="min-w-0 flex-1 rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
+                    />
+                    <input
+                      type="number"
+                      min={0}
+                      value={editForm.qty}
+                      onChange={(e) => setEditForm({ ...editForm, qty: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEdit(card.id);
+                        if (e.key === "Escape") setEditingId(null);
+                      }}
+                      placeholder="Qty"
+                      className="w-20 rounded-md bg-black/40 px-2.5 py-1.5 text-[13px] text-white placeholder:text-[#52525b] outline-none"
+                    />
+                    <select
+                      value={editForm.level}
+                      onChange={(e) => setEditForm({ ...editForm, level: e.target.value })}
+                      className="rounded-md bg-black/40 px-2 py-1.5 text-xs text-white outline-none"
+                    >
+                      {Object.keys(levelStyles).map((l) => (
+                        <option key={l} value={l}>
+                          {l}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => saveEdit(card.id)}
+                      className="rounded-md bg-[#e2f1a6] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-[#d4f05a]"
+                    >
+                      Save
+                    </button>
+                  </div>
+                );
+              }
               return (
                 <div
                   key={card.id}
@@ -129,6 +227,11 @@ export default function TaskBoard() {
                   </div>
 
                   <div className="flex shrink-0 items-center gap-3">
+                    {(card.qty ?? 0) > 0 && (
+                      <span className="rounded bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white">
+                        {card.qty} units
+                      </span>
+                    )}
                     <span className="rounded bg-[#2A2A2A] px-2 py-0.5 text-[10px] font-medium text-[#8c8c8c]">
                       {card.type}
                     </span>
@@ -153,9 +256,16 @@ export default function TaskBoard() {
                       {card.level}
                     </span>
                     <button
+                      onClick={() => startEdit(card)}
+                      title="Edit utility"
+                      className="p-0.5 text-white/25 transition-colors hover:text-white"
+                    >
+                      <Pencil size={12} />
+                    </button>
+                    <button
                       onClick={() => removeCard(card.id)}
-                      title="Delete card"
-                      className="text-white/0 transition-colors hover:text-rose-300 group-hover:text-white/25"
+                      title="Remove utility"
+                      className="px-0.5 text-[14px] leading-none text-white/25 transition-colors hover:text-rose-300"
                     >
                       ×
                     </button>

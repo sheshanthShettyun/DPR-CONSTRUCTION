@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { recomputeSummary } from "@/app/api/expenses/route";
+import { similarity } from "@/lib/itemMapper";
 
 interface ImportRow {
   name: string;
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Choose at least one destination" }, { status: 400 });
     }
 
-    const result = { categoriesAdded: 0, totalCost: 0, unitsAdded: 0 };
+    const result = { categoriesAdded: 0, totalCost: 0, unitsAdded: 0, cardsAdded: 0 };
 
     if (targets.expenses) {
       const count = await prisma.expenseCategory.count({ where: projectId ? { projectId } : {} });
@@ -72,17 +73,41 @@ export async function POST(req: NextRequest) {
 
     if (targets.stock) {
       const units = clean.reduce((s, r) => s + r.qty, 0);
-      const where = projectId ? { projectId } : {};
-      const existing = await prisma.utilityStock.findFirst({ where, orderBy: { updatedAt: "desc" } });
-      if (existing) {
-        await prisma.utilityStock.update({
-          where: { id: existing.id },
-          data: { totalItems: existing.totalItems + units, available: existing.available + units },
-        });
-      } else {
-        await prisma.utilityStock.create({ data: { projectId, totalItems: units, available: units, lowStock: 0 } });
-      }
+      // Card quantities ARE the stock now — the stored row is only for manual adjustments,
+      // so imports write cards and leave stored counts untouched (no double counting).
       result.unitsAdded = units;
+
+      // Showcase each item as a real utility card, filed into the best column
+      const columns = await prisma.taskColumn.findMany({ orderBy: { position: "asc" } });
+      if (columns.length > 0) {
+        const today = new Date().toLocaleDateString();
+        for (const r of clean) {
+          let best = columns[columns.length - 1];
+          let bestScore = -1;
+          for (const c of columns) {
+            const s = similarity(r.name, c.title);
+            if (s > bestScore) {
+              bestScore = s;
+              best = c;
+            }
+          }
+          const colCount = await prisma.taskCard.count({ where: { columnId: best.id } });
+          await prisma.taskCard.create({
+            data: {
+              columnId: best.id,
+              projectId,
+              title: r.name,
+              desc: r.qty > 0 ? `${r.qty} units @ $${r.amount.toLocaleString()} each` : `$${r.amount.toLocaleString()} each`,
+              qty: r.qty,
+              date: today,
+              level: r.qty === 0 ? "Critical" : r.qty <= 10 ? "Low" : "Plenty",
+              type: best.title.split(" ")[0] ?? "Utility",
+              position: colCount,
+            },
+          });
+          result.cardsAdded += 1;
+        }
+      }
     }
 
     return NextResponse.json({ ok: true, ...result });

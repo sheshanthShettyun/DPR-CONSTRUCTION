@@ -30,12 +30,14 @@ export type ProjectAvgAggregateOutputType = {
   progress: number | null
   equipment: number | null
   crew: number | null
+  budget: number | null
 }
 
 export type ProjectSumAggregateOutputType = {
   progress: number | null
   equipment: number | null
   crew: number | null
+  budget: number | null
 }
 
 export type ProjectMinAggregateOutputType = {
@@ -46,6 +48,7 @@ export type ProjectMinAggregateOutputType = {
   progress: number | null
   equipment: number | null
   crew: number | null
+  budget: number | null
   status: string | null
   svgType: string | null
   imageUrl: string | null
@@ -62,6 +65,7 @@ export type ProjectMaxAggregateOutputType = {
   progress: number | null
   equipment: number | null
   crew: number | null
+  budget: number | null
   status: string | null
   svgType: string | null
   imageUrl: string | null
@@ -78,6 +82,7 @@ export type ProjectCountAggregateOutputType = {
   progress: number
   equipment: number
   crew: number
+  budget: number
   status: number
   svgType: number
   imageUrl: number
@@ -92,12 +97,14 @@ export type ProjectAvgAggregateInputType = {
   progress?: true
   equipment?: true
   crew?: true
+  budget?: true
 }
 
 export type ProjectSumAggregateInputType = {
   progress?: true
   equipment?: true
   crew?: true
+  budget?: true
 }
 
 export type ProjectMinAggregateInputType = {
@@ -108,6 +115,7 @@ export type ProjectMinAggregateInputType = {
   progress?: true
   equipment?: true
   crew?: true
+  budget?: true
   status?: true
   svgType?: true
   imageUrl?: true
@@ -124,6 +132,7 @@ export type ProjectMaxAggregateInputType = {
   progress?: true
   equipment?: true
   crew?: true
+  budget?: true
   status?: true
   svgType?: true
   imageUrl?: true
@@ -140,6 +149,7 @@ export type ProjectCountAggregateInputType = {
   progress?: true
   equipment?: true
   crew?: true
+  budget?: true
   status?: true
   svgType?: true
   imageUrl?: true
@@ -243,6 +253,7 @@ export type ProjectGroupByOutputType = {
   progress: number
   equipment: number
   crew: number
+  budget: number
   status: string
   svgType: string
   imageUrl: string | null
@@ -282,6 +293,7 @@ export type ProjectWhereInput = {
   progress?: Prisma.IntFilter<"Project"> | number
   equipment?: Prisma.IntFilter<"Project"> | number
   crew?: Prisma.IntFilter<"Project"> | number
+  budget?: Prisma.IntFilter<"Project"> | number
   status?: Prisma.StringFilter<"Project"> | string
   svgType?: Prisma.StringFilter<"Project"> | string
   imageUrl?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -298,6 +310,7 @@ export type ProjectOrderByWithRelationInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
   status?: Prisma.SortOrder
   svgType?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -317,6 +330,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   progress?: Prisma.IntFilter<"Project"> | number
   equipment?: Prisma.IntFilter<"Project"> | number
   crew?: Prisma.IntFilter<"Project"> | number
+  budget?: Prisma.IntFilter<"Project"> | number
   status?: Prisma.StringFilter<"Project"> | string
   svgType?: Prisma.StringFilter<"Project"> | string
   imageUrl?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -333,6 +347,7 @@ export type ProjectOrderByWithAggregationInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
   status?: Prisma.SortOrder
   svgType?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -357,6 +372,7 @@ export type ProjectScalarWhereWithAggregatesInput = {
   progress?: Prisma.IntWithAggregatesFilter<"Project"> | number
   equipment?: Prisma.IntWithAggregatesFilter<"Project"> | number
   crew?: Prisma.IntWithAggregatesFilter<"Project"> | number
+  budget?: Prisma.IntWithAggregatesFilter<"Project"> | number
   status?: Prisma.StringWithAggregatesFilter<"Project"> | string
   svgType?: Prisma.StringWithAggregatesFilter<"Project"> | string
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
@@ -373,6 +389,7 @@ export type ProjectCreateInput = {
   progress: number
   equipment: number
   crew: number
+  budget?: number
   status: string
   svgType: string
   imageUrl?: string | null
@@ -389,6 +406,7 @@ export type ProjectUncheckedCreateInput = {
   progress: number
   equipment: number
   crew: number
+  budget?: number
   status: string
   svgType: string
   imageUrl?: string | null
@@ -405,6 +423,7 @@ export type ProjectUpdateInput = {
   progress?: Prisma.IntFieldUpdateOperationsInput | number
   equipment?: Prisma.IntFieldUpdateOperationsInput | number
   crew?: Prisma.IntFieldUpdateOperationsInput | number
+  budget?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   svgType?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -421,6 +440,7 @@ export type ProjectUncheckedUpdateInput = {
   progress?: Prisma.IntFieldUpdateOperationsInput | number
   equipment?: Prisma.IntFieldUpdateOperationsInput | number
   crew?: Prisma.IntFieldUpdateOperationsInput | number
+  budget?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   svgType?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -437,6 +457,7 @@ export type ProjectCreateManyInput = {
   progress: number
   equipment: number
   crew: number
+  budget?: number
   status: string
   svgType: string
   imageUrl?: string | null
@@ -453,6 +474,7 @@ export type ProjectUpdateManyMutationInput = {
   progress?: Prisma.IntFieldUpdateOperationsInput | number
   equipment?: Prisma.IntFieldUpdateOperationsInput | number
   crew?: Prisma.IntFieldUpdateOperationsInput | number
+  budget?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   svgType?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -469,6 +491,7 @@ export type ProjectUncheckedUpdateManyInput = {
   progress?: Prisma.IntFieldUpdateOperationsInput | number
   equipment?: Prisma.IntFieldUpdateOperationsInput | number
   crew?: Prisma.IntFieldUpdateOperationsInput | number
+  budget?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   svgType?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -485,6 +508,7 @@ export type ProjectCountOrderByAggregateInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
   status?: Prisma.SortOrder
   svgType?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
@@ -497,6 +521,7 @@ export type ProjectAvgOrderByAggregateInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
 }
 
 export type ProjectMaxOrderByAggregateInput = {
@@ -507,6 +532,7 @@ export type ProjectMaxOrderByAggregateInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
   status?: Prisma.SortOrder
   svgType?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
@@ -523,6 +549,7 @@ export type ProjectMinOrderByAggregateInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
   status?: Prisma.SortOrder
   svgType?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
@@ -535,6 +562,7 @@ export type ProjectSumOrderByAggregateInput = {
   progress?: Prisma.SortOrder
   equipment?: Prisma.SortOrder
   crew?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -567,6 +595,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   progress?: boolean
   equipment?: boolean
   crew?: boolean
+  budget?: boolean
   status?: boolean
   svgType?: boolean
   imageUrl?: boolean
@@ -583,6 +612,7 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   progress?: boolean
   equipment?: boolean
   crew?: boolean
+  budget?: boolean
   status?: boolean
   svgType?: boolean
   imageUrl?: boolean
@@ -599,6 +629,7 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   progress?: boolean
   equipment?: boolean
   crew?: boolean
+  budget?: boolean
   status?: boolean
   svgType?: boolean
   imageUrl?: boolean
@@ -615,6 +646,7 @@ export type ProjectSelectScalar = {
   progress?: boolean
   equipment?: boolean
   crew?: boolean
+  budget?: boolean
   status?: boolean
   svgType?: boolean
   imageUrl?: boolean
@@ -623,7 +655,7 @@ export type ProjectSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "location" | "targetDate" | "progress" | "equipment" | "crew" | "status" | "svgType" | "imageUrl" | "modulesJson" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "location" | "targetDate" | "progress" | "equipment" | "crew" | "budget" | "status" | "svgType" | "imageUrl" | "modulesJson" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 
 export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Project"
@@ -636,6 +668,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     progress: number
     equipment: number
     crew: number
+    budget: number
     status: string
     svgType: string
     imageUrl: string | null
@@ -1072,6 +1105,7 @@ export interface ProjectFieldRefs {
   readonly progress: Prisma.FieldRef<"Project", 'Int'>
   readonly equipment: Prisma.FieldRef<"Project", 'Int'>
   readonly crew: Prisma.FieldRef<"Project", 'Int'>
+  readonly budget: Prisma.FieldRef<"Project", 'Int'>
   readonly status: Prisma.FieldRef<"Project", 'String'>
   readonly svgType: Prisma.FieldRef<"Project", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Project", 'String'>
