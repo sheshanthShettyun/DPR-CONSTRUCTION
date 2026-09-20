@@ -36,14 +36,17 @@ export default function Home() {
       <nav className="fixed left-1/2 top-0 z-50 flex w-[90%] max-w-5xl -translate-x-1/2 items-center justify-between rounded-b-2xl bg-white/[0.06] px-5 py-2 backdrop-blur-xl" style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif" }}>
         <span className="text-[16px] font-medium tracking-tight text-white/90">DPR Construction</span>
         <div className="flex items-center gap-1">
-          {["Dashboard", "Fleet", "Assets", "Progress"].map((item) => (
+          {[
+            { label: "Dashboard", href: "/overview" },
+            { label: "Login", href: "/login" },
+          ].map((item) => (
             <Link
-              key={item}
+              key={item.label}
               className="flex items-center rounded-[10px] px-3 text-[13px] font-medium text-white/60 transition-all duration-200 hover:bg-white/[0.08] hover:text-white/90"
               style={{ height: 32 }}
-              href={item === "Dashboard" ? "/overview" : "#"}
+              href={item.href}
             >
-              {item}
+              {item.label}
             </Link>
           ))}
         </div>
