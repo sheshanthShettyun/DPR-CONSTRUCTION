@@ -89,6 +89,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const ProjectScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   name: 'name',
   location: 'location',
   targetDate: 'targetDate',

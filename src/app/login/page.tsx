@@ -22,9 +22,11 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [needsVerify, setNeedsVerify] = useState(false);
 
   const login = async () => {
     setError("");
+    setNeedsVerify(false);
     setBusy(true);
     const r = await fetch("/api/auth/login", {
       method: "POST",
@@ -35,9 +37,27 @@ export default function LoginPage() {
     setBusy(false);
     if (!r.ok) {
       setError(d.error ?? "Login failed");
+      if (r.status === 403) setNeedsVerify(true);
       return;
     }
     router.push("/overview");
+  };
+
+  const resend = async () => {
+    setError("");
+    setBusy(true);
+    const r = await fetch("/api/auth/resend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const d = await r.json();
+    setBusy(false);
+    if (!r.ok) {
+      setError(d.error ?? "Could not resend code");
+      return;
+    }
+    router.push(`/signup?verify=${encodeURIComponent(email)}`);
   };
 
   return (
@@ -131,6 +151,15 @@ export default function LoginPage() {
           </div>
 
           {error && <p className="mt-4 text-center text-[12px] text-rose-300">{error}</p>}
+          {needsVerify && (
+            <button
+              onClick={resend}
+              disabled={busy}
+              className="mt-3 w-full rounded-[10px] bg-[#1f1f1f] py-2.5 text-[13px] font-medium text-[#e2f1a6] transition-colors hover:bg-[#242424] disabled:opacity-50"
+            >
+              {busy ? "Sending…" : "Resend verification code"}
+            </button>
+          )}
 
           <button
             onClick={login}

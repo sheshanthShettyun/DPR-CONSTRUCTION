@@ -28,9 +28,15 @@ interface Props {
 const inputCls =
   "w-full rounded-lg bg-black/40 px-3 py-2 text-[13px] text-white placeholder:text-[#52525b] outline-none";
 
+function fmtDate(raw: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(raw);
+  if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+  return raw;
+}
+
 export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
   const [addOpen, setAddOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", location: "", targetDate: "", budget: "", status: "Active" });
+  const [form, setForm] = useState({ name: "", location: "", dd: "", mm: "", yyyy: "", budget: "", status: "Active" });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -46,6 +52,13 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
       setError("Project name and location are required");
       return;
     }
+    const d = Number(form.dd), m = Number(form.mm), y = Number(form.yyyy);
+    const dt = new Date(y, m - 1, d);
+    if (!d || !m || !y || dt.getDate() !== d || dt.getMonth() !== m - 1 || dt.getFullYear() !== y) {
+      setError("Enter a valid target date (DD / MM / YYYY)");
+      return;
+    }
+    const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     setBusy(true);
     const r = await fetch("/api/projects", {
       method: "POST",
@@ -54,7 +67,7 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
         id: `p_${Date.now().toString(36)}`,
         name: form.name.trim().slice(0, 80),
         location: form.location.trim().slice(0, 80),
-        targetDate: form.targetDate || new Date().toISOString().split("T")[0],
+        targetDate: iso,
         progress: 0,
         equipment: 0,
         crew: 0,
@@ -69,7 +82,7 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
       setError("Could not create the project");
       return;
     }
-    setForm({ name: "", location: "", targetDate: "", budget: "", status: "Active" });
+    setForm({ name: "", location: "", dd: "", mm: "", yyyy: "", budget: "", status: "Active" });
     setAddOpen(false);
     onChanged?.();
   };
@@ -115,7 +128,7 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
               <span className="h-1 w-1 rounded-full bg-[#8c8c8c]/40" />
               <div className="flex items-center gap-1.5">
                 <Calendar size={16} strokeWidth={2} />
-                {p.targetDate}
+                {fmtDate(p.targetDate)}
               </div>
               {p.budget > 0 && (
                 <>
@@ -181,7 +194,20 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
                   <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Target date</label>
-                      <input type="date" value={form.targetDate} onChange={(e) => setForm({ ...form, targetDate: e.target.value })} className={`${inputCls} [color-scheme:dark]`} />
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {(["dd", "mm", "yyyy"] as const).map((part) => (
+                          <input
+                            key={part}
+                            inputMode="numeric"
+                            value={form[part]}
+                            onChange={(e) =>
+                              setForm({ ...form, [part]: e.target.value.replace(/\D/g, "").slice(0, part === "yyyy" ? 4 : 2) })
+                            }
+                            placeholder={part.toUpperCase()}
+                            className={`${inputCls} px-2 text-center`}
+                          />
+                        ))}
+                      </div>
                     </div>
                     <div>
                       <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Budget ($)</label>

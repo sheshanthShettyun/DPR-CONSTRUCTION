@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, X, Calendar, ArrowLeft, Plus } from "lucide-react";
 import TopNav from "@/components/TopNav";
@@ -22,6 +23,7 @@ import AddOrderModal from "@/components/AddOrderModal";
 import type { OrderData } from "@/lib/orders";
 
 export default function Home() {
+  const router = useRouter();
   const [panelOpen, setPanelOpen] = useState(false);
   const [calOpen, setCalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -38,9 +40,18 @@ export default function Home() {
     fetch(`/api/orders${qs}`).then((r) => r.json()).then(setOrders);
   };
 
+  const refreshProjects = () =>
+    fetch("/api/projects").then((r) => {
+      if (r.status === 401) {
+        router.push("/login");
+        return [];
+      }
+      return r.json();
+    }).then(setProjects);
+
   useEffect(() => {
     refreshOrders(selectedBuilding);
-    fetch("/api/projects").then((r) => r.json()).then(setProjects);
+    refreshProjects();
     try {
       if (sessionStorage.getItem("dpr:projects") === "1") {
         sessionStorage.removeItem("dpr:projects");
@@ -56,6 +67,9 @@ export default function Home() {
   const handleBuildingSelect = (id: string) => {
     setSelectedBuilding(id);
     setActiveFilter("Dashboard");
+    try {
+      sessionStorage.setItem("dpr:building", id);
+    } catch {}
   };
 
   const selectedProject = projects.find((p) => p.id === selectedBuilding);
@@ -118,9 +132,6 @@ export default function Home() {
                   )}
                 </AnimatePresence>
               </div>
-              <button className="rounded-xl border border-white/5 bg-[#1a1a1a] p-2 text-[#8c8c8c]">
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/></svg>
-              </button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -140,7 +151,7 @@ export default function Home() {
             <ProjectsView
               projects={projects}
               onSelect={handleBuildingSelect}
-              onChanged={() => fetch("/api/projects").then((r) => r.json()).then(setProjects)}
+              onChanged={() => refreshProjects()}
             />
           ) : activeFilter === "Utilities" ? (
             <TaskBoard projectId={selectedBuilding} />

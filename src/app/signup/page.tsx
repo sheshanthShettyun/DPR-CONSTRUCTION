@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, ArrowRight, MapPin, Box, Truck, BarChart3 } from "lucide-react";
 
@@ -16,7 +16,16 @@ const FEATURES = [
 ];
 
 export default function SignupPage() {
+  return (
+    <Suspense>
+      <SignupInner />
+    </Suspense>
+  );
+}
+
+function SignupInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<"form" | "otp">("form");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -28,6 +37,16 @@ export default function SignupPage() {
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
   const boxes = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    const v = searchParams.get("verify");
+    if (v) {
+      setEmail(v);
+      setStep("otp");
+      setNotice("A fresh code was sent — enter it below.");
+      setTimeout(() => boxes.current[0]?.focus(), 300);
+    }
+  }, [searchParams]);
 
   const submitForm = async () => {
     setError("");
