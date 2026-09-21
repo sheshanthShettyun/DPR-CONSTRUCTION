@@ -36,7 +36,7 @@ function fmtDate(raw: string): string {
 
 export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
   const [addOpen, setAddOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", location: "", dd: "", mm: "", yyyy: "", budget: "", status: "Active" });
+  const [form, setForm] = useState({ name: "", location: "", dd: "", mm: "", yyyy: "", status: "Active" });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -71,7 +71,7 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
         progress: 0,
         equipment: 0,
         crew: 0,
-        budget: Math.max(0, Number(form.budget) || 0),
+        budget: 0,
         status: form.status,
         svgType: "tower",
         modules: [],
@@ -82,7 +82,7 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
       setError("Could not create the project");
       return;
     }
-    setForm({ name: "", location: "", dd: "", mm: "", yyyy: "", budget: "", status: "Active" });
+    setForm({ name: "", location: "", dd: "", mm: "", yyyy: "", status: "Active" });
     setAddOpen(false);
     onChanged?.();
   };
@@ -208,10 +208,6 @@ export default function ProjectsView({ projects, onSelect, onChanged }: Props) {
                           />
                         ))}
                       </div>
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-[10px] uppercase tracking-wider text-[#8c8c8c]">Budget ($)</label>
-                      <input type="number" min={0} value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} placeholder="eg. 50000" className={inputCls} />
                     </div>
                   </div>
                   <div>

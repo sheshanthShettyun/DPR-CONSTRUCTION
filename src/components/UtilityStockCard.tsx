@@ -215,22 +215,6 @@ export default function UtilityStockCard({ projectId }: { projectId?: string | n
 
       <div className="flex-1" />
 
-      <div className="grid grid-cols-2 gap-2">
-        <button
-          onClick={() => setOptOpen(true)}
-          className="flex items-center justify-center gap-1.5 rounded-lg bg-[#1f1f1f] py-1.5 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/[0.04] hover:text-white"
-        >
-          Plan restock
-          <ArrowUpRight size={12} strokeWidth={2.5} />
-        </button>
-        <button
-          onClick={openManage}
-          className="flex items-center justify-center gap-1.5 rounded-lg bg-[#1f1f1f] py-1.5 text-[10px] font-medium text-[#8c8c8c] transition-colors hover:bg-white/[0.04] hover:text-white"
-        >
-          Manage stock
-        </button>
-      </div>
-
       <div className="flex gap-2">
         <button
           onClick={() => {

@@ -34,6 +34,7 @@ export default function Home() {
   const [activeFilter, setActiveFilter] = useState("Dashboard");
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
   const [addOrderOpen, setAddOrderOpen] = useState(false);
+  const [xpLevel, setXpLevel] = useState(0);
 
   const refreshOrders = (pid: string | null) => {
     const qs = pid ? `?projectId=${encodeURIComponent(pid)}` : "";
@@ -60,8 +61,14 @@ export default function Home() {
       }
     } catch {}
     const h = () => refreshOrders(selectedBuilding);
+    const hx = () => fetch("/api/xp").then((r) => r.json()).then((d) => setXpLevel(d.level ?? 0)).catch(() => {});
     window.addEventListener("dpr:refresh", h);
-    return () => window.removeEventListener("dpr:refresh", h);
+    window.addEventListener("dpr:refresh", hx);
+    hx();
+    return () => {
+      window.removeEventListener("dpr:refresh", h);
+      window.removeEventListener("dpr:refresh", hx);
+    };
   }, [selectedBuilding]);
 
   const handleBuildingSelect = (id: string) => {
@@ -174,10 +181,10 @@ export default function Home() {
                       <HourglassIcon size={128} />
                       <div className="flex flex-col items-center gap-1">
                         <span className="text-4xl font-semibold tracking-tight text-white">
-                          {selectedProject?.progress ?? 0}%
+                          {Math.min(xpLevel, 100)}%
                         </span>
                         <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#8c8c8c]">
-                          {buildingName} · Progress
+                          Level {xpLevel} · Progress
                         </span>
                       </div>
                     </div>
