@@ -7,10 +7,8 @@ import { Zap, X, Calendar, ArrowLeft, Plus } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import FilterSidebar from "@/components/FilterSidebar";
 import OrderCard from "@/components/OrderCard";
-import QuickOrderPanel from "@/components/QuickOrderPanel";
 import CalendarPicker from "@/components/CalendarPicker";
 import TransitPanel from "@/components/TransitPanel";
-import OffSiteView from "@/components/OffSiteView";
 import ProjectsView, { type ProjectData } from "@/components/ProjectsView";
 import ExpensesCard from "@/components/ExpensesCard";
 import ObjectivesCard from "@/components/ObjectivesCard";
@@ -24,7 +22,6 @@ import type { OrderData } from "@/lib/orders";
 
 export default function Home() {
   const router = useRouter();
-  const [panelOpen, setPanelOpen] = useState(false);
   const [calOpen, setCalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [orders, setOrders] = useState<OrderData[]>([]);
@@ -139,18 +136,18 @@ export default function Home() {
                   )}
                 </AnimatePresence>
               </div>
-              <motion.button
+              <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setPanelOpen(!panelOpen)}
-                title="Quick emergency stock order"
-                className={`flex items-center gap-1.5 rounded-xl border border-white/5 px-3 py-2 text-[12px] font-medium transition-colors ${
-                  panelOpen ? "bg-[#e2f1a6] text-black" : "bg-[#1a1a1a] text-[#8c8c8c] hover:text-white"
-                }`}
+                href="https://www.handypanda.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Order on HandyPanda"
+                className="flex items-center gap-1.5 rounded-xl border border-white/5 bg-[#1a1a1a] px-3 py-2 text-[12px] font-medium text-[#8c8c8c] transition-colors hover:text-white"
               >
-                {panelOpen ? <X size={16} /> : <Zap size={16} />}
-                {panelOpen ? "" : "Quick Order"}
-              </motion.button>
+                <Zap size={16} />
+                Quick Order
+              </motion.a>
             </div>
           </div>
 
@@ -162,8 +159,6 @@ export default function Home() {
             />
           ) : activeFilter === "Utilities" ? (
             <TaskBoard projectId={selectedBuilding} />
-          ) : activeFilter === "Off-Site" ? (
-            <OffSiteView />
           ) : activeFilter === "Dashboard" ? (
             <div className="flex flex-col gap-5 [zoom:0.8]">
               {/* Row 1: Level/XP (full width) */}
@@ -271,36 +266,6 @@ export default function Home() {
         projectId={selectedBuilding}
         onAdded={() => refreshOrders(selectedBuilding)}
       />
-
-        <AnimatePresence>
-          {panelOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 z-40 bg-black/40"
-                onClick={() => setPanelOpen(false)}
-              />
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                style={{ transformOrigin: "top right" }}
-                className="absolute right-0 top-12 z-50"
-              >
-                <QuickOrderPanel
-                  onClose={() => setPanelOpen(false)}
-                  onOrdered={() => setActiveFilter("Transit")}
-                  projectId={selectedBuilding}
-                />
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </main>
       <ImportOverlay />
 

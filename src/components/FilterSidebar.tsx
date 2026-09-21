@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, MapPin, Truck, Archive, Plus } from "lucide-react";
+import { LayoutDashboard, MapPin, Truck, Plus } from "lucide-react";
 
 interface Props {
   active: string;
@@ -13,7 +13,6 @@ const filters = [
   { id: "Dashboard", icon: LayoutDashboard },
   { id: "Transit", icon: Truck },
   { id: "Utilities", icon: MapPin },
-  { id: "Off-Site", icon: Archive },
 ];
 
 export default function FilterSidebar({ active, onChange }: Props) {
